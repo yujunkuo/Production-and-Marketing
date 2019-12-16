@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'customerAnalysis.css' %}">
+  </head>
+  <body>
+    <p>客群分析</p>
+    <form method="post" enctype="multipart/form-data">
+      <!--<input type="file" class="file" name="customer_file" accept=".csv" />-->
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit">確認上傳</input>
+    </form>
+    {{ output }}
+
+  </body>
+</html>
