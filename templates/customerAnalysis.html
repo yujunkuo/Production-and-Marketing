@@ -14,7 +14,14 @@
       {{ form.as_p }}
       <input type="submit">確認上傳</input>
     </form>
-    {{ output }}
+    <div>
+    <li>
+    <ul><p>Name: </p>{{ mname_list }}</ul>
+    <ul><p>Age: </p>{{ age_list }}</ul>
+    <ul><p>Consumption: </p>{{ consumption_list }}</ul>
+    <ul><p>KMeans Result: </p>{{ kmeans_fit }}</ul>
+  </li></div>
+    <img src="data:image/png;base64,{{ plot_res }}" />
 
   </body>
 </html>
