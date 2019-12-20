@@ -24,16 +24,48 @@ p{
   position: absolute;
   top: 150px;
 }
-
-.file{
-  weight: 40px;
-  height: 28px;
+p1{
+  font-family: 標楷體;
+  font-size: 40px;
+  color: #FFAA33;
+  position: absolute;
+  top: 150px;
+}
+p2{
+  font-family: 標楷體;
+  font-size: 40px;
+  color: #FFAA33;
+  position: absolute;
+  top: 150px;
+}
+p3{
+  font-family: 標楷體;
+  font-size: 40px;
+  color: #FFAA33;
+  position: absolute;
+  top: 150px;
+}
+p4{
+  font-family: 標楷體;
+  font-size: 40px;
+  color: #FFAA33;
+  position: absolute;
+  top: 150px;
+}
+.formUpload{
+  weight: 100px;
+  height: 25px;
   background: none;
+  border: 2px solid;
+  border-width: thin;
+  color: #3498bd;
+  font-weight: 700;
+  font-size: 20px;
+  text-transform: uppercase;
   cursor: pointer;
   position: relative;
-  font-size: 20px;
-  color: #3498bd;
-  font-weight: bold;
+  top:50px;
+  left:-378px;
 }
 
 .btn{

@@ -8,7 +8,7 @@
   </head>
   <body>
     <p>客群分析</p>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" class="formUpload"enctype="multipart/form-data">
       <!--<input type="file" class="file" name="customer_file" accept=".csv" />-->
       {% csrf_token %}
       {{ form.as_p }}
@@ -16,12 +16,36 @@
     </form>
     <div>
     <li>
-    <ul><p>Name: </p>{{ mname_list }}</ul>
-    <ul><p>Age: </p>{{ age_list }}</ul>
-    <ul><p>Consumption: </p>{{ consumption_list }}</ul>
-    <ul><p>KMeans Result: </p>{{ kmeans_fit }}</ul>
-  </li></div>
+    <ul><p1>Name: </p1>{{ mname_list }}</ul>
+    <ul><p2>Age: </p2>{{ age_list }}</ul>
+    <ul><p3>Consumption: </p3>{{ consumption_list }}</ul>
+    <ul><p4>KMeans Result: </p4>{{ kmeans_fit }}</ul>
+    </li></div>
     <img src="data:image/png;base64,{{ plot_res }}" />
+    <ul class="drop-down-menu">
+    	<li>
+    		<a href="#">顧客分析</a>
+    		<ul>
+    			<li>
+    				<a href="#">留存率</a>
+    			</li>
+    			<li>
+    				<a href="#">存活率</a>
+    			</li>
+    			<li>
+    				<a href="#">存續期間</a>
+    			</li>
+    		</ul>
+    	</li>
+    	<li>
+        <a href="#">客群分析</a>
+        <ul>
+          <li>
+            <a href="#">K-Means</a>
+          </li>
+          <li>
+            <a href="#">存活率</a>
+          </li>
 
   </body>
 </html>
