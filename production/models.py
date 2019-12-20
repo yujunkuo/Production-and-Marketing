@@ -11,9 +11,17 @@ class Member(models.Model):
     Pets = models.BooleanField
     Student = models.BooleanField
 
+    def __str__(self):
+        return self.mName
+
+
 class Dish(models.Model):
     dName = models.CharField(max_length = 50, primary_key = True)
     dPrice = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.dName
+
 
 class Stock(models.Model):
     sName = models.CharField(max_length = 50, primary_key = True)
@@ -21,16 +29,28 @@ class Stock(models.Model):
     sPrice = models.PositiveIntegerField()
     Expierd = models.DateField()
 
+    def __str__(self):
+        return self.sName
+
+
 class Equipment(models.Model):
     eName = models.CharField(max_length = 50, primary_key = True)
     eNum = models.PositiveIntegerField()
     ePrice = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.eName
+
 
 class Firm(models.Model):
     FirmID = models.PositiveIntegerField(primary_key = True)
     fName = models.CharField(max_length = 20)
     Tele = models.CharField(max_length = 10)
     Address = models.CharField(max_length = 50)
+
+    def __str__(self):
+        return self.fName
+
 
 class Order(models.Model):
     oTime = models.DateTimeField(auto_now_add = 'True')

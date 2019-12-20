@@ -31,6 +31,6 @@ class CustomerView(TemplateView):
         return render(request, self.template_name, args)
 
     def handle_file(self, file):
-        df = pd.read_csv(file)
+        df = pd.DataFrame()
         kmeans_fit = KMeans(n_clusters=3).fit_predict(df.iloc[1:,1:])
         return kmeans_fit
