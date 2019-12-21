@@ -3,11 +3,13 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'swot.css' %}">
     <title></title>
   </head>
   <body>
   <p>SWOT分析</p>
-  <img src={% static "swot.jpg" %} alt= "小公寓首頁">
+  <img src={% static "swot.png" %} alt= "小公寓首頁" height= 300px>
 
   </body>
 </html>

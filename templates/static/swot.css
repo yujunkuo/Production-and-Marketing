@@ -21,6 +21,6 @@ p{
   font-family: 標楷體;
   font-size: 40px;
   color: #FFAA33;
-  position: absolute;
-  top: 150px;
+  position: relative;
+  top: 0px;
 }

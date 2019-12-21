@@ -7,13 +7,29 @@
     <link rel="stylesheet" href="{% static 'customerAnalysis.css' %}">
   </head>
   <body>
-    <p>客群分析</p>
+    <p>客群分析(K-Means)</p>
     <form method="post" class="formUpload"enctype="multipart/form-data">
-      <!--<input type="file" class="file" name="customer_file" accept=".csv" />-->
       {% csrf_token %}
       {{ form.as_p }}
       <input type="submit">確認上傳</input>
     </form>
+    <li>
+      <a href="#">分群</a>
+      <ul>
+        <li>
+          <a href="#">2</a>
+        </li>
+        <li>
+          <a href="#">3</a>
+        </li>
+        <li>
+          <a href="#">4</a>
+        </li>
+        <li>
+          <a href="#">5</a>
+        </li>
+      </ul>
+    </li>
     <div>
     <li>
     <ul><p1>Name: </p1>{{ mname_list }}</ul>
@@ -21,31 +37,6 @@
     <ul><p3>Consumption: </p3>{{ consumption_list }}</ul>
     <ul><p4>KMeans Result: </p4>{{ kmeans_fit }}</ul>
     </li></div>
-    <img src="data:image/png;base64,{{ plot_res }}" />
-    <ul class="drop-down-menu">
-    	<li>
-    		<a href="#">顧客分析</a>
-    		<ul>
-    			<li>
-    				<a href="#">留存率</a>
-    			</li>
-    			<li>
-    				<a href="#">存活率</a>
-    			</li>
-    			<li>
-    				<a href="#">存續期間</a>
-    			</li>
-    		</ul>
-    	</li>
-    	<li>
-        <a href="#">客群分析</a>
-        <ul>
-          <li>
-            <a href="#">K-Means</a>
-          </li>
-          <li>
-            <a href="#">存活率</a>
-          </li>
-
+    <img class="image" src="data:image/png;base64,{{ plot_res }}" />
   </body>
 </html>
