@@ -8,8 +8,17 @@
     <title></title>
   </head>
   <body>
-  <p>客群分析(決策樹)</p>
-  <img class= "image" src="data:image/png;base64,{{ plot_res }}" />
+  <p>客群分析(決策樹)</p><br>
+  <ul>
+    <li>No pets, not student, female: {{ pre0 }}</li>
+    <li>No pets, not student, male: {{ pre1 }}</li>
+    <li>No pets, is student, female: {{ pre2 }}</li>
+    <li>No pets, is student, male: {{ pre3 }}</li>
+    <li>Has pets, not student, female: {{ pre4 }}</li>
+    <li>Has pets, not student, male: {{ pre5 }}</li>
+    <li>Has pets, is student, female: {{ pre6 }}</li>
+    <li>Has pets, is student, male: {{ pre7 }}</li>
+  </ul>
 
   </body>
 </html>
