@@ -22,6 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', marketing.views.main),
     path('marketing/', include("marketing.urls")),
-    # path('production/', include("production.urls")),
+    path('production/', include("production.urls")),
     path('members/', marketing.views.members),
 ]

@@ -2,6 +2,8 @@ from django.shortcuts import render
 import datetime
 from production.models import *
 
+def main(request):
+    return render(request, "某某.html")
 
 # Create your views here.
 def order(request):
