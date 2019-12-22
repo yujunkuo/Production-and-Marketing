@@ -27,11 +27,6 @@ def stp(request):
 def decisionTree(request):
     return render(request, 'decisionTree.html')
 
-
-def swot(request):
-    return render(request, 'swot.html')
-
-
 class KmeansView(TemplateView):
     template_name = 'customerAnalysis.html'
 
