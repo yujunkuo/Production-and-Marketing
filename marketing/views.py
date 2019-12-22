@@ -20,12 +20,14 @@ def main(request):
 
 def members(request):
     return render(request, 'members.html')
+
+
 def swot(request):
     return render(request, 'swot.html')
+
+
 def stp(request):
     return render(request, 'stp.html')
-def decisionTree(request):
-    return render(request, 'decisionTree.html')
 
 
 def swot(request):
@@ -87,3 +89,9 @@ class KmeansView(TemplateView):
         plot_res = base64.b64encode(save_file.getvalue()).decode('utf8')
         plt.close()
         return plot_res, mname_list, age_list, consumption_list, kmeans_fit
+
+
+class DecisionTreeView(TemplateView):
+
+    def get(self, request):
+        return render(request, "decisionTree.html")
