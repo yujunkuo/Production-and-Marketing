@@ -10,13 +10,64 @@
     <h1></h1>
 <form class="box" action="首頁" method="post">
   <img src={% static "小公寓首頁.jpg" %} class= "image" alt= "小公寓首頁">
-  <input type= "button" value= "分工" class = "btn0" onclick="location.href='/members/'">
-  <input type= "button" value= "行銷管理" class = "btn1" onclick="location.href='/marketing/'">
-  <input type= "button" value= "作業管理" class = "btn2" onclick="location.href='/production/'">
+
   <p>一間隱藏於二樓的溫馨咖啡廳<strong>小公寓</strong></p>
   <p>不僅是一間<strong>貓咪餐廳</strong></p>
   <p>更是<strong>友善動物、歡迎寵物</strong>的咖啡館</p>
   <p>讓您悠閒的喝咖啡、吃輕食、看設計</p>
 </form>
+ <ul class="drop-down-menu">
+  <li>
+    <a href="location.href='/production/'">作業管理</a>
+    <ul>
+      <li>
+        <a href="#">點餐</a>
+      </li>
+      <li>
+        <a href="#">存貨</a>
+      </li>
+      <li>
+        <a href="#">設備</a>
+      </li>
+    </ul>
+  </li>
+  <li>
+      <a href="#">行銷管理</a>
+      <ul>
+        <li>
+          <a >顧客分析</a>
+          <ul>
+            <li>
+              <a href="#">留存率</a>
+            </li>
+            <li>
+              <a href="#">存活率</a>
+            </li>
+            <li>
+              <a href="#">存續期間</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">客群分析</a>
+          <ul>
+            <li>
+              <a onclick="location.href='/marketing/'">K-Means</a>
+            </li>
+            <li>
+              <a href="#">Decision Tree</a>
+            </li>
+          </ul>
+        <li>
+          <a href="#">STP分析</a>
+            </li>
+        <li>
+          <a onclick="location.href='/swot/'">SWOT分析</a>
+      </li>
+          </ul>
+        </li>
+  <li>
+      <a type= "button" onclick="location.href='/members/'">分工</a>
+    </li>
   </body>
 </html>

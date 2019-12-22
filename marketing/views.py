@@ -20,6 +20,10 @@ def main(request):
 
 def members(request):
     return render(request, 'members.html')
+def swot(request):
+    return render(request, 'swot.html')
+
+
 
 class CustomerView(TemplateView):
 

@@ -24,4 +24,5 @@ urlpatterns = [
     path('marketing/', include("marketing.urls")),
     #path('production/', include("production.urls")),
     path('members/', marketing.views.members),
+    path('swot/', marketing.views.swot),
 ]
