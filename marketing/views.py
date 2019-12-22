@@ -4,19 +4,19 @@ from .forms import CustomerForm
 from production.models import Member, Dish, Order
 
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.cluster import KMeans
 from datetime import datetime
 
 from io import BytesIO
 import base64
 
+
 # Create your views here.
 
 def main(request):
     return render(request, 'main.html')
+
 
 def members(request):
     return render(request, 'members.html')
@@ -28,9 +28,11 @@ def decisionTree(request):
     return render(request, 'decisionTree.html')
 
 
+def swot(request):
+    return render(request, 'swot.html')
 
-class CustomerView(TemplateView):
 
+class KmeansView(TemplateView):
     template_name = 'customerAnalysis.html'
 
     def get(self, request):
@@ -44,7 +46,8 @@ class CustomerView(TemplateView):
         if form.is_valid():
             plot_res, mname_list, age_list, consumption_list, kmeans_fit = self.handle_file(request.FILES['file'])
             form = CustomerForm()
-        args = {'form': form, "plot_res": plot_res, "mname_list": mname_list, "age_list": age_list, "consumption_list": consumption_list, "kmeans_fit": kmeans_fit}
+        args = {'form': form, "plot_res": plot_res, "mname_list": mname_list, "age_list": age_list,
+                "consumption_list": consumption_list, "kmeans_fit": kmeans_fit}
         return render(request, self.template_name, args)
 
     def handle_file(self, file):
@@ -75,9 +78,9 @@ class CustomerView(TemplateView):
             student_list.append(cust.Student)
         df = pd.DataFrame({"id": memberid_list, "name": mname_list, "age": age_list, "consumption": consumption_list})
         model = KMeans(n_clusters=3)
-        kmeans_fit = model.fit_predict(df.iloc[:,2:])
+        kmeans_fit = model.fit_predict(df.iloc[:, 2:])
         for i in set(kmeans_fit):
-            plt.scatter(x=df[(model.labels_ == i)]["age"], y=df[(model.labels_ == i)]["consumption"],label=i)
+            plt.scatter(x=df[(model.labels_ == i)]["age"], y=df[(model.labels_ == i)]["consumption"], label=i)
         plt.legend()
         save_file = BytesIO()
         plt.savefig(save_file, format='png')

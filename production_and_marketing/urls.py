@@ -22,9 +22,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', marketing.views.main),
     path('marketing/', include("marketing.urls")),
-    #path('production/', include("production.urls")),
+    # path('production/', include("production.urls")),
     path('members/', marketing.views.members),
+<<<<<<< HEAD
     path('swot/', marketing.views.swot),
     path('stp/', marketing.views.stp),
     path('decisionTree/', marketing.views.decisionTree),
+=======
+>>>>>>> 0f2aecf1a86f92ed82b30955cb1bd6fc3da627c6
 ]
