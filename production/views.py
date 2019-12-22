@@ -2,6 +2,14 @@ from django.shortcuts import render
 import datetime
 from production.models import *
 
+def orderSystem(request):
+    return render(request, "orderSystem.html")
+
+def inventorySystem(request):
+    return render(request, "inventorySystem.html")
+    
+def equipmentSystem(request):
+    return render(request, "equipmentSystem.html")
 
 # Create your views here.
 def order(request):

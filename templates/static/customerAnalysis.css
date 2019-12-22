@@ -17,7 +17,7 @@ body{
   background-attachment: fixed;
 }
 image{
-  top: 100px;
+  top: 330px;
   left: 100px;
 }
 
@@ -87,6 +87,7 @@ p4{
 .formUpload.click::before{
   display:block;
 }
+
 ul {
   /* 取消ul預設的內縮及樣式 */
   margin: 0;
@@ -166,4 +167,17 @@ ul.drop-down-menu ul {
 ul.drop-down-menu li:hover>ul {
   /* 滑鼠滑入展開次選單*/
   display: block;
+}
+.btn{
+  width: 200px;
+  height: 60px;
+  background: none;
+  border: 4px solid;
+  color: #3498bd;
+  font-weight: 700;
+  cursor: pointer;
+  position: relative;
+  font-size: 25px;
+  top: 100px;
+  left: 0px;
 }

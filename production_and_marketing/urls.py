@@ -22,10 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', marketing.views.main),
     path('marketing/', include("marketing.urls")),
-    # path('production/', include("production.urls")),
+    path('production/', include("production.urls")),
     path('members/', marketing.views.members),
-
-    path('swot/', marketing.views.swot),
-    path('stp/', marketing.views.stp),
-    path('decisionTree/', marketing.views.decisionTree),
 ]

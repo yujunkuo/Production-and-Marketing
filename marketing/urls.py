@@ -1,7 +1,9 @@
 from django.urls import path
-from marketing.views import KmeansView, swot
+import marketing.views
 
 urlpatterns = [
-  path('cluster/kmeans/', KmeansView.as_view()),
-  path('swot/', swot),
+  path('cluster/kmeans/', marketing.views.KmeansView.as_view()),
+  path('swot/', marketing.views.swot),
+  path('stp/', marketing.views.stp),
+  path('cluster/decisionTree/', marketing.views.DecisionTreeView.as_view()),
 ]

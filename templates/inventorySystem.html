@@ -2,12 +2,13 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'inventorySystem.css' %}">
     <title></title>
-    <link rel="stylesheet" href="inventorySystem.css">
   </head>
   <body>
-    <p>庫存數量</p>
-    <p1>庫存項目</p1>
-
+  <p>存貨系統</p>
+  <img src={% static "inventory.jpg" %} alt= "存貨" height= 300px>
+  <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>
 </html>

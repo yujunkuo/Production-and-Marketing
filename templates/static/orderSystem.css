@@ -1,0 +1,36 @@
+*{
+  margin: 0;
+  padding: 0;
+  font-family:標楷體;
+}
+
+body{
+  background: #353b48;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+p{
+  line-height: 1.8;
+  position: relative;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 28px;
+  color: #FFaa33;
+  top: -200px;
+  left: -300px;
+}
+
+.btn{
+  width: 200px;
+  height: 60px;
+  background: none;
+  border: 4px solid;
+  color: #3498bd;
+  font-weight: 700;
+  cursor: pointer;
+  position: relative;
+  font-size: 25px;
+  top: 200px;
+  left: -150px;
+}
