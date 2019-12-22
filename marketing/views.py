@@ -22,6 +22,10 @@ def members(request):
     return render(request, 'members.html')
 def swot(request):
     return render(request, 'swot.html')
+def stp(request):
+    return render(request, 'stp.html')
+def decisionTree(request):
+    return render(request, 'decisionTree.html')
 
 
 
