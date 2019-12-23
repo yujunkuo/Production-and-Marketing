@@ -132,5 +132,13 @@ class DecisionTreeView(TemplateView):
             "pre7": pre[7]
         })
 
+class RetentionRateView(TemplateView):
+    def get(self):
+        past = 0
+        curr = 0
+        time_list = []
+        for order in Order.objects.all():
+            pass
+
 
 
