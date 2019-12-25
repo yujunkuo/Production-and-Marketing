@@ -42,21 +42,26 @@ class KmeansView(TemplateView):
     template_name = 'customerAnalysis.html'
 
     def get(self, request):
-        form = CustomerForm()
+        #form = CustomerForm()
+        plot_res, mname_list, age_list, consumption_list, kmeans_fit = self.handle_file()
         return render(request, self.template_name, {
-            "form": form
+            "plot_res": plot_res,
+            "mname_list": mname_list,
+            "age_list": age_list,
+            "consumption_list": consumption_list,
+            "kmeans_result": kmeans_fit
         })
 
-    def post(self, request):
-        form = CustomerForm(request.POST, request.FILES)
-        if form.is_valid():
-            plot_res, mname_list, age_list, consumption_list, kmeans_fit = self.handle_file(request.FILES['file'])
-            form = CustomerForm()
-        args = {'form': form, "plot_res": plot_res, "mname_list": mname_list, "age_list": age_list,
-                "consumption_list": consumption_list, "kmeans_fit": kmeans_fit}
-        return render(request, self.template_name, args)
+    #def post(self, request):
+    #    form = CustomerForm(request.POST, request.FILES)
+    #    if form.is_valid():
+    #        plot_res, mname_list, age_list, consumption_list, kmeans_fit = self.handle_file(request.FILES['file'])
+    #        form = CustomerForm()
+    #    args = {'form': form, "plot_res": plot_res, "mname_list": mname_list, "age_list": age_list,
+    #            "consumption_list": consumption_list, "kmeans_fit": kmeans_fit}
+    #    return render(request, self.template_name, args)
 
-    def handle_file(self, file):
+    def handle_file(self):
         memberid_list = []
         mname_list = []
         age_list = []
