@@ -61,7 +61,7 @@ class Equipment(models.Model):
 
 
 class Order(models.Model):
-    oTime = models.DateTimeField(auto_now_add='True', primary_key=True)
+    oTime = models.DateTimeField(primary_key=True)  # auto_now_add='True',
     MemberID = models.ForeignKey(Member, on_delete=models.CASCADE)
     dName = models.ForeignKey(Dish, on_delete=models.CASCADE)
     oNum = models.PositiveIntegerField()
