@@ -37,17 +37,16 @@ def swot(request):
 def stp(request):
     return render(request, 'stp.html')
 
+
 def survivalRate(request):
     return render(request, 'survivalRate.html')
 
-def retaintionRate(request):
-    return render(request, 'retaintionRate.html')
 
 class KmeansView(TemplateView):
     template_name = 'customerAnalysis.html'
 
     def get(self, request):
-        #form = CustomerForm()
+        # form = CustomerForm()
         plot_res, mname_list, age_list, consumption_list, kmeans_fit = self.handle_file()
         return render(request, self.template_name, {
             "plot_res": plot_res,
@@ -57,7 +56,7 @@ class KmeansView(TemplateView):
             "kmeans_result": kmeans_fit
         })
 
-    #def post(self, request):
+    # def post(self, request):
     #    form = CustomerForm(request.POST, request.FILES)
     #    if form.is_valid():
     #        plot_res, mname_list, age_list, consumption_list, kmeans_fit = self.handle_file(request.FILES['file'])
@@ -142,10 +141,27 @@ class DecisionTreeView(TemplateView):
             "pre7": pre[7]
         })
 
+
 class RetentionRateView(TemplateView):
-    def get(self):
+
+    def get(self, request):
         past = 0
         curr = 0
-        time_list = []
+        curr_cust = []
+        past_cust = []
+        curr_month = datetime.now().month
         for order in Order.objects.all():
-            pass
+            if order.oTime.month == curr_month:
+                curr_cust.append(order.MemberID)
+            elif order.oTime.month == curr_month - 1:
+                past_cust.append(order.MemberID)
+            elif curr_month == 1 and order.oTime.month == 12:
+                past_cust.append(order.MemberID)
+        curr_cust = set(curr_cust)
+        past_cust = set(past_cust)
+        retention = curr_cust & past_cust
+        try:
+            retention_rate = len(retention) / len(past_cust)
+        except:
+            retention_rate = 0
+        return render(request, "retentionRate.html", {"retention": retention_rate})
