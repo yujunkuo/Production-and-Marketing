@@ -1,49 +1,64 @@
-@import url(//fonts.googleapis.com/earlyaccess/notosanstc.css);
+@import url(https://fonts.googleapis.com/earlyaccess/cwtexyen.css);
 *{
   margin: 0;
   padding: 0;
-  font-family:"montserrat", sans-serif;
+  font-family: 'cwTeXYen', sans-serif;
 }
 body{
-  background: #353b48;
+  background: lightskyblue;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+.background{
+  width: 600px;
+  height: 500px;
+  background-position: center;
+  background-attachment: fixed;
+}
+h{
+  font-family: 標楷體;
+  font-size: 40px;
+  color: white;
+  position: relative;
+  top: 100px;;
+}
+.image{
+  width: 700px;
+  height: 400px;
+  position: relative;
+  float: right;
+  margin: 10px;
+  top: 0px;
+  left: -200px;
+}
 p{
   text-align: left;
   line-height: 1.8;
   position: relative;
-  top: -150px;
-  left: 750px;
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
-  color: #FFaa33;
+  color: darkorchid;
+  top: -180px;
+  left: 580px;
 }
-.image{
-  width: 700px;
-  height: 500px;
-  position: relative;
-  float: right;
-  margin: 10px;
-  top: 100px;
-}
+
 ul {
   /* 取消ul預設的內縮及樣式 */
   margin: 0;
   padding: 0;
   list-style: none;
   position: relative;
-  top: -200px;
-  left: 20px;
+  top: -220px;
+  left: -150px;
 }
 
 ul.drop-down-menu {
   border: #ccc 1px solid;
   display: inline-block;
   font-family: 'Open Sans', Arial, sans-serif;
-  font-size: 13px;
+  font-size: 16px;
   cursor: pointer;
 }
 

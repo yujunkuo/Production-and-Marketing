@@ -7,15 +7,15 @@
     <link rel = "stylesheet" href = {% static "main.css" %}>
   </head>
   <body>
-    <h1></h1>
+
 <form class="box" action="首頁" method="post">
   <img src={% static "小公寓首頁.jpg" %} class= "image" alt= "小公寓首頁">
-
-  <p>一間隱藏於二樓的溫馨咖啡廳<strong>小公寓</strong></p>
-  <p>不僅是一間<strong>貓咪餐廳</strong></p>
-  <p>更是<strong>友善動物、歡迎寵物</strong>的咖啡館</p>
-  <p>讓您悠閒的喝咖啡、吃輕食、看設計</p>
+    <p>一間隱藏於二樓的溫馨咖啡廳<strong>小公寓</strong></p>
+    <p>不僅是一間<strong>貓咪餐廳</strong></p>
+    <p>更是<strong>友善動物、歡迎寵物</strong>的咖啡館</p>
+    <p>讓您悠閒的喝咖啡、吃輕食、看設計</p>
 </form>
+
  <ul class="drop-down-menu">
   <li>
     <a>作業管理</a>
@@ -38,13 +38,10 @@
           <a>顧客分析</a>
           <ul>
             <li>
-              <a href="#">留存率</a>
+              <a onclick="location.href='/marketing/retaintionRate/'">留存率</a>
             </li>
             <li>
-              <a href="#">存活率</a>
-            </li>
-            <li>
-              <a href="#">存續期間</a>
+              <a onclick="location.href='/marketing/survivalRate/'">存活率</a>
             </li>
           </ul>
         </li>

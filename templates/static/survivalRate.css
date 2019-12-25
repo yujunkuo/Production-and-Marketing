@@ -11,16 +11,20 @@ body{
   align-items: center;
   justify-content: center;
 }
-p{
-  line-height: 1.8;
-  position: relative;
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 28px;
-  color: #FFaa33;
-  top: -200px;
-  left: -300px;
+.background{
+  width: 800px;
+  height: 500px;
+  background-position: center;
+  background-attachment: fixed;
 }
 
+h1{
+  font-family: 標楷體;
+  font-size: 40px;
+  color: #FFAA33;
+  position: relative;
+  top: 0px;
+}
 .btn{
   width: 200px;
   height: 60px;
@@ -31,6 +35,6 @@ p{
   cursor: pointer;
   position: relative;
   font-size: 25px;
-  top: 200px;
-  left: -150px;
+  top: 100px;
+  left: 0px;
 }

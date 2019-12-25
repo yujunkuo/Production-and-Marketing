@@ -8,35 +8,16 @@
   </head>
   <body>
     <p>客群分析(K-Means)</p>
-    <form method="post" class="formUpload"enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit">確認上傳</input>
-    </form>
-    <li>
-      <a href="#">分群</a>
+    <div class="result">
       <ul>
-        <li>
-          <a href="#">2</a>
-        </li>
-        <li>
-          <a href="#">3</a>
-        </li>
-        <li>
-          <a href="#">4</a>
-        </li>
-        <li>
-          <a href="#">5</a>
-        </li>
-      </ul>
-    </li>
-    <div>
-    <li>
-    <ul><p1>Name: </p1>{{ mname_list }}</ul>
-    <ul><p2>Age: </p2>{{ age_list }}</ul>
-    <ul><p3>Consumption: </p3>{{ consumption_list }}</ul>
-    <ul><p4>KMeans Result: </p4>{{ kmeans_fit }}</ul>
-    </li></div>
+      <li>Name:a{{ mname_list }}<li>
+      <li>Age:{{ age_list }}</li>
+      <li>Consumption: {{ consumption_list }}</li>
+      <li>KMeans Result: {{ kmeans_fit }}</li>
+      </u1>
+    </div>
+
+
     <img class="image" src="data:image/png;base64,{{ plot_res }}" />
     <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>

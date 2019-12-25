@@ -37,6 +37,11 @@ def swot(request):
 def stp(request):
     return render(request, 'stp.html')
 
+def survivalRate(request):
+    return render(request, 'survivalRate.html')
+
+def retaintionRate(request):
+    return render(request, 'retaintionRate.html')
 
 class KmeansView(TemplateView):
     template_name = 'customerAnalysis.html'
@@ -144,6 +149,3 @@ class RetentionRateView(TemplateView):
         time_list = []
         for order in Order.objects.all():
             pass
-
-
-

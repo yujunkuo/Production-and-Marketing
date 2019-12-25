@@ -1,6 +1,6 @@
 @import url(https://fonts.googleapis.com/earlyaccess/cwtexyen.css);
-body, h{
-  background: #353b48;
+body{
+  background:	lightskyblue;
   height: 60vh;
   display: flex;
   align-items: center;
@@ -11,6 +11,13 @@ body, h{
   justify-content: center;
   font-family: 'cwTeXYen', sans-serif;
 }
+h{
+  font-family: 標楷體;
+  font-size: 40px;
+  color: white;
+  position: absolute;
+  top: 80px;
+}
 .center-box{
   position: absolute;
   top: 50%;
@@ -18,16 +25,17 @@ body, h{
   transform: translate(-50%, -50%);
 }
 .center-box div{
-  width: 600px;
+  width: 900px;
   height: 60px;
   background: #6498db;
   overflow: hidden;
   margin: 8px 0;
   color: #313131
+  top: auto;
 }
 .center-box span{
   float: left;
-  width: 40px;
+  width: 150px;
   height: 60px;
   font-size: 30px;
   text-align: center;
@@ -35,7 +43,7 @@ body, h{
 }
 .center-box p{
   float: left;
-  font-size: 16px;
+  font-size: 24px;
   margin: 0;
   padding:0 6px;
   font-weight: 700;
@@ -58,4 +66,17 @@ body, h{
 }
 .m3 span{
   background: #c0392b;
+}
+.btn{
+  width: 200px;
+  height: 60px;
+  background: none;
+  border: 4px solid;
+  color: #3498bd;
+  font-weight: 700;
+  cursor: pointer;
+  position: relative;
+  font-size: 25px;
+  top: 150px;
+  left: 0px;
 }
