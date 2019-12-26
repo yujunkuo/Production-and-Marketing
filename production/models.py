@@ -69,11 +69,9 @@ class Order(models.Model):
 
     class Meta:
         unique_together = ("oTime", "MID", "dishName")
-
     def __str__(self):
         result = str(self.oTime) + ' ' + str(self.MID) + ' ' + str(self.dishName) + ' ' + str(self.orderNum)
         return result
-
 
 class Made(models.Model):
     mTime = models.DateTimeField(auto_now_add='True', primary_key=True)
@@ -83,7 +81,6 @@ class Made(models.Model):
 
     class Meta:
         unique_together = ("mTime", "mDish", "mStock")
-
     def __str__(self):
         result = str(self.mTime) + ' ' + str(self.mDish) + ' ' + str(self.mStock) + ' ' + str(self.mNum)
         return result
@@ -97,11 +94,9 @@ class ProvideStock(models.Model):
 
     class Meta:
         unique_together = ("psTime", "pStock", "psNum")
-
     def __str__(self):
         result = str(self.psTime) + ' ' + str(self.psFirm) + ' ' + str(self.pStock) + ' ' + str(self.psNum)
         return result
-
 
 class ProvideEquip(models.Model):
     peTime = models.DateTimeField(auto_now_add='True', primary_key=True)
@@ -111,7 +106,6 @@ class ProvideEquip(models.Model):
 
     class Meta:
         unique_together = ("peTime", "pEquip", "peNum")
-
     def __str__(self):
         result = str(self.peTime) + ' ' + str(self.peNum) + ' ' + str(self.pEquip) + ' ' + str(self.peNum)
         return result

@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView
+from .forms import orderForm
 import datetime
 from production.models import *
 
@@ -10,25 +12,31 @@ def orderSystem(request):
 def checkSystem(request):
     return render(request, "checkSystem.html")
 
+
 def provideSystem(request):
     return render(request, "provideSystem")
+
 
 def stockCheck(request):
     return render(request, "stockCheck.html")
 
+
 def equipmentCheck(request):
     return render(request, "equipmentCheck.html")
+
 
 def stockProvide(request):
     return render(request, "stockProvide.html")
 
+
 def equipmentProvide(request):
     return render(request, "equipmentProvide.html")
+
 
 dish_dict = {'拿鐵咖啡': {'牛奶': 1, '咖啡': 1}, '巧克力冰淇淋鬆餅': {'巧克力': 1, '冰淇淋': 1, '鬆餅粉': 1},
              '挪威燻鮭魚沙拉': {'鮭魚': 1, '萵苣': 2, '番茄': 3, '麵包丁': 2, '沙拉醬': 1}}
 
-# Create your views here.
+
 def join_member(x: str, y: str, z: int, w: str, r: datetime, t: bool, q: bool, o:int):
     '''name = request.Get.get()
     gender = request.Get.get()
@@ -76,7 +84,7 @@ def order(request):
     except Member.DoesNotExit:
         Member.objects.create(MemberID=mid)
 
-    Order.objects.create(oTime=time, MID=Member.objects.get(MemberID=mid),
+    Order.objects.create(MID=Member.objects.get(MemberID=mid),
                          dishName=Dish.objects.get(dName=dish), orderNum=num)
 
     for i in dish_dict[dish]:
@@ -84,21 +92,6 @@ def order(request):
         stock_db = Stock.objects.filter(sName=stock).orderby('Expired')
         used_num = dish_dict[dish][i]
 
-        for j in len(stock_db):
-            if not stock_db[j].sNum <= used_num:
-                stock_db[j].sNum -= used_num
-                stock_db[j].save()
-                break
-            else:
-                used_num -= stock_db[j].sNum
-                stock_db[j].sNum = 0
-                stock_db[j].save()
-        Stock.objects.filter(sNum=0).delete
-
-    Made.objects.create(mDish=Dish.objects.get(dName=dish), mStock=Stock.objects.get(sName=stock), mNum=used_num)
-
-    success_msg = 'Finish Ordering'
-    return success_msg
 
 def check_stock_all():
     result = Stock.objects.order_by('Expired')
@@ -142,9 +135,8 @@ def provide_stock(x: str, y: int, z: datetime, w: int, p: int):
         Firm.objects.create(FirmID=firm)
 
     Stock.objects.create(sName=name, sNum=num, Expired=expired)
-    ProvideStock.objects.create(psFirm=Firm.objects.get(FirmID=firm), name=Stock.objects.get(sName=name),
-                                psNum=num)
-
+    ProvideStock.objects.create(psFirm=Firm.objects.get(FirmID=firm),name=Stock.objects.get(sName=name),psNum=num)
+    
     SuccessMSG = 'Successfully Update Stock'
     return SuccessMSG
 
@@ -175,7 +167,6 @@ def provide_equip(request):
 
     success_msg = 'Successfully Update Equipment'
     return success_msg
-
 
 Dish_List = ['拿鐵咖啡', '香草拿鐵', '濃縮咖啡', '卡布奇諾', '焦糖瑪奇朵', '提拉米蘇拿鐵', '貝里斯奶酒咖啡', '特調風味鮮奶茶',
              '玫瑰奶茶', '牛奶糖歐蕾', '可可歐蕾', '抹茶阿法其朵', '蜂蜜檸檬', '蜂蜜奇異果', '精選啤酒', '蘋果優格冰沙', 'Oreo巧克力冰沙',
@@ -215,5 +206,3 @@ def prediction(request):
         predict_for_month.append(predict)
 
     return name, predict[-1]
-
-
