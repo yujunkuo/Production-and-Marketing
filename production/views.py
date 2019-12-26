@@ -24,6 +24,18 @@ def stockProvide(request):
 def equipmentProvide(request):
     return render(request, "equipmentProvide.html")
 
+class OrderView(TemplateView):
+  template_name = 'orderSystem.html'
+  def get(self, request):
+    form = HomeForm()
+    return render( request, self.template_name, {'form':form})
+  def post(self, request):
+    form = HomeForm(request.POST)
+    if form.is_valid():
+      text = form.cleaned_data['post']
+      form = HomeForm()
+    args = {'form': form, 'text': text}
+    return render(request, self.template_name, args)
 
 # Create your views here.
 def order(x : int, y : str, z : int, w : datetime):
