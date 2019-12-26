@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from .forms import orderForm
-import datetime
+from datetime import datetime
 from production.models import *
 
 
@@ -69,19 +69,20 @@ class OrderView(TemplateView):
         order_form = orderForm(request.POST)
 
         if order_form.is_valid():
-            mid = request.POST.get('mid', "")
-            dish = request.POST.get('dish', "")
-            num = request.POST.get('num', "")
+            mid = int(request.POST.get('mid', ""))
+            dish = int(request.POST.get('dish', ""))
+            num = int(request.POST.get('num', ""))
             order_form = orderForm()
+            dish_name = Dish.objects.all()[dish]
+            time = datetime.now()
 
             try:
-                mid = Member.objects.get(MemberID=mid)
                 Order.objects.create(oTime=time, MID=Member.objects.get(MemberID=mid),
-                                     dishName=Dish.objects.get(dName=dish), orderNum=num)
-                for i in dish_dict[dish]:
+                                     dishName=Dish.objects.get(dName=dish_name), orderNum=num)
+                for i in dish_dict[dish_name]:
                     stock = i
                     stock_db = Stock.objects.filter(sName=stock).orderby('Expired')
-                    used_num = dish_dict[dish][i]
+                    used_num = dish_dict[dish_name][i]
             except:
                 pass
         return render(request, self.template_name, {'form': order_form})

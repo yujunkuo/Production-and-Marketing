@@ -81,7 +81,6 @@ class Made(models.Model):
 
     class Meta:
         unique_together = ("mTime", "mDish", "mStock")
-
     def __str__(self):
         result = str(self.mTime) + ' ' + str(self.mDish) + ' ' + str(self.mStock) + ' ' + str(self.mNum)
         return result
@@ -107,7 +106,6 @@ class ProvideEquip(models.Model):
 
     class Meta:
         unique_together = ("peTime", "pEquip", "peNum")
-
     def __str__(self):
         result = str(self.peTime) + ' ' + str(self.peNum) + ' ' + str(self.pEquip) + ' ' + str(self.peNum)
         return result
