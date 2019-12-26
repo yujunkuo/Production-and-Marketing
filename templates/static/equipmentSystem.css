@@ -5,7 +5,7 @@
   font-family: 'cwTeXYen', sans-serif;
 }
 body{
-  background: lightskyblue;
+  background: #F1F1F1;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -16,7 +16,7 @@ p{
   position: relative;
   font-family: 'Noto Sans TC', sans-serif;
   font-size: 28px;
-  color: #FFaa33;
+  color: lightskyblue;
   top: -200px;
   left: -100px;
 }

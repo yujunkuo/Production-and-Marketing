@@ -5,7 +5,7 @@
   font-family: 'cwTeXYen', sans-serif;
 }
 body{
-  background: lightskyblue;
+  background: #353b48;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -17,21 +17,22 @@ body{
   background-position: center;
   background-attachment: fixed;
 }
-h{
+h1{
   font-family: 標楷體;
   font-size: 40px;
-  color: white;
-  position: relative;
-  top: 100px;;
+  color: #FFaa33;
+  position: absolute;
+  top: 30px;
+  left: 860px;
 }
 .image{
   width: 700px;
-  height: 400px;
-  position: relative;
+  height: 500px;
+  position: absolute;
   float: right;
   margin: 10px;
   top: 0px;
-  left: -200px;
+  left: 0px;
 }
 p{
   text-align: left;
@@ -39,9 +40,9 @@ p{
   position: relative;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
-  color: darkorchid;
-  top: -180px;
-  left: 580px;
+  color: #FFaa33;
+  top: 130px;
+  left: 350px;
 }
 
 ul {
@@ -49,9 +50,9 @@ ul {
   margin: 0;
   padding: 0;
   list-style: none;
-  position: relative;
-  top: -220px;
-  left: -150px;
+  position: absolute;
+  top: 120px;
+  left:830px;
 }
 
 ul.drop-down-menu {

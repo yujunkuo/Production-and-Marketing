@@ -5,7 +5,7 @@
   font-family: 'cwTeXYen', sans-serif;
 }
 body{
-  background: lightskyblue;
+  background: #F1F1F1;
   height: 100vh;
   width: 100vh;
   display: flex;
@@ -21,21 +21,21 @@ body{
 p{
   font-family: 標楷體;
   font-size: 40px;
-  color: white;
+  color: lightskyblue;
   position: absolute;
   top: 100px;
 }
 result{
   float: right;
+  left: 800px;
 }
 image{
-  top: 330px;
+  position: absolute;
+  top: 830px;
   left: 700px;
-  height: 600px;
-  weight: 400px;
+  height: 60px;
+  weight: 40px;
 }
-
-
 .btn{
   width: 200px;
   height: 60px;
@@ -47,5 +47,5 @@ image{
   position: relative;
   font-size: 25px;
   top: 100px;
-  left: 0px;
+  left: 100px;
 }

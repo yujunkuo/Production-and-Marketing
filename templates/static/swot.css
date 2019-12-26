@@ -5,7 +5,7 @@
   font-family: 'cwTeXYen', sans-serif;
 }
 body{
-  background: lightskyblue;
+  background: #F1F1F1;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -20,7 +20,7 @@ body{
 p{
   font-family: 標楷體;
   font-size: 40px;
-  color: white;
+  color: lightskyblue;
   position: relative;
   top: 50px;
   left: 100px;

@@ -1,6 +1,6 @@
 @import url(https://fonts.googleapis.com/earlyaccess/cwtexyen.css);
 body{
-  background:	lightskyblue;
+  background:	#F1F1F1;
   height: 60vh;
   display: flex;
   align-items: center;
@@ -14,7 +14,7 @@ body{
 h{
   font-family: 標楷體;
   font-size: 40px;
-  color: white;
+  color: lightskyblue;
   position: absolute;
   top: 80px;
 }
