@@ -1,14 +1,10 @@
 @import url(https://fonts.googleapis.com/earlyaccess/cwtexyen.css);
 body{
   background:	#F1F1F1;
-  height: 60vh;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-family: 'cwTeXYen', sans-serif;
 }
 h{
