@@ -1,15 +1,42 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView
 import datetime
 from production.models import *
 
 def orderSystem(request):
     return render(request, "orderSystem.html")
 
-def inventorySystem(request):
-    return render(request, "inventorySystem.html")
-    
-def equipmentSystem(request):
-    return render(request, "equipmentSystem.html")
+def checkSystem(request):
+    return render(request, "checkSystem.html")
+
+def provideSystem(request):
+    return render(request, "provideSystem.html")
+
+def stockCheck(request):
+    return render(request, "stockCheck.html")
+
+def equipmentCheck(request):
+    return render(request, "equipmentCheck.html")
+
+def stockProvide(request):
+    return render(request, "stockProvide.html")
+
+def equipmentProvide(request):
+    return render(request, "equipmentProvide.html")
+
+class OrderView(TemplateView):
+    template_name = 'orderSystem.html'
+
+    def get(self, request):
+    form = HomeForm()
+    return render( request, self.template_name, {'form':form})
+  def post(self, request):
+    form = HomeForm(request.POST)
+    if form.is_valid():
+      text = form.cleaned_data['post']
+      form = HomeForm()
+    args = {'form': form, 'text': text}
+    return render(request, self.template_name, args)
 
 # Create your views here.
 def order(x : int, y : str, z : int, w : datetime):

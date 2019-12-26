@@ -8,7 +8,75 @@
     <title></title>
   </head>
   <body>
-  <p>點餐系統</p>
+  <p><strong>點餐系統</strong></p>
+  <div class="form">
+    <form method="post">
+      <fieldset>
+        <input type="text" class="ID" placeholder="請輸入會員帳號："><br>
+        <label for="order">請選擇欲購買餐點:</label>
+        <select id="order">
+          <optgroup label="飲料">
+          <option value="拿鐵咖啡">拿鐵咖啡</option>
+          <option value="香草拿鐵">香草拿鐵</option>
+          <option value="濃縮咖啡">濃縮咖啡</option>
+          <option value="卡布奇諾">卡布奇諾</option>
+          <option value="焦糖瑪奇朵">焦糖瑪奇朵</option>
+          <option value="提拉米蘇拿鐵">提拉米蘇拿鐵</option>
+          <option value="貝里斯奶酒咖啡">貝里斯奶酒咖啡</option>
+          <option value="特調風味鮮奶茶">特調風味鮮奶茶</option>
+          <option value="玫瑰奶茶">玫瑰奶茶</option>
+          <option value="牛奶糖歐蕾">牛奶糖歐蕾</option>
+          <option value="可可歐蕾">可可歐蕾</option>
+          <option value="抹茶阿法奇朵">抹茶阿法奇朵</option>
+          <option value="蜂蜜檸檬">蜂蜜檸檬</option>
+          <option value="蜂蜜奇異果">蜂蜜奇異果</option>
+          <option value="精選啤酒">精選啤酒</option>
+          <option value="蘋果優格冰沙">蘋果優格冰沙</option>
+          <option value="Oreo巧克力冰沙">Oreo巧克力冰沙</option>
+          <option value="宇治抹茶冰沙">宇治抹茶冰沙</option>
+          <option value="香蕉巧克力冰沙">香蕉巧克力冰沙</option>
+          <option value="青檸冰紅茶">青檸冰紅茶</option>
+          <option value="玫瑰四物茶">玫瑰四物茶</option>
+          <option value="富士蘋果冰茶">富士蘋果冰茶</option>
+          <option value="伯爵紅茶">伯爵紅茶</option>
+          <option value="烏龍鐵觀音">烏龍鐵觀音</option>
+          <option value="日式玄米煎茶">日式玄米煎茶</option>
+        </optgroup>
+          <optgroup label="食物">
+          <option value="燻火腿芝士夾心焗烤土司">燻火腿芝士夾心焗烤土司</option>
+          <option value="夏威夷比薩芝士焗烤土司">夏威夷比薩芝士焗烤土司</option>
+          <option value="'原味鬆餅">'原味鬆餅</option>
+          <option value="焦糖冰淇淋鬆餅">焦糖冰淇淋鬆餅</option>
+          <option value="巧克力冰淇淋鬆餅">巧克力冰淇淋鬆餅</option>
+          <option value="香蕉冰淇淋鬆餅">香蕉冰淇淋鬆餅</option>
+          <option value="藍莓貝果">藍莓貝果</option>
+          <option value="奶油貝果">奶油貝果</option>
+          <option value="玫瑰奶茶">玫瑰奶茶</option>
+          <option value="花生貝果">花生貝果</option>
+          <option value="焦糖北海道牛奶冰淇淋">焦糖北海道牛奶冰淇淋</option>
+          <option value="甜心草莓冰淇淋">甜心草莓冰淇淋</option>
+          <option value="酥脆巧克力冰淇淋">酥脆巧克力冰淇淋</option>
+          <option value="起士可頌">起士可頌</option>
+          <option value="鮪魚可頌">鮪魚可頌</option>
+          <option value="起士火腿可頌">起士火腿可頌</option>
+          <option value="黑胡椒牛肉可頌">黑胡椒牛肉可頌</option>
+          <option value="蔬菜雞肉可頌">蔬菜雞肉可頌</option>
+          <option value="咖喱雞肉皮塔">咖喱雞肉皮塔</option>
+          <option value="辣味牛肉皮塔">辣味牛肉皮塔</option>
+          <option value="法式鴨胸皮塔">法式鴨胸皮塔</option>
+          <option value="挪威燻鮭魚沙拉">挪威燻鮭魚沙拉</option>
+          <option value="燻火腿沙拉">燻火腿沙拉</option>
+          <option value="一杯雞蛋沙拉(素)">一杯雞蛋沙拉(素)</option>
+          <option value="一杯鮪魚沙拉">一杯鮪魚沙拉</option>
+        </optgroup><br>
+        購買數量:<input class="num" type="text"><br>
+        <input type="submit" value="確認點餐" class"order"><br>
+      </fieldset>
+      </form>
+    </div>
+
+
+
   <img src={% static "order.png" %} alt= "點餐" height= 300px>
   <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>
