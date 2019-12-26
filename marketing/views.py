@@ -140,7 +140,7 @@ class DecisionTreeView(TemplateView):
 
 class RetentionRateView(TemplateView):
 
-    def get(request):
+    def get(self, request):
         curr_time = datetime.now()
         retention_rate_past = self.get_past_retention_rate(curr_time.year, curr_time.month)
         retention_rate_curr = self.get_curr_retention_rate(curr_time.year, curr_time.month)
