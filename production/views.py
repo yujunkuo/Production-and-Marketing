@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
+from .forms import orderForm
 import datetime
 from production.models import *
 
@@ -24,30 +25,17 @@ def stockProvide(request):
 def equipmentProvide(request):
     return render(request, "equipmentProvide.html")
 
-class OrderView(TemplateView):
-  template_name = 'orderSystem.html'
-  def get(self, request):
-    form = HomeForm()
-    return render( request, self.template_name, {'form':form})
-  def post(self, request):
-    form = HomeForm(request.POST)
-    if form.is_valid():
-      text = form.cleaned_data['post']
-      form = HomeForm()
-    args = {'form': form, 'text': text}
-    return render(request, self.template_name, args)
 
-# Create your views here.
-def order(x : int, y : str, z : int, w : datetime):
-    '''
-    mid = request.Get.get('Member ID')
-    dish = request.Get.get('Dish_Name')
-    num = request.Get.get('Dish num')
-    '''
-    mid = x
-    dish = y
-    num = z
-    time = w
+def order(request):
+    if request.method == "POST":
+        orderForm = orderForm(request.POST)
+        if form.is_valid():
+            mid = form.cleaned_data['mid']
+            dish = form.cleaned_data['dish']
+            num = form.cleaned_data['num']
+            return render(request, 'orderSystem.html')
+    else:
+        return render(request, 'orderSystem.html')
 
     try:
         mid = Member.objects.get(MemberID=mid)
@@ -58,11 +46,6 @@ def order(x : int, y : str, z : int, w : datetime):
                          dName=Dish.objects.get(dName=dish), oNum=num)
     success_msg = 'Finish Ordering'
     return success_msg
-
-
-def made(request):
-    made_time = datetime.datetime.now()
-    d_name = request.Get.get('Dish Name')
 
 
 def check_stock_all():
@@ -104,17 +87,11 @@ def provide_stock(x: str, y: int, z: datetime, w: int, p: int):
 
     try:
         Firm.objects.get(FirmID=firm)
-        Stock.objects.get(sName=name)
-
     except Firm.DoesNotExist:
         Firm.objects.create(FirmID=firm)
 
-    '''except Stock.DoesNotExist:
-        print("Remember to update stock's price")'''
-
-    Stock.objects.create(sName=name, sNum=num, Expired=expired, sPrice=price)
-    ProvideStock.objects.create(psFirm=Firm.objects.get(FirmID=firm), name=Stock.objects.get(sName=name),
-                                psNum=num)
+    Stock.objects.create(sName=name, sNum=num, Expired=expired)
+    ProvideStock.objects.create(psFirm=Firm.objects.get(FirmID=firm),name=Stock.objects.get(sName=name),psNum=num)
 
     SuccessMSG = 'Successfully Update Stock'
     return SuccessMSG

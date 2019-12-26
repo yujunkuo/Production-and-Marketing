@@ -13,7 +13,8 @@ class Member(models.Model):
     Student = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.mName
+        result = str(self.MemberID)+' '+ self.mName
+        return result
 
 
 class Dish(models.Model):
@@ -32,13 +33,12 @@ class Firm(models.Model):
     Address = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.fName
-
+        result = str(self.FirmID) + ' ' + self.fName
+        return result
 
 class Stock(models.Model):
     sName = models.CharField(max_length=50, primary_key=True)
     sNum = models.PositiveIntegerField()
-    sPrice = models.PositiveIntegerField()
     Expired = models.DateField()
     dish = models.ManyToManyField(Dish, through='Made')
     firm = models.ManyToManyField(Firm, through='ProvideStock')
@@ -47,28 +47,31 @@ class Stock(models.Model):
         unique_together = ('sName', 'Expired')
 
     def __str__(self):
-        return self.sName
+        result = self.sName + ' ' + str(self.sNum) + ' ' + str(self.Expired)
+        return result
 
 
 class Equipment(models.Model):
     eName = models.CharField(max_length=50, primary_key=True)
     eNum = models.PositiveIntegerField()
-    ePrice = models.PositiveIntegerField()
     firm = models.ManyToManyField(Firm, through='ProvideEquip')
 
     def __str__(self):
-        return self.eName
+        result = self.eName + ' ' + str(self.eNum)
+        return result
 
 
 class Order(models.Model):
-    oTime = models.DateTimeField(primary_key=True)  # auto_now_add='True',
-    MemberID = models.ForeignKey(Member, on_delete=models.CASCADE)
-    dName = models.ForeignKey(Dish, on_delete=models.CASCADE)
-    oNum = models.PositiveIntegerField()
+    oTime = models.DateTimeField(auto_now_add='True', primary_key=True)
+    MID = models.ForeignKey(Member, on_delete=models.CASCADE)
+    dishName = models.ForeignKey(Dish, on_delete=models.CASCADE)
+    orderNum = models.PositiveIntegerField()
 
     class Meta:
-        unique_together = ("oTime", "MemberID", "dName")
-
+        unique_together = ("oTime", "MID", "dishName")
+    def __str__(self):
+        result = str(self.oTime) + ' ' + str(self.MID) + ' ' + str(self.dishName) + ' ' + str(self.orderNum)
+        return result
 
 class Made(models.Model):
     mTime = models.DateTimeField(auto_now_add='True', primary_key=True)
@@ -78,6 +81,9 @@ class Made(models.Model):
 
     class Meta:
         unique_together = ("mTime", "mDish", "mStock")
+    def __str__(self):
+        result = str(self.mTime) + ' ' + str(self.mDish + ' ' + str(self.mStock) + ' ' + str(self.mNum)
+        return result
 
 
 class ProvideStock(models.Model):
@@ -88,6 +94,9 @@ class ProvideStock(models.Model):
 
     class Meta:
         unique_together = ("psTime", "pStock", "psNum")
+    def __str__(self):
+        result = str(self.psTime) + ' ' + str(self.psFirm) + ' ' + str(self.pStock) + ' ' + str(self.psNum)
+        return result
 
 
 class ProvideEquip(models.Model):
@@ -98,3 +107,6 @@ class ProvideEquip(models.Model):
 
     class Meta:
         unique_together = ("peTime", "pEquip", "peNum")
+    def __str__(self):
+        result = str(self.peTime) + ' ' + str(self.peNum) + ' ' + str(self.pEquip) + ' ' + str(self.peNum)
+        return result
