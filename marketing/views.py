@@ -134,7 +134,7 @@ class DecisionTreeView(TemplateView):
             "pre4": "高" if pre[4] == "High" else "低",
             "pre5": "高" if pre[5] == "High" else "低",
             "pre6": "高" if pre[6] == "High" else "低",
-            "pre7": "高" if pre[7] == "High" else "低"
+            "pre7": "高" if pre[7] == "High" else "低",
         })
 
 
