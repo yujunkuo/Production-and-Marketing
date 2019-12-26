@@ -38,10 +38,6 @@ def stp(request):
     return render(request, 'stp.html')
 
 
-def survivalRate(request):
-    return render(request, 'survivalRate.html')
-
-
 class KmeansView(TemplateView):
     template_name = 'customerAnalysis.html'
 
@@ -144,41 +140,83 @@ class DecisionTreeView(TemplateView):
 
 class RetentionRateView(TemplateView):
 
-    def get(self, request):
-        past = 0
-        curr = 0
-        curr_cust = []
-        past_cust = []
-        past_past_cust = []
-        curr_month = datetime.now().month
-        for order in Order.objects.all():
-            if order.oTime.month == curr_month:
-                curr_cust.append(order.MemberID)
-            elif order.oTime.month == curr_month - 1:
-                past_cust.append(order.MemberID)
-            elif order.oTime.month == curr_month - 2:
-                past_past_cust.append(order.MemberID)
-            elif curr_month == 1 and order.oTime.month == 12:
-                past_cust.append(order.MemberID)
-            elif curr_month == 1 and order.oTime.month == 11:
-                past_past_cust.append(order.MemberID)
-            elif curr_month == 2 and order.oTime.month == 12:
-                past_past_cust.append(order.MemberID)
-        curr_cust = set(curr_cust)
-        past_cust = set(past_cust)
-        past_past_cust = set(past_past_cust)
-        curr_retention = curr_cust & past_cust
-        past_retention = past_cust & past_past_cust
-        try:
-            retention_rate_curr = round(len(curr_retention) / len(past_cust), 2)
-        except:
-            retention_rate_curr = "Exception: 分母為0"
-        try:
-            retention_rate_past = round(len(past_retention) / len(past_past_cust), 2)
-        except:
-            retention_rate_past = "Exception: 分母為0"
-
+    def get(request):
+        curr_time = datetime.now()
+        retention_rate_past = self.get_past_retention_rate(curr_time.year, curr_time.month)
+        retention_rate_curr = self.get_curr_retention_rate(curr_time.year, curr_time.month)
         return render(request, "retentionRate.html", {
             "retention_past": retention_rate_past,
             "retention_curr": retention_rate_curr
+        })
+
+    def get_curr_retention_rate(self, curr_year, curr_month):
+        curr_cust = []
+        past_cust = []
+        for order in Order.objects.all():
+            if order.oTime.year == curr_year and order.oTime.month == curr_month:
+                curr_cust.append(order.MemberID)
+            elif order.oTime.year == curr_year and order.oTime.month == curr_month - 1:
+                past_cust.append(order.MemberID)
+            elif curr_month == 1 and order.oTime.month == 12 and order.oTime.year == (curr_year - 1):
+                past_cust.append(order.MemberID)
+        curr_cust = set(curr_cust)
+        past_cust = set(past_cust)
+        curr_retention = curr_cust & past_cust
+        try:
+            retention_rate_curr = round(len(curr_retention) / len(past_cust), 2)
+        except:
+            retention_rate_curr = 0
+
+        return retention_rate_curr
+
+    def get_past_retention_rate(self, curr_year, curr_month):
+        past_cust = []
+        past_past_cust = []
+        for order in Order.objects.all():
+            if order.oTime.year == curr_year and order.oTime.month == curr_month - 1:
+                past_cust.append(order.MemberID)
+            elif order.oTime.year == curr_year and order.oTime.month == curr_month - 2:
+                past_past_cust.append(order.MemberID)
+            elif order.oTime.year == (curr_year - 1) and curr_month == 1 and order.oTime.month == 12:
+                past_cust.append(order.MemberID)
+            elif order.oTime.year == (curr_year - 1) and curr_month == 1 and order.oTime.month == 11:
+                past_past_cust.append(order.MemberID)
+            elif order.oTime.year == (curr_year - 1) and curr_month == 2 and order.oTime.month == 12:
+                past_past_cust.append(order.MemberID)
+        past_cust = set(past_cust)
+        past_past_cust = set(past_past_cust)
+        past_retention = past_cust & past_past_cust
+        try:
+            retention_rate_past = round(len(past_retention) / len(past_past_cust), 2)
+        except:
+            retention_rate_past = 0
+        return retention_rate_past
+
+
+class SurvivalRateView(TemplateView):
+
+    def get(self, request):
+        curr_time = datetime.now()
+        survival = 1
+        survival_list = []
+        for year in range(2019, curr_time.year + 1):
+            if year != curr_time.year:
+                for month in range(1, 13):
+                    retention = RetentionRateView.get_curr_retention_rate(SurvivalRateView, year, month)
+                    survival *= retention
+                    if curr_time.month < 6 and year == (curr_time.year - 1) and month >= (7 + curr_time.month):
+                        survival_list.append(survival)
+            else:
+                for month in range(1, curr_time.month + 1):
+                    retention = RetentionRateView.get_curr_retention_rate(SurvivalRateView, year, month)
+                    survival *= retention
+                    if curr_time.month > 6 and month >= 13 - curr_time.month:
+                        survival_list.append(survival)
+        return render(request, 'survivalRate.html', {
+            "s1": survival_list[0],
+            "s2": survival_list[1],
+            "s3": survival_list[2],
+            "s4": survival_list[3],
+            "s5": survival_list[4],
+            "s6": survival_list[5]
         })
