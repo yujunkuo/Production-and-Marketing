@@ -1,16 +1,17 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
 import datetime
 from production.models import *
 
+
 def orderSystem(request):
     return render(request, "orderSystem.html")
+
 
 def checkSystem(request):
     return render(request, "checkSystem.html")
 
 def provideSystem(request):
-    return render(request, "provideSystem.html")
+    return render(request, "provideSystem")
 
 def stockCheck(request):
     return render(request, "stockCheck.html")
@@ -24,47 +25,82 @@ def stockProvide(request):
 def equipmentProvide(request):
     return render(request, "equipmentProvide.html")
 
-class OrderView(TemplateView):
-    template_name = 'orderSystem.html'
 
-    def get(self, request):
-    form = HomeForm()
-    return render( request, self.template_name, {'form':form})
-  def post(self, request):
-    form = HomeForm(request.POST)
-    if form.is_valid():
-      text = form.cleaned_data['post']
-      form = HomeForm()
-    args = {'form': form, 'text': text}
-    return render(request, self.template_name, args)
+dish_dict = {'拿鐵咖啡': {'牛奶': 1, '咖啡': 1}, '巧克力冰淇淋鬆餅': {'巧克力': 1, '冰淇淋': 1, '鬆餅粉': 1},
+             '挪威燻鮭魚沙拉': {'鮭魚': 1, '萵苣': 2, '番茄': 3, '麵包丁': 2, '沙拉醬': 1}}
+
 
 # Create your views here.
-def order(x : int, y : str, z : int, w : datetime):
-    '''
+def join_member(x: str, y: str, z: int, w: str, r: datetime, t: bool, q: bool, o:int):
+    '''name = request.Get.get()
+    gender = request.Get.get()
+    phone = request.Get.get()
+    email = request.Get.get()
+    bday = request.Get.get()
+    pets = request.Get.get()
+    student = request.Get.get()'''
+    name = x
+    gender = y
+    phone = z
+    email = w
+    bday = r
+    pets = t
+    student = q
+    id = o
+
+    Member.objects.create(mName=name, Gender=gender, Phone=phone, Email=email, BDay=bday, Pets=pets
+                          , Student=student, MemberID=id)
+    '''if Member.objects.filter(mName__isnull = True):
+        members=Member.objects.filter(mName__isnull = True)
+        member_choose = members[0]
+        member_choose.Name = name
+        member_choose.Gender = gender
+        member_choose.Phone = phone
+        member_choose.Email = email
+        member_choose.BDay = bday
+        member_choose.Pets = pets
+        member_choose.Students = student
+        member_choose.save()
+    else:
+        Member.objects.create(mName=name, Gender=gender, Phone=phone, Email=email, BDay=bday, Pets=pets
+                              , Student=student)'''
+    new_member = Member.objects.get(MemberID=id)
+    return new_member
+
+
+def order(request):
     mid = request.Get.get('Member ID')
     dish = request.Get.get('Dish_Name')
     num = request.Get.get('Dish num')
-    '''
-    mid = x
-    dish = y
-    num = z
-    time = w
 
     try:
         mid = Member.objects.get(MemberID=mid)
     except Member.DoesNotExit:
         Member.objects.create(MemberID=mid)
 
-    Order.objects.create(oTime = time, MemberID=Member.objects.get(MemberID=mid),
-                         dName=Dish.objects.get(dName=dish), oNum=num)
+    Order.objects.create(oTime=time, MID=Member.objects.get(MemberID=mid),
+                         dishName=Dish.objects.get(dName=dish), orderNum=num)
+
+    for i in dish_dict[dish]:
+        stock = i
+        stock_db = Stock.objects.filter(sName=stock).orderby('Expired')
+        used_num = dish_dict[dish][i]
+
+        for j in len(stock_db):
+            if not stock_db[j].sNum <= used_num:
+                stock_db[j].sNum -= used_num
+                stock_db[j].save()
+                break
+            else:
+                used_num -= stock_db[j].sNum
+                stock_db[j].sNum = 0
+                stock_db[j].save()
+        Stock.objects.filter(sNum=0).delete
+
+    Made.objects.create(mDish=Dish.objects.get(dName=dish), mStock=Stock.objects.get(sName=stock), mNum=used_num)
+
     success_msg = 'Finish Ordering'
     return success_msg
-
-
-def made(request):
-    made_time = datetime.datetime.now()
-    d_name = request.Get.get('Dish Name')
-
 
 def check_stock_all():
     result = Stock.objects.order_by('Expired')
@@ -101,19 +137,13 @@ def provide_stock(x: str, y: int, z: datetime, w: int, p: int):
     firm = y
     expired = z
     num = w
-    price = p
 
     try:
         Firm.objects.get(FirmID=firm)
-        Stock.objects.get(sName=name)
-
     except Firm.DoesNotExist:
         Firm.objects.create(FirmID=firm)
 
-    '''except Stock.DoesNotExist:
-        print("Remember to update stock's price")'''
-
-    Stock.objects.create(sName=name, sNum=num, Expired=expired, sPrice=price)
+    Stock.objects.create(sName=name, sNum=num, Expired=expired)
     ProvideStock.objects.create(psFirm=Firm.objects.get(FirmID=firm), name=Stock.objects.get(sName=name),
                                 psNum=num)
 
@@ -125,7 +155,6 @@ def provide_equip(request):
     name = request.Get.get('Provide Equipment Name')
     firm = request.Get.get('Provide Equipment Firm')
     num = request.Get.get('Provide Equipment Num')
-    price = request.Get.get('Equipment Price')
 
     try:
         Firm.objects.get(FirmID=firm)
@@ -135,7 +164,7 @@ def provide_equip(request):
     try:
         Equipment.objects.get(eName=name)
     except Equipment.DoesNotExit:
-        Equipment.objects.create(eName=name, eNum=0, ePrice=price)
+        Equipment.objects.create(eName=name, eNum=0)
 
     equip = Equipment.objects.get(eName=name)
     origin_num = equip.eNum
