@@ -74,7 +74,7 @@ class OrderView(TemplateView):
             num = int(request.POST.get('num', ""))
             order_form = orderForm()
             dish_name = Dish.objects.all()[dish]
-            time = datetime.now()
+            time = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
 
             try:
                 Order.objects.create(oTime=time, MID=Member.objects.get(MemberID=mid),
@@ -85,7 +85,7 @@ class OrderView(TemplateView):
                     used_num = dish_dict[dish_name][i]
             except:
                 pass
-        return render(request, self.template_name, {'form': order_form})
+        return render(request, self.template_name, {'form': order_form, "time":time})
 
 
 def check_stock_all():

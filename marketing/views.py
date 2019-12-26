@@ -75,9 +75,9 @@ class KmeansView(TemplateView):
             age_list.append(age)
             # Calculate the member's total consumption amount
             cons = 0
-            orders = Order.objects.filter(MemberID=cust.MemberID)
+            orders = Order.objects.filter(MID=cust.MemberID)
             for order in orders:
-                dish = Dish.objects.filter(dName=order.dName)
+                dish = Dish.objects.filter(dName=order.dishName)
                 dish_price = dish[0].dPrice
                 cons += dish_price
             consumption_list.append(cons)
@@ -104,9 +104,9 @@ class DecisionTreeView(TemplateView):
         for cust in Member.objects.all():
             # Calculate the member's total consumption amount
             cons = 0
-            orders = Order.objects.filter(MemberID=cust.MemberID)
+            orders = Order.objects.filter(MID=cust.MemberID)
             for order in orders:
-                dish = Dish.objects.filter(dName=order.dName)
+                dish = Dish.objects.filter(dName=order.dishName)
                 dish_price = dish[0].dPrice
                 cons += dish_price
             consumption_list.append(cons)
@@ -154,11 +154,11 @@ class RetentionRateView(TemplateView):
         past_cust = []
         for order in Order.objects.all():
             if order.oTime.year == curr_year and order.oTime.month == curr_month:
-                curr_cust.append(order.MemberID)
+                curr_cust.append(order.MID)
             elif order.oTime.year == curr_year and order.oTime.month == curr_month - 1:
-                past_cust.append(order.MemberID)
+                past_cust.append(order.MID)
             elif curr_month == 1 and order.oTime.month == 12 and order.oTime.year == (curr_year - 1):
-                past_cust.append(order.MemberID)
+                past_cust.append(order.MID)
         curr_cust = set(curr_cust)
         past_cust = set(past_cust)
         curr_retention = curr_cust & past_cust
@@ -174,15 +174,15 @@ class RetentionRateView(TemplateView):
         past_past_cust = []
         for order in Order.objects.all():
             if order.oTime.year == curr_year and order.oTime.month == curr_month - 1:
-                past_cust.append(order.MemberID)
+                past_cust.append(order.MID)
             elif order.oTime.year == curr_year and order.oTime.month == curr_month - 2:
-                past_past_cust.append(order.MemberID)
+                past_past_cust.append(order.MID)
             elif order.oTime.year == (curr_year - 1) and curr_month == 1 and order.oTime.month == 12:
-                past_cust.append(order.MemberID)
+                past_cust.append(order.MID)
             elif order.oTime.year == (curr_year - 1) and curr_month == 1 and order.oTime.month == 11:
-                past_past_cust.append(order.MemberID)
+                past_past_cust.append(order.MID)
             elif order.oTime.year == (curr_year - 1) and curr_month == 2 and order.oTime.month == 12:
-                past_past_cust.append(order.MemberID)
+                past_past_cust.append(order.MID)
         past_cust = set(past_cust)
         past_past_cust = set(past_past_cust)
         past_retention = past_cust & past_past_cust
