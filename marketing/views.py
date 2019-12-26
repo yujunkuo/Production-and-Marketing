@@ -202,16 +202,21 @@ class SurvivalRateView(TemplateView):
         for year in range(2019, curr_time.year + 1):
             if year != curr_time.year:
                 for month in range(1, 13):
-                    retention = RetentionRateView.get_curr_retention_rate(SurvivalRateView, year, month)
-                    survival *= retention
-                    if curr_time.month < 6 and year == (curr_time.year - 1) and month >= (7 + curr_time.month):
-                        survival_list.append(survival)
+                    if year != 2019 or month != 1:
+                        retention = RetentionRateView.get_curr_retention_rate(SurvivalRateView, year, month)
+                        survival *= retention
+                        if curr_time.month < 6 and year == (curr_time.year - 1) and month >= (7 + curr_time.month):
+                            survival_list.append(round(survival, 2))
             else:
                 for month in range(1, curr_time.month + 1):
-                    retention = RetentionRateView.get_curr_retention_rate(SurvivalRateView, year, month)
-                    survival *= retention
-                    if curr_time.month > 6 and month >= 13 - curr_time.month:
-                        survival_list.append(survival)
+                    if year == 2019 and month == 1:
+                        if curr_time.month <= 6:
+                            survival_list.append(round(survival, 2))
+                    else:
+                        retention = RetentionRateView.get_curr_retention_rate(SurvivalRateView, year, month)
+                        survival *= retention
+                        if curr_time.month < 6 or month > 11 - curr_time.month:
+                            survival_list.append(round(survival, 2))
         return render(request, 'survivalRate.html', {
             "s1": survival_list[0],
             "s2": survival_list[1],
