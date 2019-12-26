@@ -25,10 +25,8 @@ def stockProvide(request):
 def equipmentProvide(request):
     return render(request, "equipmentProvide.html")
 
-
 dish_dict = {'拿鐵咖啡': {'牛奶': 1, '咖啡': 1}, '巧克力冰淇淋鬆餅': {'巧克力': 1, '冰淇淋': 1, '鬆餅粉': 1},
              '挪威燻鮭魚沙拉': {'鮭魚': 1, '萵苣': 2, '番茄': 3, '麵包丁': 2, '沙拉醬': 1}}
-
 
 # Create your views here.
 def join_member(x: str, y: str, z: int, w: str, r: datetime, t: bool, q: bool, o:int):

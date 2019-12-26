@@ -127,20 +127,20 @@ class DecisionTreeView(TemplateView):
         })
         pre = clf.predict(test_df)
         return render(request, "decisionTree.html", {
-            "pre0": pre[0],
-            "pre1": pre[1],
-            "pre2": pre[2],
-            "pre3": pre[3],
-            "pre4": pre[4],
-            "pre5": pre[5],
-            "pre6": pre[6],
-            "pre7": pre[7]
+            "pre0": "高" if pre[0] == "High" else "低",
+            "pre1": "高" if pre[1] == "High" else "低",
+            "pre2": "高" if pre[2] == "High" else "低",
+            "pre3": "高" if pre[3] == "High" else "低",
+            "pre4": "高" if pre[4] == "High" else "低",
+            "pre5": "高" if pre[5] == "High" else "低",
+            "pre6": "高" if pre[6] == "High" else "低",
+            "pre7": "高" if pre[7] == "High" else "低",
         })
 
 
 class RetentionRateView(TemplateView):
 
-    def get(request):
+    def get(self, request):
         curr_time = datetime.now()
         retention_rate_past = self.get_past_retention_rate(curr_time.year, curr_time.month)
         retention_rate_curr = self.get_curr_retention_rate(curr_time.year, curr_time.month)
@@ -202,16 +202,21 @@ class SurvivalRateView(TemplateView):
         for year in range(2019, curr_time.year + 1):
             if year != curr_time.year:
                 for month in range(1, 13):
-                    retention = RetentionRateView.get_curr_retention_rate(SurvivalRateView, year, month)
-                    survival *= retention
-                    if curr_time.month < 6 and year == (curr_time.year - 1) and month >= (7 + curr_time.month):
-                        survival_list.append(survival)
+                    if year != 2019 or month != 1:
+                        retention = RetentionRateView.get_curr_retention_rate(SurvivalRateView, year, month)
+                        survival *= retention
+                        if curr_time.month < 6 and year == (curr_time.year - 1) and month >= (7 + curr_time.month):
+                            survival_list.append(round(survival, 2))
             else:
                 for month in range(1, curr_time.month + 1):
-                    retention = RetentionRateView.get_curr_retention_rate(SurvivalRateView, year, month)
-                    survival *= retention
-                    if curr_time.month > 6 and month >= 13 - curr_time.month:
-                        survival_list.append(survival)
+                    if year == 2019 and month == 1:
+                        if curr_time.month <= 6:
+                            survival_list.append(round(survival, 2))
+                    else:
+                        retention = RetentionRateView.get_curr_retention_rate(SurvivalRateView, year, month)
+                        survival *= retention
+                        if curr_time.month < 6 or month > 11 - curr_time.month:
+                            survival_list.append(round(survival, 2))
         return render(request, 'survivalRate.html', {
             "s1": survival_list[0],
             "s2": survival_list[1],
