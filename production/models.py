@@ -13,11 +13,7 @@ class Member(models.Model):
     Student = models.BooleanField(default=True)
 
     def __str__(self):
-<<<<<<< HEAD
-        result = str(self.MemberID)+' '+ self.mName
-=======
         result = str(self.MemberID) + ' ' + str(self.mName)
->>>>>>> 8b3251eff310c5ad3b51806c5399233940e0c4b4
         return result
 
 
@@ -37,11 +33,7 @@ class Firm(models.Model):
     Address = models.CharField(max_length=50)
 
     def __str__(self):
-<<<<<<< HEAD
-        result = str(self.FirmID) + ' ' + self.fName
-=======
         result = str(self.FirmID) + ' ' + str(self.fName)
->>>>>>> 8b3251eff310c5ad3b51806c5399233940e0c4b4
         return result
 
 class Stock(models.Model):
@@ -55,11 +47,7 @@ class Stock(models.Model):
         unique_together = ('sName', 'Expired')
 
     def __str__(self):
-<<<<<<< HEAD
-        result = self.sName + ' ' + str(self.sNum) + ' ' + str(self.Expired)
-=======
         result = str(self.sName) + ' ' + str(self.sNum) + ' ' + str(self.Expired)
->>>>>>> 8b3251eff310c5ad3b51806c5399233940e0c4b4
         return result
 
 
@@ -69,11 +57,7 @@ class Equipment(models.Model):
     firm = models.ManyToManyField(Firm, through='ProvideEquip')
 
     def __str__(self):
-<<<<<<< HEAD
-        result = self.eName + ' ' + str(self.eNum)
-=======
         result = str(self.eName) + ' ' + str(self.eNum)
->>>>>>> 8b3251eff310c5ad3b51806c5399233940e0c4b4
         return result
 
 
@@ -85,17 +69,11 @@ class Order(models.Model):
 
     class Meta:
         unique_together = ("oTime", "MID", "dishName")
-<<<<<<< HEAD
-    def __str__(self):
-        result = str(self.oTime) + ' ' + str(self.MID) + ' ' + str(self.dishName) + ' ' + str(self.orderNum)
-        return result
-=======
 
     def __str__(self):
         result = str(self.oTime) + ' ' + str(self.MID) + ' ' + str(self.dishName) + ' ' + str(self.orderNum)
         return result
 
->>>>>>> 8b3251eff310c5ad3b51806c5399233940e0c4b4
 
 class Made(models.Model):
     mTime = models.DateTimeField(auto_now_add='True', primary_key=True)
@@ -105,9 +83,6 @@ class Made(models.Model):
 
     class Meta:
         unique_together = ("mTime", "mDish", "mStock")
-    def __str__(self):
-        result = str(self.mTime) + ' ' + str(self.mDish + ' ' + str(self.mStock) + ' ' + str(self.mNum)
-        return result
 
     def __str__(self):
         result = str(self.mTime) + ' ' + str(self.mDish) + ' ' + str(self.mStock) + ' ' + str(self.mNum)
@@ -139,10 +114,7 @@ class ProvideEquip(models.Model):
 
     class Meta:
         unique_together = ("peTime", "pEquip", "peNum")
-<<<<<<< HEAD
-=======
 
->>>>>>> 8b3251eff310c5ad3b51806c5399233940e0c4b4
     def __str__(self):
         result = str(self.peTime) + ' ' + str(self.peNum) + ' ' + str(self.pEquip) + ' ' + str(self.peNum)
         return result

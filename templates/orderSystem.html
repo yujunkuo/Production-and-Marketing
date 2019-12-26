@@ -10,20 +10,10 @@
   <body>
   <p><strong>點餐系統</strong></p>
   <form  method="POST">
-    {%% csrf_token %}
-    <table border = "1" cellspacing = "1" cellpadding ="5">
-      <tr><th>請輸入會員id</th><td>{{ mid }}</td></tr>
-      <tr><th>請選擇欲購買餐點</th><td><select>{% for c in allDish %}<option>{{ dish }}</option>{ %endfor% }</select></td></tr>
-      <tr><th>請選擇欲購買數量</th><td>{{ num }}</td></tr>
-      <tr>
-        <th align = "center">
-          <input type ="submit" name ="button" value="確認購買"</th>
-      </tr>
-
-    </table>
-
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit"  value="確認點餐">
   </form>
-
 
 
 
