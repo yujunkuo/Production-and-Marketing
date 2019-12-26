@@ -127,14 +127,14 @@ class DecisionTreeView(TemplateView):
         })
         pre = clf.predict(test_df)
         return render(request, "decisionTree.html", {
-            "pre0": pre[0],
-            "pre1": pre[1],
-            "pre2": pre[2],
-            "pre3": pre[3],
-            "pre4": pre[4],
-            "pre5": pre[5],
-            "pre6": pre[6],
-            "pre7": pre[7]
+            "pre0": "高" if pre[0] == "High" else "低",
+            "pre1": "高" if pre[1] == "High" else "低",
+            "pre2": "高" if pre[2] == "High" else "低",
+            "pre3": "高" if pre[3] == "High" else "低",
+            "pre4": "高" if pre[4] == "High" else "低",
+            "pre5": "高" if pre[5] == "High" else "低",
+            "pre6": "高" if pre[6] == "High" else "低",
+            "pre7": "高" if pre[7] == "High" else "低"
         })
 
 
