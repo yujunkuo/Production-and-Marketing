@@ -149,19 +149,36 @@ class RetentionRateView(TemplateView):
         curr = 0
         curr_cust = []
         past_cust = []
+        past_past_cust = []
         curr_month = datetime.now().month
         for order in Order.objects.all():
             if order.oTime.month == curr_month:
                 curr_cust.append(order.MemberID)
             elif order.oTime.month == curr_month - 1:
                 past_cust.append(order.MemberID)
+            elif order.oTime.month == curr_month - 2:
+                past_past_cust.append(order.MemberID)
             elif curr_month == 1 and order.oTime.month == 12:
                 past_cust.append(order.MemberID)
+            elif curr_month == 1 and order.oTime.month == 11:
+                past_past_cust.append(order.MemberID)
+            elif curr_month == 2 and order.oTime.month == 12:
+                past_past_cust.append(order.MemberID)
         curr_cust = set(curr_cust)
         past_cust = set(past_cust)
-        retention = curr_cust & past_cust
+        past_past_cust = set(past_past_cust)
+        curr_retention = curr_cust & past_cust
+        past_retention = past_cust & past_past_cust
         try:
-            retention_rate = len(retention) / len(past_cust)
+            retention_rate_curr = round(len(curr_retention) / len(past_cust), 2)
         except:
-            retention_rate = 0
-        return render(request, "retentionRate.html", {"retention": retention_rate})
+            retention_rate_curr = "Exception: 分母為0"
+        try:
+            retention_rate_past = round(len(past_retention) / len(past_past_cust), 2)
+        except:
+            retention_rate_past = "Exception: 分母為0"
+
+        return render(request, "retentionRate.html", {
+            "retention_past": retention_rate_past,
+            "retention_curr": retention_rate_curr
+        })

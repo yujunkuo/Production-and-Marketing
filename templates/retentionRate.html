@@ -8,7 +8,10 @@
   </head>
   <body>
     <h1>留存率</h1>
-    <p>{{ retention }}</p>
+    <ul>
+      <li>前月留存率: {{ retention_past }}</li>
+      <li>本月留存率: {{ retention_curr }}</li>
+    </ul>
     <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>
 </html>
