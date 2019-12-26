@@ -12,85 +12,112 @@ def equipmentSystem(request):
     return render(request, "equipmentSystem.html")
 
 # Create your views here.
-def order(request):
-    odertime = datetime.datetime.now()
-    mID = request.Get.get('Member ID')
+def order(x : int, y : str, z : int, w : datetime):
+    '''
+    mid = request.Get.get('Member ID')
     dish = request.Get.get('Dish_Name')
     num = request.Get.get('Dish num')
+    '''
+    mid = x
+    dish = y
+    num = z
+    time = w
+
     try:
-        mID = Member.objects.get(MemberID=mID)
+        mid = Member.objects.get(MemberID=mid)
+    except Member.DoesNotExit:
+        Member.objects.create(MemberID=mid)
 
-        Order.objects.create(oTime=odertime, MemberID=mID, dName='dish', oNum=num)
-        SuccessMSG = 'Finish Ordering'
-        return SuccessMSG
-    except:
-        Errormessage = 'Please join our membership'
-        return Errormessage
-
-
-def Made(request):
-    madeTime = datetime.datetime.now()
-    dName = request.Get.get('Dish Name')
+    Order.objects.create(oTime = time, MemberID=Member.objects.get(MemberID=mid),
+                         dName=Dish.objects.get(dName=dish), oNum=num)
+    success_msg = 'Finish Ordering'
+    return success_msg
 
 
-def checkStockAll():
+def made(request):
+    made_time = datetime.datetime.now()
+    d_name = request.Get.get('Dish Name')
+
+
+def check_stock_all():
     result = Stock.objects.order_by('Expired')
     return result
 
 
-def checkEquipAll():
+def check_stock_expired(request):
+    name = request.Get.get('Check Stock')
+    result = Stock.objects.get(sName=name).order_by('Expired')
+    return result
+
+
+def check_equip_all():
     result = Equipment.objects.all()
     return result
 
 
-def checkStockNeed():
-    result = Stock.objects.get(sNum < 20)
+def check_stock_need():
+    result = Stock.objects.get(sNum__lt=20)
     return result
 
 
-def checkEquipNeed():
-    result = Equipment.objects.get(eNum < 10)
+def check_equip_need():
+    result = Equipment.objects.get(eNum__lt=10)
     return result
 
 
-def ProvideStock(request):
-    time = datetime.datetime.now()
-    name = request.Get.get('Provide Stock Name')
-    firm = request.Get.get('Provide Stock Firm')
-    num = request.Get.get('Provide Stock Num')
-    expired = request.Get.get('Stock Expired Date')
+def provide_stock(x: str, y: int, z: datetime, w: int, p: int):
+    # name = request.Get.get('Provide Stock Name')
+    # firm = request.Get.get('Provide Stock Firm')
+    # num = request.Get.get('Provide Stock Num')
+    # expired = request.Get.get('Stock Expired Date')
+    name = x
+    firm = y
+    expired = z
+    num = w
+    price = p
 
     try:
-        firm = Firm.objects.get(FirmID=firm)
-        ProvideStock.objects.create(psTime=time, psName=name, psFirm=firm, psNum=num)
+        Firm.objects.get(FirmID=firm)
+        Stock.objects.get(sName=name)
 
-        Stock.objects.create(sName=name, sNum=num, Expired=expired, )  # 要加sPrice
+    except Firm.DoesNotExist:
+        Firm.objects.create(FirmID=firm)
 
-        SuccessMSG = 'Successfully Update Stock'
-        return SuccessMSG
+    '''except Stock.DoesNotExist:
+        print("Remember to update stock's price")'''
 
-    except:
-        ErrorMSG = 'Cannot find this firm! Please create a new FirmID'
-        return ErrorMSG
+    Stock.objects.create(sName=name, sNum=num, Expired=expired, sPrice=price)
+    ProvideStock.objects.create(psFirm=Firm.objects.get(FirmID=firm), name=Stock.objects.get(sName=name),
+                                psNum=num)
+
+    SuccessMSG = 'Successfully Update Stock'
+    return SuccessMSG
 
 
-def ProvideEquip(request):
-    time = datetime.datetime.now()
+def provide_equip(request):
     name = request.Get.get('Provide Equipment Name')
     firm = request.Get.get('Provide Equipment Firm')
     num = request.Get.get('Provide Equipment Num')
+    price = request.Get.get('Equipment Price')
 
     try:
-        firm = Firm.objects.get(FirmID=firm)
+        Firm.objects.get(FirmID=firm)
+    except Firm.DoesNotExit:
+        Firm.objects.create(FirmID=firm)
 
-        ProvideEquip.objects.create(peTime=time, peName=name, peFirm=firm, peNum=num)
-        equip = Equipment.objects.get(eName=name)
-        equip.eNum += num
-        equip.save()
+    try:
+        Equipment.objects.get(eName=name)
+    except Equipment.DoesNotExit:
+        Equipment.objects.create(eName=name, eNum=0, ePrice=price)
 
-        SuccessMSG = 'Successfully Update Equipment'
-        return SuccessMSG
+    equip = Equipment.objects.get(eName=name)
+    origin_num = equip.eNum
+    new_num = origin_num + num
+    equip.eNum = new_num
+    equip.save()
 
-    except:
-        Errormessage = 'Cannot find this firm! Please create a new FirmID'
-        return Errormessage
+    ProvideEquip.objects.create(peFirm=Firm.objects.get(FirmID=firm), pEquip=Equipment.objects.get(eName=name)
+                                , peNum=num)
+
+    success_msg = 'Successfully Update Equipment'
+    return success_msg
