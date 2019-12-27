@@ -36,6 +36,7 @@ class Firm(models.Model):
         result = str(self.FirmID) + ' ' + str(self.fName)
         return result
 
+
 class Inventory(models.Model):
     invID = models.PositiveIntegerField(primary_key=True)
     invName = models.CharField(max_length=50)
@@ -79,7 +80,7 @@ class Made(models.Model):
     mNum = models.PositiveIntegerField()
 
     def __str__(self):
-        result = str(self.mTime) + ' ' + str(self.mDish) + ' ' + str(self.mStock) + ' ' + str(self.mNum)
+        result = str(self.mTime) + ' ' + str(self.mDish) + ' ' + str(self.mInvent) + ' ' + str(self.mNum)
         return result
 
 
@@ -95,7 +96,7 @@ class ProvideInventory(models.Model):
 
 
 class ProvideEquip(models.Model):
-    peTime = models.DateTimeField(auto_now_add='True', primary_key=True)
+    peTime = models.DateTimeField(auto_now_add='True')
     peFirm = models.ForeignKey(Firm, on_delete=models.CASCADE)
     pEquip = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     peNum = models.PositiveIntegerField()
