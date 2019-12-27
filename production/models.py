@@ -37,14 +37,11 @@ class Firm(models.Model):
         return result
 
 class Stock(models.Model):
-    sName = models.CharField(max_length=50, primary_key=True)
+    sName = models.CharField(max_length=50)
     sNum = models.PositiveIntegerField()
     Expired = models.DateField()
     dish = models.ManyToManyField(Dish, through='Made')
     firm = models.ManyToManyField(Firm, through='ProvideStock')
-
-    class Meta:
-        unique_together = ('sName', 'Expired')
 
     def __str__(self):
         result = str(self.sName) + ' ' + str(self.sNum) + ' ' + str(self.Expired)
@@ -62,50 +59,42 @@ class Equipment(models.Model):
 
 
 class Order(models.Model):
-    oTime = models.DateTimeField(auto_now_add='True', primary_key=True)
+    oTime = models.DateTimeField(auto_now_add='True')
     MID = models.ForeignKey(Member, on_delete=models.CASCADE)
     dishName = models.ForeignKey(Dish, on_delete=models.CASCADE)
     orderNum = models.PositiveIntegerField()
 
-    class Meta:
-        unique_together = ("oTime", "MID", "dishName")
     def __str__(self):
         result = str(self.oTime) + ' ' + str(self.MID) + ' ' + str(self.dishName) + ' ' + str(self.orderNum)
         return result
 
 class Made(models.Model):
-    mTime = models.DateTimeField(auto_now_add='True', primary_key=True)
+    mTime = models.DateTimeField(auto_now_add='True')
     mDish = models.ForeignKey(Dish, on_delete=models.CASCADE)
     mStock = models.ForeignKey(Stock, on_delete=models.CASCADE)
     mNum = models.PositiveIntegerField()
 
-    class Meta:
-        unique_together = ("mTime", "mDish", "mStock")
     def __str__(self):
         result = str(self.mTime) + ' ' + str(self.mDish) + ' ' + str(self.mStock) + ' ' + str(self.mNum)
         return result
 
 
 class ProvideStock(models.Model):
-    psTime = models.DateTimeField(auto_now_add='True', primary_key=True)
+    psTime = models.DateTimeField(auto_now_add='True')
     psFirm = models.ForeignKey(Firm, on_delete=models.CASCADE)
     pStock = models.ForeignKey(Stock, on_delete=models.CASCADE)
     psNum = models.PositiveIntegerField()
 
-    class Meta:
-        unique_together = ("psTime", "pStock", "psNum")
     def __str__(self):
         result = str(self.psTime) + ' ' + str(self.psFirm) + ' ' + str(self.pStock) + ' ' + str(self.psNum)
         return result
 
 class ProvideEquip(models.Model):
-    peTime = models.DateTimeField(auto_now_add='True', primary_key=True)
+    peTime = models.DateTimeField(auto_now_add='True')
     peFirm = models.ForeignKey(Firm, on_delete=models.CASCADE)
     pEquip = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     peNum = models.PositiveIntegerField()
 
-    class Meta:
-        unique_together = ("peTime", "pEquip", "peNum")
     def __str__(self):
         result = str(self.peTime) + ' ' + str(self.peNum) + ' ' + str(self.pEquip) + ' ' + str(self.peNum)
         return result

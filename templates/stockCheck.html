@@ -7,8 +7,19 @@
     <title></title>
   </head>
   <body>
-  <p><strong>存貨系統</strong></p>
+  <p><strong>檢查存貨</strong></p>
   <img src={% static "inventory.jpg" %} alt= "存貨" height= 300px>
+  <form method="get">
+    {% csrf_token %}
+    {{ form.as_table }}
+    <input type= "button" value= "全部存貨" class = "btn">
+    <input type= "button" value= "所需存貨" class = "btn">
+    <input type= "button" value= "過期存貨" class = "btn">
+  </form>
+  {{ check_stock_all }}
+  {{ check_stock_need }}
+  {{ check_stock_expired }}
+
   <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>
 </html>

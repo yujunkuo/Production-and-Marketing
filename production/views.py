@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from .forms import orderForm
+from .forms import joinMemberForm
 from datetime import datetime
 from production.models import *
 
@@ -27,25 +28,36 @@ dish_dict = {'拿鐵咖啡': {'牛奶': 1, '咖啡': 1}, '巧克力冰淇淋鬆�
              '挪威燻鮭魚沙拉': {'鮭魚': 1, '萵苣': 2, '番茄': 3, '麵包丁': 2, '沙拉醬': 1}}
 
 # Create your views here.
-def join_member(request):
-    Member.objects.create(mName=name, Gender=gender, Phone=phone, Email=email, BDay=bday, Pets=pets
-                          , Student=student, MemberID=id)
-    '''if Member.objects.filter(mName__isnull = True):
-        members=Member.objects.filter(mName__isnull = True)
-        member_choose = members[0]
-        member_choose.Name = name
-        member_choose.Gender = gender
-        member_choose.Phone = phone
-        member_choose.Email = email
-        member_choose.BDay = bday
-        member_choose.Pets = pets
-        member_choose.Students = student
-        member_choose.save()
-    else:
-        Member.objects.create(mName=name, Gender=gender, Phone=phone, Email=email, BDay=bday, Pets=pets
-                              , Student=student)'''
-    new_member = Member.objects.get(MemberID=id)
-    return new_member
+class JoinMemberView(TemplateView):
+
+    template_name = 'memeberJoin.html'
+
+    def get(self, request):
+        global join_member_form
+        join_member_form = joinMemberForm()
+        return render(request, self.template_name, {'form': join_member_form })
+
+    def post(self, request):
+        global join_member_form
+        join_member_form = joinMemberForm(request.POST)
+
+        if order_form.is_valid():
+            name = int(request.POST.get('mid', ""))
+            gender = request.POST.get('gender', "")
+            email = request.POST.get('email', "")
+            phone = int(request.POST.get('phone', ""))
+            bday = request.POST.get('bday', "")
+            pets = request.POST.get('pets', "")
+            student = request.POST.get('student', "")
+            join_member_form = joinMemberForm()
+
+            def join_member(request):
+                Member.objects.create(mName=name, Gender=gender, Phone=phone, Email=email, BDay=bday, Pets=pets
+                                        , Student=student, MemberID=id)
+                new_member = Member.objects.get(MemberID=id)
+                return new_member
+
+        return render(request, self.template_name, {'form': join_member_form})
 
 class OrderView(TemplateView):
 
@@ -77,34 +89,40 @@ class OrderView(TemplateView):
                     used_num = dish_dict[dish_name][i]
             except:
                 pass
-        return render(request, self.template_name, {'form': order_form, "time":time})
+        return render(request, self.template_name, {'form': order_form})
 
 class CheckStockView(TemplateView):
-        def get(self, request):
-            global check_stock_form
-            check_stock_form = checkStockForm()
-            return render(request, self.template_name, {'form': check_stock_form})
-            
-            def check_stock_all():
-                result = Stock.objects.order_by('Expired')
-                return result
 
-            def check_stock_need():
-                    result = Stock.objects.get(sNum__lt=20)
-                    return result
+    template_name = 'stockCheck.html'
 
-            def check_stock_expired(request):
-                name = request.Get.get('Check Stock')
-                result = Stock.objects.get(sName=name).order_by('Expired')
-                return result
+    def get(self, request):
+        def check_stock_all(request):
+            result = Stock.objects.order_by('Expired')
+            return result
+
+        def check_stock_need(request):
+            result = Stock.objects.get(sNum__lt=20)
+            return result
+
+        def check_stock_expired(request):
+            name = request.Get.get('Check Stock')
+            result = Stock.objects.get(sName=name).order_by('Expired')
+            return result
+
+
+        return render(request, "stockCheck.html", {
+        "check_stock_all": check_stock_all,
+        "check_stock_need": check_stock_need,
+        "check_stock_expired" : check_stock_expired})
+
+
+
+
 
 
 def check_equip_all():
     result = Equipment.objects.all()
     return result
-
-
-
 
 def check_equip_need():
     result = Equipment.objects.get(eNum__lt=10)
@@ -190,4 +208,3 @@ def prediction(request):
         predict_for_month.append(predict)
 
     return name, predict_for_month[-1]
-

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    {% load static %}
+    <title></title>
+  </head>
+  <body>
+    <h1>成為小公寓的會員吧!</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="加入會員">
+    </form>
+
+    <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
+  </body>
+</html>
