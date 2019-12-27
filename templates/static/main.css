@@ -41,7 +41,7 @@ p{
   font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
   color: #FFaa33;
-  top: 130px;
+  top: 50px;
   left: 350px;
 }
 
@@ -51,14 +51,13 @@ ul {
   padding: 0;
   list-style: none;
   position: absolute;
-  top: 120px;
-  left:830px;
+  top: 100px;
+  left:780px;
 }
 
 ul.drop-down-menu {
   border: #ccc 1px solid;
   display: inline-block;
-  font-family: 'Open Sans', Arial, sans-serif;
   font-size: 16px;
   cursor: pointer;
 }
@@ -131,4 +130,17 @@ ul.drop-down-menu ul {
 ul.drop-down-menu li:hover>ul {
   /* 滑鼠滑入展開次選單*/
   display: block;
+}
+.btn{
+  width: 200px;
+  height: 60px;
+  background: none;
+  border: 4px solid;
+  color: #3498bd;
+  font-weight: 700;
+  cursor: pointer;
+  position: relative;
+  font-size: 25px;
+  top: 310px;
+  left: 100px;
 }

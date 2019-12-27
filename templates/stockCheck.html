@@ -3,23 +3,65 @@
   <head>
     <meta charset="utf-8">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'inventorySystem.css' %}">
+    <link rel="stylesheet" href="{% static 'stockCheck.css' %}">
     <title></title>
   </head>
   <body>
   <p><strong>檢查存貨</strong></p>
   <img src={% static "inventory.jpg" %} alt= "存貨" height= 300px>
-  <form method="get">
+  <form method="post">
     {% csrf_token %}
     {{ form.as_table }}
-    <input type= "button" value= "全部存貨" class = "btn">
-    <input type= "button" value= "所需存貨" class = "btn">
-    <input type= "button" value= "過期存貨" class = "btn">
+    <input type= "button" value= "全部存貨" class = "btn btnClick" id='all' onclick="showCorrespondForm('all')">
+    <input type= "button" value= "所需存貨" class = "btn btnClick" id='need' onclick="showCorrespondForm('need')">
+    <input type= "button" value= "過期存貨" class = "btn btnClick" id='expired' onclick="showCorrespondForm('expired')">
   </form>
-  {{ check_stock_all }}
-  {{ check_stock_need }}
-  {{ check_stock_expired }}
+
+  <div id='allForm' style="visibility: hidden;">
+  <td>{{ result1.sName }}</td>
+  <td>{{ result1.sNum }}</td>
+  <td>{{ result1.Expired }}</td>
+  </div>
+
+  <div id='needForm' style="visibility: hidden;">
+    <td>{{ result2.sName }}</td>
+    <td>{{ result2.sNum }}</td>
+    <td>{{ result2.Expired }}</td>
+  </div>
+
+  <div id='expiredForm' style="visibility: hidden;">
+    <td>{{ result3.sName }}</td>
+    <td>{{ result3.sNum }}</td>
+    <td>{{ result3.Expired }}</td>
+  </div>
 
   <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
+  <script>
+      let allShow = false
+      let needShow = false
+      let expiredShow = false
+
+      function showCorrespondForm(id){
+        showFormId = id+'Form'
+        target = document.querySelector('#'+showFormId)
+        console.log(target)
+        target.style.visibility = eval(id+'Show') ? 'hidden':'visible';
+        switch (id) {
+          case 'all':
+            allShow = !allShow
+            break;
+          case 'need':
+            needShow = !needShow
+            break;
+          case 'expired':
+            expiredShow = !expiredShow
+            break;
+          default:
+
+        }
+      }
+
+
+  </script>
   </body>
 </html>

@@ -63,7 +63,7 @@ class JoinMemberView(TemplateView):
         else:
             return render(request, self.template_name, {
                     'form': join_member_form,
-                    'res': "表單驗證失敗，無法加入會員"
+                    'res': "表單驗證失敗，無法加入會員="
                     })
 
 class OrderView(TemplateView):
@@ -98,29 +98,23 @@ class OrderView(TemplateView):
                 pass
         return render(request, self.template_name, {'form': order_form})
 
-class CheckStockView(TemplateView):
 
-    template_name = 'stockCheck.html'
 
-    def get(self, request):
-        def check_stock_all(request):
-            result = Stock.objects.order_by('Expired')
-            return result
+def check_stock_all(request):
+        result = Stock.objects.order_by('Expired')
+        return render(request, {'result1': result1})
 
-        def check_stock_need(request):
-            result = Stock.objects.get(sNum__lt=20)
-            return result
+def check_stock_need(request):
+            result2 = Stock.objects.get(sNum__lt=20)
+            for result2 in result2:
+                pass
+            return render(request, {'result2': result2})
 
-        def check_stock_expired(request):
+def check_stock_expired(request):
             name = request.Get.get('Check Stock')
-            result = Stock.objects.get(sName=name).order_by('Expired')
-            return result
-
-
-        return render(request, "stockCheck.html", {
-        "check_stock_all": check_stock_all,
-        "check_stock_need": check_stock_need,
-        "check_stock_expired" : check_stock_expired})
+            for result3 in result3:
+                pass
+            return render(request, {'result3': result3})
 
 
 
@@ -144,7 +138,7 @@ def provide_stock(request):
     except Firm.DoesNotExist:
         Firm.objects.create(FirmID=firm)
 
-    Stock.objects.create(sName=name, sNum=num, Expired=expired)
+    inventory.objects.create(sName=name, sNum=num, Expired=expired)
     ProvideStock.objects.create(psFirm=Firm.objects.get(FirmID=firm),name=Stock.objects.get(sName=name),psNum=num)
 
     SuccessMSG = 'Successfully Update Stock'
