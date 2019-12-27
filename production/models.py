@@ -96,7 +96,7 @@ class ProvideInventory(models.Model):
 
 
 class ProvideEquip(models.Model):
-    peTime = models.DateTimeField(auto_now_add='True')
+    peTime = models.DateTimeField(auto_now_add='True', primary_key=True)
     peFirm = models.ForeignKey(Firm, on_delete=models.CASCADE)
     pEquip = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     peNum = models.PositiveIntegerField()
