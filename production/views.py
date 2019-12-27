@@ -9,23 +9,30 @@ from production.models import *
 def orderSystem(request):
     return render(request, "orderSystem.html")
 
+
 def memeberJoin(request):
     return render(request, "memeberJoin.html")
+
 
 def stockCheck(request):
     return render(request, "stockCheck.html")
 
+
 def equipmentCheck(request):
     return render(request, "equipmentCheck.html")
+
 
 def stockProvide(request):
     return render(request, "stockProvide.html")
 
+
 def equipmentProvide(request):
     return render(request, "equipmentProvide.html")
 
+
 dish_dict = {'拿鐵咖啡': {'牛奶': 1, '咖啡': 1}, '巧克力冰淇淋鬆餅': {'巧克力': 1, '冰淇淋': 1, '鬆餅粉': 1},
              '挪威燻鮭魚沙拉': {'鮭魚': 1, '萵苣': 2, '番茄': 3, '麵包丁': 2, '沙拉醬': 1}}
+
 
 # Create your views here.
 class JoinMemberView(TemplateView):
@@ -67,7 +74,6 @@ class JoinMemberView(TemplateView):
                     })
 
 class OrderView(TemplateView):
-
     template_name = 'orderSystem.html'
 
     def get(self, request):
@@ -80,9 +86,9 @@ class OrderView(TemplateView):
         order_form = orderForm(request.POST)
 
         if order_form.is_valid():
-            mid = int(request.POST.get('mid', ""))
-            dish = int(request.POST.get('dish', ""))
-            num = int(request.POST.get('num', ""))
+            mid = int(request.POST.get('mid'))
+            dish = int(request.POST.get('dish'))
+            num = int(request.POST.get('num'))
             order_form = orderForm()
             dish_name = Dish.objects.all()[dish]
             time = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
@@ -92,31 +98,34 @@ class OrderView(TemplateView):
                                      dishName=Dish.objects.get(dName=dish_name), orderNum=num)
                 for i in dish_dict[dish_name]:
                     stock = i
-                    stock_db = Stock.objects.filter(sName=stock).orderby('Expired')
+                    stock_db = Inventory.objects.filter(sName=stock).orderby('Expired')
                     used_num = dish_dict[dish_name][i]
             except:
                 pass
-        return render(request, self.template_name, {'form': order_form})
+        return render(request, self.template_name, {'form': order_form, "time": time})
 
 
 
-def check_stock_all(request):
-        result = Stock.objects.order_by('Expired')
-        return render(request, {'result1': result1})
 
-def check_stock_need(request):
-            result2 = Stock.objects.get(sNum__lt=20)
-            for result2 in result2:
-                pass
-            return render(request, {'result2': result2})
+    def get(self, request):
+        def check_stock_all(request):
+            result = Inventory.objects.order_by('Expired')
+            return result
+
+        def check_stock_need(request):
+            result = Inventory.objects.get(sNum__lt=20)
+            return result
 
 def check_stock_expired(request):
             name = request.Get.get('Check Stock')
-            for result3 in result3:
-                pass
-            return render(request, {'result3': result3})
+            result = Inventory.objects.get(sName=name).order_by('Expired')
+            return result
 
 
+        return render(request, "stockCheck.html", {
+        "check_stock_all": check_stock_all,
+        "check_stock_need": check_stock_need,
+        "check_stock_expired" : check_stock_expired})
 
 class CheckEquipView(TemplateView):
 
@@ -132,51 +141,83 @@ class CheckEquipView(TemplateView):
             return result
 
 
-def provide_stock(request):
-    try:
-        Firm.objects.get(FirmID=firm)
-    except Firm.DoesNotExist:
-        Firm.objects.create(FirmID=firm)
+
 
     inventory.objects.create(sName=name, sNum=num, Expired=expired)
     ProvideStock.objects.create(psFirm=Firm.objects.get(FirmID=firm),name=Stock.objects.get(sName=name),psNum=num)
 
-    SuccessMSG = 'Successfully Update Stock'
-    return SuccessMSG
+
+    def get(self, request):
+        global provide_stock_form
+        provide_stock_form = provideStockForm()
+        return render(request, self.template_name, {'form': provide_stock_form})
+
+    def post(self, request):
+        global provide_stock_form
+        provide_stock_form = provideStockForm(request.POST)
+
+        if provide_stock_form.is_valid():
+            name = request.POST.get('Stock Name', "")
+            firm = int(request.POST.get('Firm ID'))
+            num = int(request.POST.get('Num'))
+            expired = request.POST.get('Expired', "")
+            provide_stock_form = provideStockForm()
+
+        try:
+            Firm.objects.get(FirmID=firm)
+        except Firm.DoesNotExist:
+            Firm.objects.create(FirmID=firm)
+
+        Inventory.objects.create(invName=name, invNum=num, Expired=expired)
+        ProvideInventory.objects.create(piFirm=Firm.objects.get(FirmID=firm), name=Inventory.objects.get(invName=name), piNum=num)
+
+        return render(request, self.template_name, {'form': provide_stock_form})
 
 
-def provide_equip(request):
-    name = request.Get.get('Provide Equipment Name')
-    firm = request.Get.get('Provide Equipment Firm')
-    num = request.Get.get('Provide Equipment Num')
+class ProvideEquipView(TemplateView):
+    template_name = 'equipmentProvide.html'
 
-    try:
-        Firm.objects.get(FirmID=firm)
-    except Firm.DoesNotExit:
-        Firm.objects.create(FirmID=firm)
+    def get(self, request):
+        global provide_equip_form
+        provide_equip_form = provideEquipForm()
+        return render(request, self.template_name, {'form': provide_equip_form})
 
-    try:
-        Equipment.objects.get(eName=name)
-    except Equipment.DoesNotExit:
-        Equipment.objects.create(eName=name, eNum=0)
+    def post(self, request):
+        global provide_equip_form
+        provide_equip_form = provideEquipFrom(request.POST)
 
-    equip = Equipment.objects.get(eName=name)
-    origin_num = equip.eNum
-    new_num = origin_num + num
-    equip.eNum = new_num
-    equip.save()
+        if provide_equip_form.is_valid():
+            name = request.POST.get('Equipment Name', "")
+            firm = int(request.POST.get('Frim ID'))
+            num = int(request.POST.get('Num'))
+            provide_equip_form = provideEquipFrom()
 
-    ProvideEquip.objects.create(peFirm=Firm.objects.get(FirmID=firm), pEquip=Equipment.objects.get(eName=name)
-                                , peNum=num)
+        try:
+            Firm.objects.get(FirmID=firm)
+        except Firm.DoesNotExit:
+            Firm.objects.create(FirmID=firm)
 
-    success_msg = 'Successfully Update Equipment'
-    return success_msg
+        try:
+            Equipment.objects.get(eName=name)
+        except Equipment.DoesNotExit:
+            Equipment.objects.create(eName=name, eNum=0)
+
+        equip = Equipment.objects.get(eName=name)
+        origin_num = equip.eNum
+        new_num = origin_num + num
+        equip.eNum = new_num
+        equip.save()
+
+        ProvideEquip.objects.create(peFirm=Firm.objects.get(FirmID=firm), pEquip=Equipment.objects.get(eName=name)
+                                    , peNum=num)
+
+        return render(request, self.template_name, {'form': provide_equip_form})
 
 
 Dish_List = ['拿鐵咖啡', '香草拿鐵', '濃縮咖啡', '卡布奇諾', '焦糖瑪奇朵', '提拉米蘇拿鐵', '貝里斯奶酒咖啡', '特調風味鮮奶茶',
              '玫瑰奶茶', '牛奶糖歐蕾', '可可歐蕾', '抹茶阿法其朵', '蜂蜜檸檬', '蜂蜜奇異果', '精選啤酒', '蘋果優格冰沙', 'Oreo巧克力冰沙',
              '宇治抹茶冰沙', '香蕉巧克力冰沙', '青檸冰紅茶', '玫瑰四物茶', '富士蘋果冰茶', '伯爵紅茶', '烏龍鐵觀音', '日式玄米煎茶',
-             '燻火腿芝士夾心焗烤土司', '夏威夷比薩芝士焗烤土司', '原味鬆餅','焦糖冰淇淋鬆餅', '巧克力冰淇淋鬆餅', '香蕉冰淇淋鬆餅',
+             '燻火腿芝士夾心焗烤土司', '夏威夷比薩芝士焗烤土司', '原味鬆餅', '焦糖冰淇淋鬆餅', '巧克力冰淇淋鬆餅', '香蕉冰淇淋鬆餅',
              '藍莓貝果', '奶油貝果', '花生貝果', '焦糖北海道牛奶冰淇淋', '甜心草莓冰淇淋', '酥脆巧克力冰淇淋', '起士可頌', '鮪魚可頌',
              '起士火腿可頌', '黑胡椒牛肉可頌', '蔬菜雞肉可頌', '咖喱雞肉皮塔', '辣味牛肉皮塔', '法式鴨胸皮塔', '挪威燻鮭魚沙拉',
              '燻火腿沙拉', '一杯雞蛋沙拉（素）', '一杯鮪魚沙拉']
@@ -198,7 +239,7 @@ def prediction(request):
                         count += ds_order.orderNum
                 num_per_month.append(count)
         else:
-            for month in range(1, curr.month+1):
+            for month in range(1, curr.month + 1):
                 count = 0
                 for ds_order in dish_order:
                     if ds_order.oTime.year == year and ds_order.oTime.month == month:
@@ -206,8 +247,8 @@ def prediction(request):
                 num_per_month.append(count)
         predict_for_month.append(num_per_month[0])
 
-    for i in range(len(num_per_month)-1):
-        predict = predict_for_month[i] + 0.15*(num_per_month[i+1] - predict_for_month[i])
+    for i in range(len(num_per_month) - 1):
+        predict = predict_for_month[i] + 0.15 * (num_per_month[i + 1] - predict_for_month[i])
         predict_for_month.append(predict)
 
     return name, predict_for_month[-1]
