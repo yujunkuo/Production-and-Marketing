@@ -1,14 +1,12 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from .forms import orderForm
-import datetime
-from dateutil.relativedelta import relativedelta
+from datetime import datetime
 from production.models import *
 
 
 def orderSystem(request):
     return render(request, "orderSystem.html")
-
 
 def checkSystem(request):
     return render(request, "checkSystem.html")
@@ -33,28 +31,11 @@ def stockProvide(request):
 def equipmentProvide(request):
     return render(request, "equipmentProvide.html")
 
-
 dish_dict = {'拿鐵咖啡': {'牛奶': 1, '咖啡': 1}, '巧克力冰淇淋鬆餅': {'巧克力': 1, '冰淇淋': 1, '鬆餅粉': 1},
              '挪威燻鮭魚沙拉': {'鮭魚': 1, '萵苣': 2, '番茄': 3, '麵包丁': 2, '沙拉醬': 1}}
 
-
-def join_member(x: str, y: str, z: int, w: str, r: datetime, t: bool, q: bool, o:int):
-    '''name = request.Get.get()
-    gender = request.Get.get()
-    phone = request.Get.get()
-    email = request.Get.get()
-    bday = request.Get.get()
-    pets = request.Get.get()
-    student = request.Get.get()'''
-    name = x
-    gender = y
-    phone = z
-    email = w
-    bday = r
-    pets = t
-    student = q
-    id = o
-
+# Create your views here.
+def join_member(request):
     Member.objects.create(mName=name, Gender=gender, Phone=phone, Email=email, BDay=bday, Pets=pets
                           , Student=student, MemberID=id)
     '''if Member.objects.filter(mName__isnull = True):
@@ -74,24 +55,37 @@ def join_member(x: str, y: str, z: int, w: str, r: datetime, t: bool, q: bool, o
     new_member = Member.objects.get(MemberID=id)
     return new_member
 
+class OrderView(TemplateView):
 
-def order(request):
-    mid = request.Get.get('Member ID')
-    dish = request.Get.get('Dish_Name')
-    num = request.Get.get('Dish num')
+    template_name = 'orderSystem.html'
 
-    try:
-        mid = Member.objects.get(MemberID=mid)
-    except Member.DoesNotExit:
-        Member.objects.create(MemberID=mid)
+    def get(self, request):
+        global order_form
+        order_form = orderForm()
+        return render(request, self.template_name, {'form': order_form})
 
-    Order.objects.create(MID=Member.objects.get(MemberID=mid),
-                         dishName=Dish.objects.get(dName=dish), orderNum=num)
+    def post(self, request):
+        global order_form
+        order_form = orderForm(request.POST)
 
-    for i in dish_dict[dish]:
-        stock = i
-        stock_db = Stock.objects.filter(sName=stock).orderby('Expired')
-        used_num = dish_dict[dish][i]
+        if order_form.is_valid():
+            mid = int(request.POST.get('mid', ""))
+            dish = int(request.POST.get('dish', ""))
+            num = int(request.POST.get('num', ""))
+            order_form = orderForm()
+            dish_name = Dish.objects.all()[dish]
+            time = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
+
+            try:
+                Order.objects.create(oTime=time, MID=Member.objects.get(MemberID=mid),
+                                     dishName=Dish.objects.get(dName=dish_name), orderNum=num)
+                for i in dish_dict[dish_name]:
+                    stock = i
+                    stock_db = Stock.objects.filter(sName=stock).orderby('Expired')
+                    used_num = dish_dict[dish_name][i]
+            except:
+                pass
+        return render(request, self.template_name, {'form': order_form, "time":time})
 
 
 def check_stock_all():
@@ -137,7 +131,7 @@ def provide_stock(x: str, y: int, z: datetime, w: int, p: int):
 
     Stock.objects.create(sName=name, sNum=num, Expired=expired)
     ProvideStock.objects.create(psFirm=Firm.objects.get(FirmID=firm),name=Stock.objects.get(sName=name),psNum=num)
-    
+
     SuccessMSG = 'Successfully Update Stock'
     return SuccessMSG
 
@@ -208,3 +202,4 @@ def prediction(request):
         predict_for_month.append(predict)
 
     return name, predict_for_month[-1]
+
