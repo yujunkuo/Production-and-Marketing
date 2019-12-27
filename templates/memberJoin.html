@@ -12,6 +12,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="加入會員">
+        {{ res }}
     </form>
 
     <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">

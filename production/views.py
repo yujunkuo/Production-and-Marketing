@@ -30,7 +30,7 @@ dish_dict = {'拿鐵咖啡': {'牛奶': 1, '咖啡': 1}, '巧克力冰淇淋鬆�
 # Create your views here.
 class JoinMemberView(TemplateView):
 
-    template_name = 'memeberJoin.html'
+    template_name = 'memberJoin.html'
 
     def get(self, request):
         global join_member_form
@@ -41,23 +41,30 @@ class JoinMemberView(TemplateView):
         global join_member_form
         join_member_form = joinMemberForm(request.POST)
 
-        if order_form.is_valid():
-            name = int(request.POST.get('mid', ""))
-            gender = request.POST.get('gender', "")
+        if join_member_form.is_valid():
+            name = request.POST.get('name', "")
+            gender = "Female" if request.POST.get('gender', "") else "Male"
             email = request.POST.get('email', "")
-            phone = int(request.POST.get('phone', ""))
+            phone = request.POST.get('phone', "")
             bday = request.POST.get('bday', "")
-            pets = request.POST.get('pets', "")
-            student = request.POST.get('student', "")
+            pets = True if (request.POST.get('pets', "") == "on") else False
+            student = True if (request.POST.get('student', "") == "on") else False
             join_member_form = joinMemberForm()
+            member_id = Member.objects.order_by('MemberID').last().MemberID + 1
 
-            def join_member(request):
-                Member.objects.create(mName=name, Gender=gender, Phone=phone, Email=email, BDay=bday, Pets=pets
-                                        , Student=student, MemberID=id)
-                new_member = Member.objects.get(MemberID=id)
-                return new_member
+            Member.objects.create(mName=name, Gender=gender, Phone=phone, Email=email, BDay=bday, Pets=pets
+                                    , Student=student, MemberID=member_id)
+            new_member = Member.objects.order_by('MemberID').last()
 
-        return render(request, self.template_name, {'form': join_member_form})
+            return render(request, self.template_name, {
+                    'form': join_member_form,
+                    'res': "恭喜 " + new_member.mName + " 已成為會員"
+                    })
+        else:
+            return render(request, self.template_name, {
+                    'form': join_member_form,
+                    'res': "表單驗證失敗，無法加入會員"
+                    })
 
 class OrderView(TemplateView):
 
@@ -117,16 +124,18 @@ class CheckStockView(TemplateView):
 
 
 
+class CheckEquipView(TemplateView):
 
+    template_name = 'equipmentCheck.html'
 
+    def get(self, request):
+        def check_equip_all():
+            result = Equipment.objects.all()
+            return result
 
-def check_equip_all():
-    result = Equipment.objects.all()
-    return result
-
-def check_equip_need():
-    result = Equipment.objects.get(eNum__lt=10)
-    return result
+        def check_equip_need():
+            result = Equipment.objects.get(eNum__lt=10)
+            return result
 
 
 def provide_stock(request):

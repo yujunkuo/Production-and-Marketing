@@ -14,10 +14,12 @@ class orderForm(forms.Form):
     num = forms.CharField(label = '購買數量', widget = forms.TextInput)
 
 class joinMemberForm(forms.Form):
-    name = forms.CharField(max_length = 5, label = '姓名', widget = forms.TextInput)
-    gender = forms.CharField(label = '性別', widget = forms.TextInput)
-    email = forms.EmailField(label = '電子信箱', widget = forms.TextInput)
+    gender_list = ((0, "Male"), (1, "Female"))
+
+    name = forms.CharField(label = '姓名', widget = forms.TextInput)
+    gender = forms.ChoiceField(label = '性別', widget = forms.Select(), choices = gender_list, initial = gender_list[0])
+    email = forms.EmailField(label = '電子信箱')
     phone = forms.CharField(required = False, label = "電話號碼",  widget = forms.TextInput)
-    bday = forms.DateField(label = '出生日期', error_messages = { 'invalid' : '輸入的生日日期無效'})
+    bday = forms.DateField(label = '出生日期')
     pets = forms.BooleanField(required = False, initial = False, label = '是否有養寵物')
     student = forms.BooleanField(required = False, initial = False, label = '是否為學生')

@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 class Member(models.Model):
-    MemberID = models.PositiveIntegerField(primary_key=True)
+    MemberID = models.AutoField(primary_key=True)
     mName = models.CharField(max_length=20)
     Gender = models.CharField(max_length=10)
     Phone = models.CharField(max_length=13)
@@ -59,7 +59,7 @@ class Equipment(models.Model):
 
 
 class Order(models.Model):
-    oTime = models.DateTimeField(auto_now_add='True')
+    oTime = models.DateTimeField(auto_now_add='True', primary_key=True)
     MID = models.ForeignKey(Member, on_delete=models.CASCADE)
     dishName = models.ForeignKey(Dish, on_delete=models.CASCADE)
     orderNum = models.PositiveIntegerField()
