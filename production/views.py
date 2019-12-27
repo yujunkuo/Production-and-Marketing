@@ -35,8 +35,6 @@ dish_dict = {'拿鐵咖啡': {'牛奶': 1, '咖啡': 1}, '巧克力冰淇淋鬆�
 
 
 # Create your views here.
-<<<<<<< HEAD
-=======
 class JoinMemberView(TemplateView):
 
     template_name = 'memberJoin.html'
