@@ -104,6 +104,8 @@ class OrderView(TemplateView):
                 pass
         return render(request, self.template_name, {'form': order_form, "time": time})
 
+inventory_minimum = {'牛奶': 50, '咖啡': 100, '巧克力': 50, '冰淇淋': 40, '鬆餅粉': 50, '鮭魚': 30, '萵苣': 45, '番茄': 45,
+                     '麵包丁': 35, '沙拉醬': 50, 'egg' : 100}
 
 class CheckStockView(TemplateView):
 
@@ -115,8 +117,20 @@ class CheckStockView(TemplateView):
             return result
 
         def check_stock_need(request):
-            result = Inventory.objects.get(sNum__lt=20)
-            return result
+            need_inventory = []
+
+            all_inventory = Inventory.objects.values('invName').distinct()
+            for i in all_inventory:
+                name = i['invName']
+                num = 0
+                inventory = Inventory.objects.filter(invName=name)
+                for inv in inventory:
+                    num += inv.invNum
+                if num <= inventory_minimum[name]:
+                    need = str(name) + ' : ' + str(num) + '份 (至少需要' + str(inventory_minimum[name]) + '份）'
+                    need_inventory.append(need)
+
+            return need_inventory
 
         def check_stock_expired(request):
             name = request.Get.get('Check Stock')
