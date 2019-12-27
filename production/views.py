@@ -8,25 +8,17 @@ from production.models import *
 def orderSystem(request):
     return render(request, "orderSystem.html")
 
-def checkSystem(request):
-    return render(request, "checkSystem.html")
-
-
-def provideSystem(request):
-    return render(request, "provideSystem")
-
+def memeberJoin(request):
+    return render(request, "memeberJoin.html")
 
 def stockCheck(request):
     return render(request, "stockCheck.html")
 
-
 def equipmentCheck(request):
     return render(request, "equipmentCheck.html")
 
-
 def stockProvide(request):
     return render(request, "stockProvide.html")
-
 
 def equipmentProvide(request):
     return render(request, "equipmentProvide.html")
@@ -87,16 +79,24 @@ class OrderView(TemplateView):
                 pass
         return render(request, self.template_name, {'form': order_form, "time":time})
 
+class CheckStockView(TemplateView):
+        def get(self, request):
+            global check_stock_form
+            check_stock_form = checkStockForm()
+            return render(request, self.template_name, {'form': check_stock_form})
+            
+            def check_stock_all():
+                result = Stock.objects.order_by('Expired')
+                return result
 
-def check_stock_all():
-    result = Stock.objects.order_by('Expired')
-    return result
+            def check_stock_need():
+                    result = Stock.objects.get(sNum__lt=20)
+                    return result
 
-
-def check_stock_expired(request):
-    name = request.Get.get('Check Stock')
-    result = Stock.objects.get(sName=name).order_by('Expired')
-    return result
+            def check_stock_expired(request):
+                name = request.Get.get('Check Stock')
+                result = Stock.objects.get(sName=name).order_by('Expired')
+                return result
 
 
 def check_equip_all():
@@ -104,9 +104,6 @@ def check_equip_all():
     return result
 
 
-def check_stock_need():
-    result = Stock.objects.get(sNum__lt=20)
-    return result
 
 
 def check_equip_need():
@@ -114,16 +111,7 @@ def check_equip_need():
     return result
 
 
-def provide_stock(x: str, y: int, z: datetime, w: int, p: int):
-    # name = request.Get.get('Provide Stock Name')
-    # firm = request.Get.get('Provide Stock Firm')
-    # num = request.Get.get('Provide Stock Num')
-    # expired = request.Get.get('Stock Expired Date')
-    name = x
-    firm = y
-    expired = z
-    num = w
-
+def provide_stock(request):
     try:
         Firm.objects.get(FirmID=firm)
     except Firm.DoesNotExist:

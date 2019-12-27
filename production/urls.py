@@ -3,8 +3,7 @@ import production.views
 
 urlpatterns = [
     path('orderSystem/', production.views.OrderView.as_view()),
-    path('checkSystem/', production.views.checkSystem),
-    path('provideSystem/', production.views.provideSystem),
+    path('memberJoin/'), production.views.memeberJoin),
     path('stockCheck/', production.views.stockCheck),
     path('equipmentCheck/', production.views.equipmentCheck),
     path('stockProvide/', production.views.stockProvide),
