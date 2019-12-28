@@ -23,3 +23,4 @@ class joinMemberForm(forms.Form):
     bday = forms.DateField(label = '出生日期')
     pets = forms.BooleanField(required = False, initial = False, label = '是否有養寵物')
     student = forms.BooleanField(required = False, initial = False, label = '是否為學生')
+    

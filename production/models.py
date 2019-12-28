@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 class Member(models.Model):
-    MemberID = models.AutoField(primary_key=True)
+    MemberID = models.PositiveIntegerField(primary_key=True)
     mName = models.CharField(max_length=20)
     Gender = models.CharField(max_length=10)
     Phone = models.CharField(max_length=13)

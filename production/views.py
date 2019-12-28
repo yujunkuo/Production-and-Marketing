@@ -92,16 +92,36 @@ class OrderView(TemplateView):
             order_form = orderForm()
             dish_name = Dish.objects.all()[dish]
             time = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
+            order_id = Order.objects.order_by('oID').last().oID + 1
 
-            try:
-                Order.objects.create(oTime=time, MID=Member.objects.get(MemberID=mid),
-                                     dishName=Dish.objects.get(dName=dish_name), orderNum=num)
-                for i in dish_dict[dish_name]:
-                    stock = i
-                    stock_db = Inventory.objects.filter(sName=stock).orderby('Expired')
-                    used_num = dish_dict[dish_name][i]
-            except:
+            Order.objects.create(oID=order_id, oTime=time, MID=Member.objects.get(MemberID=mid),
+                                 dishName=Dish.objects.get(dName=dish_name), orderNum=num)
+            dish_name_str = str(dish_name)
+            if dish_name_str in dish_dict:
+                for need_inv in dish_dict[dish_name_str]:
+                    need_num = num * dish_dict[dish_name_str][need_inv]
+                    if Made.objects.filter(madeID=1):
+                        made_id = Made.objects.order_by('madeID').last().madeID + 1
+                    else:
+                        made_id = 1
+                    mtime = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
+                    Made.objects.create(madeID=made_id, mTime=mtime, mDish=Dish.objects.get(dName=dish_name_str)
+                                        , mInvent=Inventory.objects.filter(invName=need_inv).first(), mNum=need_num)
+                    for inv in Inventory.objects.filter(invName=need_inv).order_by('Expired'):
+                        if need_num <= inv.invNum:
+                            inv.invNum -= need_num
+                            inv.save()
+                            break
+                        else:
+                            need_num -= inv.invNum
+                            inv.invNum = 0
+                            inv.save()
+                if Inventory.objects.filter(invNum=0):
+                    zero_inv = Inventory.objects.filter(invNum=0)
+                    zero_inv.delete()
+            else:
                 pass
+
         return render(request, self.template_name, {'form': order_form, "time": time})
 
 inventory_minimum = {'牛奶': 50, '咖啡': 100, '巧克力': 50, '冰淇淋': 40, '鬆餅粉': 50, '鮭魚': 30, '萵苣': 45, '番茄': 45,
@@ -177,13 +197,13 @@ class ProvideStockView(TemplateView):
             expired = request.POST.get('Expired', "")
             provide_stock_form = provideStockForm()
 
-        try:
-            Firm.objects.get(FirmID=firm)
-        except Firm.DoesNotExist:
+        if Firm.objects.get(FirmID=firm):
+            pass
+        else:
             Firm.objects.create(FirmID=firm)
 
         Inventory.objects.create(invName=name, invNum=num, Expired=expired)
-        ProvideInventory.objects.create(piFirm=Firm.objects.get(FirmID=firm), name=Inventory.objects.get(invName=name), piNum=num)
+        ProvideInventory.objects.create(piFirm=Firm.objects.get(FirmID=firm), name=Inventory.objects.filter(invName=name).first(), piNum=num)
 
         return render(request, self.template_name, {'form': provide_stock_form})
 
@@ -206,14 +226,14 @@ class ProvideEquipView(TemplateView):
             num = int(request.POST.get('Num'))
             provide_equip_form = provideEquipFrom()
 
-        try:
-            Firm.objects.get(FirmID=firm)
-        except Firm.DoesNotExit:
+        if Firm.objects.get(FirmID=firm):
+            pass
+        else:
             Firm.objects.create(FirmID=firm)
 
-        try:
-            Equipment.objects.get(eName=name)
-        except Equipment.DoesNotExit:
+        if Equipment.objects.get(eName=name):
+            pass
+        else:
             Equipment.objects.create(eName=name, eNum=0)
 
         equip = Equipment.objects.get(eName=name)
