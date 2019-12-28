@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from .forms import orderForm
 from .forms import joinMemberForm
+from .forms import provideStockForm
+from .forms import provideEquipForm
 from datetime import datetime
 from production.models import *
 
@@ -28,6 +30,9 @@ def stockProvide(request):
 
 def equipmentProvide(request):
     return render(request, "equipmentProvide.html")
+
+def prediction(request):
+    return render(request, "prediction.html")
 
 
 dish_dict = {'拿鐵咖啡': {'牛奶': 1, '咖啡': 1}, '巧克力冰淇淋鬆餅': {'巧克力': 1, '冰淇淋': 1, '鬆餅粉': 1},
@@ -127,41 +132,54 @@ class OrderView(TemplateView):
 inventory_minimum = {'牛奶': 50, '咖啡': 100, '巧克力': 50, '冰淇淋': 40, '鬆餅粉': 50, '鮭魚': 30, '萵苣': 45, '番茄': 45,
                      '麵包丁': 35, '沙拉醬': 50, 'egg' : 100}
 
-class CheckStockView(TemplateView):
-
-    template_name = 'stockCheck.html'
-
-    def get(self, request):
-        def check_stock_all(request):
-            result = Inventory.objects.order_by('Expired')
-            return result
-
-        def check_stock_need(request):
-            need_inventory = []
-
-            all_inventory = Inventory.objects.values('invName').distinct()
-            for i in all_inventory:
-                name = i['invName']
-                num = 0
-                inventory = Inventory.objects.filter(invName=name)
-                for inv in inventory:
-                    num += inv.invNum
-                if num <= inventory_minimum[name]:
-                    need = str(name) + ' : ' + str(num) + '份 (至少需要' + str(inventory_minimum[name]) + '份）'
-                    need_inventory.append(need)
-
-            return need_inventory
-
-        def check_stock_expired(request):
-            name = request.Get.get('Check Stock')
-            result = Inventory.objects.get(sName=name).order_by('Expired')
-            return result
 
 
-        return render(request, "stockCheck.html", {
-        "check_stock_all": check_stock_all,
-        "check_stock_need": check_stock_need,
-        "check_stock_expired" : check_stock_expired})
+def get(self, request):
+    def check_stock_all(request):
+        inv_name = []
+        inv_expired = []
+        result = Inventory.objects.order_by('Expired')
+        for inv in result:
+            inv_name.append(inv.invName)
+            inv_num.append(inv.invNum)
+            inv_expired.append(inv.Expired)
+    return render(request, 'stockCheck.html')
+
+def check_stock_need(request):
+    need_inventory = []
+
+    all_inventory = Inventory.objects.values('invName').distinct()
+    for i in all_inventory:
+        name = i['invName']
+        num = 0
+        inventory = Inventory.objects.filter(invName=name)
+        for inv in inventory:
+            num += inv.invNum
+            if num <= inventory_minimum[name]:
+                need = str(name) + ' : ' + str(num) + '份 (至少需要' + str(inventory_minimum[name]) + '份）'
+                need_inventory.append(need)
+
+        return need_inventory
+
+def check_stock_expired(request):
+    name = request.Get.get('Check Stock')
+    result = Inventory.objects.get(sName=name).order_by('Expired')
+    return result
+
+
+    return render(request, "stockCheck.html", {
+            "check_stock_all": check_stock_all,
+            "check_stock_need": check_stock_need,
+            "check_stock_expired" : check_stock_expired})
+'''
+def post(self,request):
+    def check_stock_expired(request):
+        name = request.Get.get('Check Stock')
+        result = Inventory.objects.filter(invName=name).order_by('Expired')
+        return result
+
+    return render(request, "stockCheck.html", {
+    "check_stock_all": result[i].invName,})'''
 
 class CheckEquipView(TemplateView):
 
@@ -191,22 +209,23 @@ class ProvideStockView(TemplateView):
         provide_stock_form = provideStockForm(request.POST)
 
         if provide_stock_form.is_valid():
-            name = request.POST.get('Stock Name', "")
-            firm = int(request.POST.get('Firm ID'))
-            num = int(request.POST.get('Num'))
-            expired = request.POST.get('Expired', "")
+            name = request.POST.get('name')
+            firm = int(request.POST.get('firm'))
+            num = int(request.POST.get('num'))
+            expired = request.POST.get('expired')
             provide_stock_form = provideStockForm()
 
-        if Firm.objects.get(FirmID=firm):
-            pass
-        else:
+        try:
+            Firm.objects.get(FirmID=firm)
+
+        except Firm.DoesNotExist:
             Firm.objects.create(FirmID=firm)
 
-        Inventory.objects.create(invName=name, invNum=num, Expired=expired)
-        ProvideInventory.objects.create(piFirm=Firm.objects.get(FirmID=firm), name=Inventory.objects.filter(invName=name).first(), piNum=num)
+        inventory_id = Inventory.objects.order_by('invID').last().invID + 1
+        Inventory.objects.create(invID=inventory_id, invName=name, invNum=num, Expired=expired)
+        ProvideInventory.objects.create(piFirm=Firm.objects.get(FirmID=firm), pInvent=Inventory.objects.get(invID=inventory_id), piNum=num)
 
         return render(request, self.template_name, {'form': provide_stock_form})
-
 
 class ProvideEquipView(TemplateView):
     template_name = 'equipmentProvide.html'
@@ -218,23 +237,27 @@ class ProvideEquipView(TemplateView):
 
     def post(self, request):
         global provide_equip_form
-        provide_equip_form = provideEquipFrom(request.POST)
+        provide_equip_form = provideEquipForm(request.POST)
 
         if provide_equip_form.is_valid():
-            name = request.POST.get('Equipment Name', "")
-            firm = int(request.POST.get('Frim ID'))
-            num = int(request.POST.get('Num'))
-            provide_equip_form = provideEquipFrom()
+            name = request.POST.get('name')
+            firm = int(request.POST.get('firm'))
+            num = int(request.POST.get('num'))
+            provide_equip_form = provideEquipForm()
 
-        if Firm.objects.get(FirmID=firm):
-            pass
-        else:
+        try:
+            Firm.objects.get(FirmID=firm)
+        except:
             Firm.objects.create(FirmID=firm)
-
-        if Equipment.objects.get(eName=name):
-            pass
         else:
+            pass
+
+        try:
+             Equipment.objects.get(eName=name)
+        except:
             Equipment.objects.create(eName=name, eNum=0)
+        else:
+            pass
 
         equip = Equipment.objects.get(eName=name)
         origin_num = equip.eNum
@@ -242,8 +265,7 @@ class ProvideEquipView(TemplateView):
         equip.eNum = new_num
         equip.save()
 
-        ProvideEquip.objects.create(peFirm=Firm.objects.get(FirmID=firm), pEquip=Equipment.objects.get(eName=name)
-                                    , peNum=num)
+        ProvideEquip.objects.create(peFirm=Firm.objects.get(FirmID=firm), pEquip=Equipment.objects.get(eName=name), peNum=num)
 
         return render(request, self.template_name, {'form': provide_equip_form})
 
