@@ -10,14 +10,26 @@
   <body>
     <p>客群分析(K-Means)</p>
     <div class="result">
+      <p>第一群的消費者與其連絡信箱</p>
       <ul>
-      <li>Name:{{ mname_list }}<li>
-      <li>Age:{{ age_list }}</li>
-      <li>Consumption: {{ consumption_list }}</li>
-      <li>KMeans Result: {{ kmeans_fit }}</li>
+      <li>Name:{{ name1 }}<li>
+      <li>E-mail:{{ email1 }}</li>
       </u1>
     </div>
-
+    <div class="result">
+      <p>第二群的消費者與其連絡信箱</p>
+      <ul>
+      <li>Name:{{ name2 }}<li>
+      <li>E-mail:{{ email2 }}</li>
+      </u1>
+    </div>
+    <div class="result">
+      <p>第三群的消費者與其連絡信箱</p>
+      <ul>
+      <li>Name:{{ name3 }}<li>
+      <li>E-mail:{{ email3 }}</li>
+      </u1>
+    </div>
 
     <img class="image" src="data:image/png;base64,{{ plot_res }}" />
     <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
