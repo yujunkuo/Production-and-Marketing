@@ -8,39 +8,10 @@
   </head>
   <body>
   <p><strong>檢查存貨</strong></p>
-  <img src={% static "inventory.jpg" %} alt= "存貨" height= 300px>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_table }}
-    <input type= "button" value= "全部存貨" class = "btn btnClick" id='all' onclick="showCorrespondForm('all')">
-    <input type= "button" value= "所需存貨" class = "btn btnClick" id='need' onclick="showCorrespondForm('need')">
-    <input type= "button" value= "過期存貨" class = "btn btnClick" id='expired' onclick="showCorrespondForm('expired')">
-  </form>
-
-  <div id='allForm' style="visibility: hidden;">
-  <td>{{ result1.sName }}</td>
-  <td>{{ result1.sNum }}</td>
-  <td>{{ result1.Expired }}</td>
-  </div>
-
-  <div id='needForm' style="visibility: hidden;">
-    <td>{{ result2.sName }}</td>
-    <td>{{ result2.sNum }}</td>
-    <td>{{ result2.Expired }}</td>
-  </div>
-
-  <div id='expiredForm' style="visibility: hidden;">
-    <td>{{ result3.sName }}</td>
-    <td>{{ result3.sNum }}</td>
-    <td>{{ result3.Expired }}</td>
-  </div>
-
-  <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   <script>
       let allShow = false
       let needShow = false
       let expiredShow = false
-
       function showCorrespondForm(id){
         showFormId = id+'Form'
         target = document.querySelector('#'+showFormId)
@@ -57,11 +28,29 @@
             expiredShow = !expiredShow
             break;
           default:
-
+          }
         }
-      }
-
-
   </script>
+  <input type= "submit" value= "全部存貨" class = "btn btnClick" id='all' onclick="showCorrespondForm('all')">
+  <input type= "submit" value= "所需存貨" class = "btn btnClick" id='need' onclick="showCorrespondForm('need')">
+  <input type= "submit" value= "將到期存貨" class = "btn btnClick" id='expired' onclick="showCorrespondForm('expired')">
+  <div id='allForm' style="visibility: hidden;margin:0px auto;width:900px;height:100px;border:3px #cccccc dashed;">
+    <ul>
+      <li>存貨名:{{ inv_all_name }}</li>
+      <li>存貨數量:{{ inv_all_num }}</li>
+      <li>存貨到期日:{{ inv_all_expired }}</li>
+    </ul>
+  </div>
+  <div id='needForm' style="visibility: hidden;">
+    <p>{{ need_inventory }}</p>
+  </div>
+  <div id='expiredForm' style="visibility: hidden;">
+    <ul>
+      <li>存貨名:{{ inv_expired_name }}</li>
+      <li>存貨數量:{{ inv_expired_num }}</li>
+      <li>存貨到期日:{{ inv_expired_time }}</li>
+    </ul>
+  </div>
+  <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>
 </html>

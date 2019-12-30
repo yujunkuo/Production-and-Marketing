@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'marketing',
-    'production'
+    'production',
+    'crispy_forms',
+    'echo',
 ]
 
 MIDDLEWARE = [
@@ -124,3 +126,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'templates/static'),
 ]
+
+#App settimgs
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'prediction.css' %}">
+  </head>
+  <body>
+    <h1>預測未來銷量</h1>
+    <ul>
+    <li>前五期: {{ s1 }}</li>
+    <li>前四期: {{ s2 }}</li>
+    <li>前三期: {{ s3 }}</li>
+    <li>前二期: {{ s4 }}</li>
+    <li>前一期: {{ s5 }}</li>
+    <li>當期: {{ s6 }}</li>
+    </u1>
+
+    </ul>
+
+
+    <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
+
+  </body>
+</html>

@@ -104,5 +104,3 @@ class ProvideEquip(models.Model):
     def __str__(self):
         result = str(self.peTime) + ' ' + str(self.pEquip) + ' ' + str(self.peNum)
         return result
-
-

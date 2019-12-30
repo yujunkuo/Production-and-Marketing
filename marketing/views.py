@@ -38,18 +38,24 @@ def stp(request):
     return render(request, 'stp.html')
 
 
+
+def rfm(request):
+    return render(request, 'rfm.html')
+
+
 class KmeansView(TemplateView):
     template_name = 'customerAnalysis.html'
 
     def get(self, request):
-        # form = CustomerForm()
-        plot_res, mname_list, age_list, consumption_list, kmeans_fit = self.handle_file()
+        plot_res, name1, name2, name3, email1, email2, email3 = self.handle()
         return render(request, self.template_name, {
             "plot_res": plot_res,
-            "mname_list": mname_list,
-            "age_list": age_list,
-            "consumption_list": consumption_list,
-            "kmeans_result": kmeans_fit
+            "name1": name1,
+            "name2": name2,
+            "name3": name3,
+            "email1": email1,
+            "email2": email2,
+            "email3": email3
         })
 
     # def post(self, request):
@@ -61,11 +67,12 @@ class KmeansView(TemplateView):
     #            "consumption_list": consumption_list, "kmeans_fit": kmeans_fit}
     #    return render(request, self.template_name, args)
 
-    def handle_file(self):
+    def handle(self):
         memberid_list = []
         mname_list = []
         age_list = []
         consumption_list = []
+        email_list = []
         curr = datetime.now()
         for cust in Member.objects.all():
             memberid_list.append(cust.MemberID)
@@ -81,9 +88,11 @@ class KmeansView(TemplateView):
                 dish_price = dish[0].dPrice
                 cons += dish_price
             consumption_list.append(cons)
-        df = pd.DataFrame({"id": memberid_list, "name": mname_list, "age": age_list, "consumption": consumption_list})
+            email_list.append(cust.Email)
+        df = pd.DataFrame({"id": memberid_list, "name": mname_list, "age": age_list, "consumption": consumption_list,
+                           "email": email_list})
         model = KMeans(n_clusters=3)
-        kmeans_fit = model.fit_predict(df.iloc[:, 2:])
+        kmeans_fit = model.fit_predict(df.iloc[:, 2:4])
         for i in set(kmeans_fit):
             plt.scatter(x=df[(model.labels_ == i)]["age"], y=df[(model.labels_ == i)]["consumption"], label=i)
         plt.legend()
@@ -91,7 +100,16 @@ class KmeansView(TemplateView):
         plt.savefig(save_file, format='png')
         plot_res = base64.b64encode(save_file.getvalue()).decode('utf8')
         plt.close()
-        return plot_res, mname_list, age_list, consumption_list, kmeans_fit
+
+        name1 = df[(model.labels_ == 1)]["name"]
+        name2 = df[(model.labels_ == 2)]["name"]
+        name3 = df[(model.labels_ == 3)]["name"]
+
+        email1 = df[(model.labels_ == 1)]["email"]
+        email2 = df[(model.labels_ == 2)]["email"]
+        email3 = df[(model.labels_ == 3)]["email"]
+
+        return plot_res, name1, name2, name3, email1, email2, email3
 
 
 class DecisionTreeView(TemplateView):

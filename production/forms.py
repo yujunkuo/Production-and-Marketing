@@ -23,4 +23,14 @@ class joinMemberForm(forms.Form):
     bday = forms.DateField(label = '出生日期')
     pets = forms.BooleanField(required = False, initial = False, label = '是否有養寵物')
     student = forms.BooleanField(required = False, initial = False, label = '是否為學生')
-    
+
+class provideStockForm(forms.Form):
+    name = forms.CharField(label = '存貨', widget = forms.TextInput)
+    firm = forms.CharField(label = '廠商', widget = forms.TextInput)
+    num = forms.CharField(label = '數量', widget = forms.TextInput)
+    expired = forms.DateField(label = '即將到期日')
+
+class provideEquipForm(forms.Form):
+    name = forms.CharField(label = '設備', widget = forms.TextInput)
+    firm = forms.CharField(label = '廠商', widget = forms.TextInput)
+    num = forms.CharField(label = '數量', widget = forms.TextInput)

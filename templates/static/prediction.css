@@ -11,13 +11,20 @@ body{
   align-items: center;
   justify-content: center;
 }
-p{
+.background{
+  width: 800px;
+  height: 500px;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+h1{
   font-family: 標楷體;
   font-size: 40px;
   color: lightskyblue;
   position: relative;
   top: -200px;
-  left: 240px;
+  left: 160px;
 }
 .btn{
   width: 200px;
@@ -29,6 +36,6 @@ p{
   cursor: pointer;
   position: relative;
   font-size: 25px;
-  top: 100px;
-  left: -50px;
+  top: 180px;
+  left: -140px;
 }

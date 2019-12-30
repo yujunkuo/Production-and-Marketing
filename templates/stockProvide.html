@@ -1,15 +1,22 @@
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'equipmentSystem.css' %}">
+    <link rel="stylesheet" href="{% static 'stockProvide.css' %}">
     <title></title>
   </head>
   <body>
-  <p>設備系統</p>
-  <img src={% static "equipment.jpg" %} alt= "設備" height= 300px>
+  <p><strong>存貨進貨</strong></p>
+  <form  method="POST">
+    {% csrf_token %}
+    <div class="order">
+      {{ form | crispy }}
+      <input type="submit"  value="確認">
+    </div>
+  </form>
   <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>
 </html>

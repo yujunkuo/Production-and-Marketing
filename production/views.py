@@ -2,39 +2,36 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from .forms import orderForm
 from .forms import joinMemberForm
+from .forms import provideStockForm
+from .forms import provideEquipForm
 from datetime import datetime
 from production.models import *
 import math
 
-
 def orderSystem(request):
     return render(request, "orderSystem.html")
-
 
 def memeberJoin(request):
     return render(request, "memeberJoin.html")
 
-
 def stockCheck(request):
     return render(request, "stockCheck.html")
-
 
 def equipmentCheck(request):
     return render(request, "equipmentCheck.html")
 
-
 def stockProvide(request):
     return render(request, "stockProvide.html")
-
 
 def equipmentProvide(request):
     return render(request, "equipmentProvide.html")
 
+def prediction(request):
+    return render(request, "prediction.html")
+
 
 dish_dict = {'拿鐵咖啡': {'牛奶': 1, '咖啡': 1}, '巧克力冰淇淋鬆餅': {'巧克力': 1, '冰淇淋': 1, '鬆餅粉': 1},
              '挪威燻鮭魚沙拉': {'鮭魚': 1, '萵苣': 2, '番茄': 3, '麵包丁': 2, '沙拉醬': 1}}
-
-
 
 easy_expired = ['牛奶', '冰淇淋', '鮭魚', '萵苣', '番茄']
 
@@ -42,11 +39,19 @@ not_easy_expired = ['咖啡', '巧克力', '鬆餅粉', '麵包丁', '沙拉醬'
 
 not_easy_min = {'咖啡' : 50, '巧克力' : 40, '鬆餅粉' : 30, '麵包丁' : 45, '沙拉醬' : 50}
 
+Dish_List = ['拿鐵咖啡', '香草拿鐵', '濃縮咖啡', '卡布奇諾', '焦糖瑪奇朵', '提拉米蘇拿鐵', '貝里斯奶酒咖啡', '特調風味鮮奶茶',
+             '玫瑰奶茶', '牛奶糖歐蕾', '可可歐蕾', '抹茶阿法其朵', '蜂蜜檸檬', '蜂蜜奇異果', '精選啤酒', '蘋果優格冰沙', 'Oreo巧克力冰沙',
+             '宇治抹茶冰沙', '香蕉巧克力冰沙', '青檸冰紅茶', '玫瑰四物茶', '富士蘋果冰茶', '伯爵紅茶', '烏龍鐵觀音', '日式玄米煎茶',
+             '燻火腿芝士夾心焗烤土司', '夏威夷比薩芝士焗烤土司', '原味鬆餅', '焦糖冰淇淋鬆餅', '巧克力冰淇淋鬆餅', '香蕉冰淇淋鬆餅',
+             '藍莓貝果', '奶油貝果', '花生貝果', '焦糖北海道牛奶冰淇淋', '甜心草莓冰淇淋', '酥脆巧克力冰淇淋', '起士可頌', '鮪魚可頌',
+             '起士火腿可頌', '黑胡椒牛肉可頌', '蔬菜雞肉可頌', '咖喱雞肉皮塔', '辣味牛肉皮塔', '法式鴨胸皮塔', '挪威燻鮭魚沙拉',
+             '燻火腿沙拉', '一杯雞蛋沙拉（素）', '一杯鮪魚沙拉']
+
 # Create your views here.
+
+
 class JoinMemberView(TemplateView):
-
     template_name = 'memberJoin.html'
-
     def get(self, request):
         global join_member_form
         join_member_form = joinMemberForm()
@@ -55,7 +60,6 @@ class JoinMemberView(TemplateView):
     def post(self, request):
         global join_member_form
         join_member_form = joinMemberForm(request.POST)
-
         if join_member_form.is_valid():
             name = request.POST.get('name', "")
             gender = "Female" if request.POST.get('gender', "") else "Male"
@@ -129,20 +133,32 @@ class OrderView(TemplateView):
                     zero_inv.delete()
             else:
                 pass
-
+        print(abc)
         return render(request, self.template_name, {'form': order_form, "time": time})
 
 
-class CheckStockView(TemplateView):
-
-    template_name = 'stockCheck.html'
-
+class CheckStockAllView(TemplateView):
     def get(self, request):
-        def check_stock_all(request):
-            result = Inventory.objects.order_by('Expired')
-            return result
+        inv_all_name = []
+        inv_all_num = []
+        inv_all_expired = []
+        result = Inventory.objects.order_by('Expired')
+        result = list(result)
+        for each in result:
+            inv_all_name.append(each.invName)
+            inv_all_num.append(each.invNum)
+            time = each.Expired
+            expired = time.isoformat()
+            inv_all_expired.append(expired)
+        return render(request, 'stockCheck.html', {
+            "inv_all_name": inv_all_name,
+            "inv_all_num": inv_all_num,
+            "inv_all_expired": inv_all_expired,
+            })
 
-        def check_stock_need(request):
+
+class CheckStockNeedView(TemplateView):
+    def get(self, request):
             need_inv = {}
             for easy in easy_expired:
                 dish_check = []
@@ -188,29 +204,52 @@ class CheckStockView(TemplateView):
                         need_inv[not_easy] = not_easy_min[not_easy]
 
 
-        def check_stock_expired(request):
-            name = request.Get.get('Check Stock')
-            result = Inventory.objects.get(sName=name).order_by('Expired')
-            return result
-
-
-        return render(request, "stockCheck.html", {
-        "check_stock_all": check_stock_all,
-        "check_stock_need": check_stock_need,
-        "check_stock_expired" : check_stock_expired})
-
-class CheckEquipView(TemplateView):
-
-    template_name = 'equipmentCheck.html'
-
+class CheckStockExpiredView(TemplateView):
     def get(self, request):
-        def check_equip_all():
-            result = Equipment.objects.all()
-            return result
+        name = request.Get.get('Check Stock')
+        inv_expired_name = []
+        inv_expired_num = []
+        inv_expired_time = []
+        result = Inventory.objects.get(sName=name).order_by('Expired')
+        result = list(result)
+        for each in result:
+            inv_expired_name.append(each.invName)
+            inv_expired_num.append(each.invNum)
+            inv_expired_time.append(each.Expired)
+        return render(request, "stockCheck.html", {
+                "inv_expired_name" : inv_expired_name,
+                "inv_expired_num" : inv_expired_num,
+                "inv_expired_time" : inv_expired_time,
+        })
 
-        def check_equip_need():
-            result = Equipment.objects.get(eNum__lt=10)
-            return result
+
+class CheckEquipAllView(TemplateView):
+    def get(self, request):
+            result = Equipment.objects.all()
+            equip_all_name = []
+            equip_all_num = []
+            result = list(result)
+            for each in result:
+                equip_all_name.append(each.eName)
+                equip_all_num.append(each.eNum)
+            return render(request, "equipmentCheck.html", {
+                    "equip_all_name" : equip_all_name,
+                    "equip_all_num" : equip_all_num,
+            })
+
+class CheckEquipNeedView(TemplateView):
+    def get(self, request):
+        result = Equipment.objects.get(eNum__lt=10)
+        equip_need_name = []
+        equip_need_num = []
+        result = list(result)
+        for each in result:
+            equip_need_name.append(each.eName)
+            equip_need_num.append(each.eNum)
+        return render(request, "equipmentCheck.html"), {
+                "equip_need_name" : equip_need_name,
+                "equip_need_num" : equip_need_num,
+    }
 
 
 
@@ -227,19 +266,21 @@ class ProvideStockView(TemplateView):
         provide_stock_form = provideStockForm(request.POST)
 
         if provide_stock_form.is_valid():
-            name = request.POST.get('Stock Name', "")
-            firm = int(request.POST.get('Firm ID'))
-            num = int(request.POST.get('Num'))
-            expired = request.POST.get('Expired', "")
+            name = request.POST.get('name')
+            firm = int(request.POST.get('firm'))
+            num = int(request.POST.get('num'))
+            expired = request.POST.get('expired')
             provide_stock_form = provideStockForm()
 
-        if Firm.objects.get(FirmID=firm):
-            pass
-        else:
+        try:
+            Firm.objects.get(FirmID=firm)
+
+        except Firm.DoesNotExist:
             Firm.objects.create(FirmID=firm)
 
-        Inventory.objects.create(invName=name, invNum=num, Expired=expired)
-        ProvideInventory.objects.create(piFirm=Firm.objects.get(FirmID=firm), name=Inventory.objects.filter(invName=name).first(), piNum=num)
+        inventory_id = Inventory.objects.order_by('invID').last().invID + 1
+        Inventory.objects.create(invID=inventory_id, invName=name, invNum=num, Expired=expired)
+        ProvideInventory.objects.create(piFirm=Firm.objects.get(FirmID=firm), pInvent=Inventory.objects.get(invID=inventory_id), piNum=num)
 
         return render(request, self.template_name, {'form': provide_stock_form})
 
@@ -257,20 +298,24 @@ class ProvideEquipView(TemplateView):
         provide_equip_form = provideEquipForm(request.POST)
 
         if provide_equip_form.is_valid():
-            name = request.POST.get('Equipment Name', "")
-            firm = int(request.POST.get('Firm ID'))
-            num = int(request.POST.get('Num'))
+            name = request.POST.get('name')
+            firm = int(request.POST.get('firm'))
+            num = int(request.POST.get('num'))
             provide_equip_form = provideEquipForm()
 
-        if Firm.objects.get(FirmID=firm):
-            pass
-        else:
+        try:
+            Firm.objects.get(FirmID=firm)
+        except:
             Firm.objects.create(FirmID=firm)
-
-        if Equipment.objects.get(eName=name):
-            pass
         else:
+            pass
+
+        try:
+             Equipment.objects.get(eName=name)
+        except:
             Equipment.objects.create(eName=name, eNum=0)
+        else:
+            pass
 
         equip = Equipment.objects.get(eName=name)
         origin_num = equip.eNum
@@ -278,26 +323,17 @@ class ProvideEquipView(TemplateView):
         equip.eNum = new_num
         equip.save()
 
-        ProvideEquip.objects.create(peFirm=Firm.objects.get(FirmID=firm), pEquip=Equipment.objects.get(eName=name)
-                                    , peNum=num)
+        ProvideEquip.objects.create(peFirm=Firm.objects.get(FirmID=firm), pEquip=Equipment.objects.get(eName=name), peNum=num)
 
         return render(request, self.template_name, {'form': provide_equip_form})
 
 
-Dish_List = ['拿鐵咖啡', '香草拿鐵', '濃縮咖啡', '卡布奇諾', '焦糖瑪奇朵', '提拉米蘇拿鐵', '貝里斯奶酒咖啡', '特調風味鮮奶茶',
-             '玫瑰奶茶', '牛奶糖歐蕾', '可可歐蕾', '抹茶阿法其朵', '蜂蜜檸檬', '蜂蜜奇異果', '精選啤酒', '蘋果優格冰沙', 'Oreo巧克力冰沙',
-             '宇治抹茶冰沙', '香蕉巧克力冰沙', '青檸冰紅茶', '玫瑰四物茶', '富士蘋果冰茶', '伯爵紅茶', '烏龍鐵觀音', '日式玄米煎茶',
-             '燻火腿芝士夾心焗烤土司', '夏威夷比薩芝士焗烤土司', '原味鬆餅', '焦糖冰淇淋鬆餅', '巧克力冰淇淋鬆餅', '香蕉冰淇淋鬆餅',
-             '藍莓貝果', '奶油貝果', '花生貝果', '焦糖北海道牛奶冰淇淋', '甜心草莓冰淇淋', '酥脆巧克力冰淇淋', '起士可頌', '鮪魚可頌',
-             '起士火腿可頌', '黑胡椒牛肉可頌', '蔬菜雞肉可頌', '咖喱雞肉皮塔', '辣味牛肉皮塔', '法式鴨胸皮塔', '挪威燻鮭魚沙拉',
-             '燻火腿沙拉', '一杯雞蛋沙拉（素）', '一杯鮪魚沙拉']
+class PedictionView(TemplateView):
+    def prediction(request):
+        name = request.Get.get('Dish name')
+        predict_for_month = predict(name)
 
-
-def prediction(request):
-    name = request.Get.get('Dish name')
-    predict_for_month = predict(name)
-
-    return name, predict_for_month[-1]
+        return name, predict_for_month[-1]
 
 
 def predict(name):

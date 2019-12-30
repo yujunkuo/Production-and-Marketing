@@ -3,12 +3,45 @@
   <head>
     <meta charset="utf-8">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'inventorySystem.css' %}">
+    <link rel="stylesheet" href="{% static 'equipmentCheck.css' %}">
     <title></title>
   </head>
   <body>
-  <p><strong>存貨系統</strong></p>
-  <img src={% static "inventory.jpg" %} alt= "存貨" height= 300px>
-  <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
+  <p><strong>檢查設備</strong></p>
+  <script>
+      let allShow = false
+      let needShow = false
+      function showCorrespondForm(id){
+        showFormId = id+'Form'
+        target = document.querySelector('#'+showFormId)
+        console.log(target)
+        target.style.visibility = eval(id+'Show') ? 'hidden':'visible';
+        switch (id) {
+          case 'all':
+            allShow = !allShow
+            break;
+          case 'need':
+            needShow = !needShow
+            break;
+          default:
+        }
+      }
+    </script>
+    <input type= "submit" value= "全部設備" class = "btn btnClick" id='all' onclick="showCorrespondForm('all')">
+    <input type= "submit" value= "所需設備" class = "btn btnClick" id='need' onclick="showCorrespondForm('need')">
+    <div id='allForm' style="visibility: hidden;">
+      <ul>
+        <li>設備名:{{ equip_all_name }}</li>
+        <li>設備數量:{{ equip_all_num }}</li>
+      </ul>
+    </div>
+    <div id='needForm' style="visibility: hidden;">
+      <ul>
+        <li>設備名:{{ inv_need_name }}</li>
+        <li>設備數量:{{ inv_need_num }}</li>
+      </ul>
+    </div>
+
+    <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>
 </html>

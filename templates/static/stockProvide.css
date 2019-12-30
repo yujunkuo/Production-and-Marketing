@@ -5,20 +5,22 @@
   font-family: 'cwTeXYen', sans-serif;
 }
 body{
-  background: #F5F5F5;
+  background: #F1F1F1;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 p{
-  font-family: 標楷體;
-  font-size: 40px;
-  color: lightskyblue;
+  line-height: 1.8;
   position: relative;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 28px;
+  color: lightskyblue;
   top: -200px;
-  left: 240px;
+  left:300px;
 }
+
 .btn{
   width: 200px;
   height: 60px;
@@ -29,6 +31,6 @@ p{
   cursor: pointer;
   position: relative;
   font-size: 25px;
-  top: 100px;
-  left: -50px;
+  top: 200px;
+  left: -150px;
 }
