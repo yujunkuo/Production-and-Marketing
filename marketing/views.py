@@ -38,6 +38,11 @@ def stp(request):
     return render(request, 'stp.html')
 
 
+
+def rfm(request):
+    return render(request, 'rfm.html')
+
+
 class KmeansView(TemplateView):
     template_name = 'customerAnalysis.html'
 
