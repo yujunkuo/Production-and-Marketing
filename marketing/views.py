@@ -19,6 +19,8 @@ from sklearn.externals.six import StringIO
 from io import BytesIO
 import base64
 
+from django.http import HttpResponse
+
 
 # Create your views here.
 
@@ -38,9 +40,62 @@ def stp(request):
     return render(request, 'stp.html')
 
 
+class RFMView(TemplateView):
+    def get(self, request):
+        id_list = []
+        name_list = []
+        email_list = []
+        for cust in Member.objects.all():
+            id_list.append(cust.MemberID)
+            name_list.append(cust.mName)
+            email_list.append(cust.Email)
+        r, f, m = [None]*len(id_list), [None]*len(id_list), [None]*len(id_list)
+        df = pd.DataFrame({"id": id_list, "name": name_list, "email": email_list, "R": r, "F": f, "M": m})
+        # The Recency Score of RFM
+        rec = []
+        rec_set = set()
+        for order in Order.objects.all().order_by('-oTime'):
+            if order.MID.MemberID not in rec_set:
+                rec.append(order.MID.MemberID)
+                rec_set.add(order.MID.MemberID)
+        for id in rec[:int(len(rec)/3)]:
+            df.loc[df["id"] == id, "R"] = 3
+        for id in rec[int(len(rec)/3):int(len(rec)*2/3)]:
+            df.loc[df["id"] == id, "R"] = 2
+        for id in rec[int(len(rec)*2/3):]:
+            df.loc[df["id"] == id, "R"] = 1
+        # The Frequency Score of RFM
+        freq = {}
+        for cust in Member.objects.all():
+            order_list = Order.objects.filter(MID=cust.MemberID)
+            times = len(order_list)
+            freq[cust.MemberID] = times
+        freq_res = sorted(freq.items(), key=lambda item: item[1], reverse=True)
+        for each in freq_res[:int(len(freq_res)/3)]:
+            df.loc[df["id"] == each[0], "F"] = 3
+        for each in freq_res[int(len(freq_res)/3):int(len(freq_res)*2/3)]:
+            df.loc[df["id"] == each[0], "F"] = 2
+        for each in freq_res[int(len(freq_res)*2/3):]:
+            df.loc[df["id"] == each[0], "F"] = 1
+        # The Monetary Score of RFM
+        mon = {}
+        for cust in Member.objects.all():
+            cons = 0
+            orders = Order.objects.filter(MID=cust.MemberID)
+            for order in orders:
+                dish = Dish.objects.filter(dName=order.dishName)
+                dish_price = dish[0].dPrice
+                cons += dish_price
+            mon[cust.MemberID] = cons
+        mon_res = sorted(mon.items(), key=lambda item: item[1], reverse=True)
+        for each in mon_res[:int(len(mon_res)/3)]:
+            df.loc[df["id"] == each[0], "M"] = 3
+        for each in mon_res[int(len(mon_res)/3):int(len(mon_res)*2/3)]:
+            df.loc[df["id"] == each[0], "M"] = 2
+        for each in mon_res[int(len(mon_res)*2/3):]:
+            df.loc[df["id"] == each[0], "M"] = 1
 
-def rfm(request):
-    return render(request, 'rfm.html')
+        return render(request, "rfm.html", {"res": df.to_string(index=False)})
 
 
 class KmeansView(TemplateView):
@@ -101,13 +156,13 @@ class KmeansView(TemplateView):
         plot_res = base64.b64encode(save_file.getvalue()).decode('utf8')
         plt.close()
 
-        name1 = df[(model.labels_ == 1)]["name"]
-        name2 = df[(model.labels_ == 2)]["name"]
-        name3 = df[(model.labels_ == 3)]["name"]
+        name1 = list(df[(model.labels_ == 1)]["name"])
+        name2 = list(df[(model.labels_ == 2)]["name"])
+        name3 = list(df[(model.labels_ == 3)]["name"])
 
-        email1 = df[(model.labels_ == 1)]["email"]
-        email2 = df[(model.labels_ == 2)]["email"]
-        email3 = df[(model.labels_ == 3)]["email"]
+        email1 = list(df[(model.labels_ == 1)]["email"])
+        email2 = list(df[(model.labels_ == 2)]["email"])
+        email3 = list(df[(model.labels_ == 3)]["email"])
 
         return plot_res, name1, name2, name3, email1, email2, email3
 

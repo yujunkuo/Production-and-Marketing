@@ -7,6 +7,7 @@ from .forms import provideEquipForm
 from .forms import expiredStockForm
 from datetime import datetime
 from production.models import *
+import math
 
 def orderSystem(request):
     return render(request, "orderSystem.html")
@@ -29,10 +30,27 @@ def equipmentProvide(request):
 def prediction(request):
     return render(request, "prediction.html")
 
+
 dish_dict = {'拿鐵咖啡': {'牛奶': 1, '咖啡': 1}, '巧克力冰淇淋鬆餅': {'巧克力': 1, '冰淇淋': 1, '鬆餅粉': 1},
              '挪威燻鮭魚沙拉': {'鮭魚': 1, '萵苣': 2, '番茄': 3, '麵包丁': 2, '沙拉醬': 1}}
 
+easy_expired = ['牛奶', '冰淇淋', '鮭魚', '萵苣', '番茄']
+
+not_easy_expired = ['咖啡', '巧克力', '鬆餅粉', '麵包丁', '沙拉醬']
+
+not_easy_min = {'咖啡' : 50, '巧克力' : 40, '鬆餅粉' : 30, '麵包丁' : 45, '沙拉醬' : 50}
+
+Dish_List = ['拿鐵咖啡', '香草拿鐵', '濃縮咖啡', '卡布奇諾', '焦糖瑪奇朵', '提拉米蘇拿鐵', '貝里斯奶酒咖啡', '特調風味鮮奶茶',
+             '玫瑰奶茶', '牛奶糖歐蕾', '可可歐蕾', '抹茶阿法其朵', '蜂蜜檸檬', '蜂蜜奇異果', '精選啤酒', '蘋果優格冰沙', 'Oreo巧克力冰沙',
+             '宇治抹茶冰沙', '香蕉巧克力冰沙', '青檸冰紅茶', '玫瑰四物茶', '富士蘋果冰茶', '伯爵紅茶', '烏龍鐵觀音', '日式玄米煎茶',
+             '燻火腿芝士夾心焗烤土司', '夏威夷比薩芝士焗烤土司', '原味鬆餅', '焦糖冰淇淋鬆餅', '巧克力冰淇淋鬆餅', '香蕉冰淇淋鬆餅',
+             '藍莓貝果', '奶油貝果', '花生貝果', '焦糖北海道牛奶冰淇淋', '甜心草莓冰淇淋', '酥脆巧克力冰淇淋', '起士可頌', '鮪魚可頌',
+             '起士火腿可頌', '黑胡椒牛肉可頌', '蔬菜雞肉可頌', '咖喱雞肉皮塔', '辣味牛肉皮塔', '法式鴨胸皮塔', '挪威燻鮭魚沙拉',
+             '燻火腿沙拉', '一杯雞蛋沙拉（素）', '一杯鮪魚沙拉']
+
 # Create your views here.
+
+
 class JoinMemberView(TemplateView):
     template_name = 'memberJoin.html'
     def get(self, request):
@@ -118,9 +136,6 @@ class OrderView(TemplateView):
                 pass
         return render(request, self.template_name, {'form': order_form})
 
-inventory_minimum = {'牛奶': 50, '咖啡': 100, '巧克力': 50, '冰淇淋': 40, '鬆餅粉': 50, '鮭魚': 30, '萵苣': 45, '番茄': 45,
-                     '麵包丁': 35, '沙拉醬': 50, 'egg' : 100}
-
 
 class CheckStockAllView(TemplateView):
     def get(self, request):
@@ -135,29 +150,59 @@ class CheckStockAllView(TemplateView):
             time = each.Expired
             expired = time.isoformat()
             inv_all_expired.append(expired)
-        return render(request, 'stockCheck.html',{
+        return render(request, 'stockCheck.html', {
             "inv_all_name": inv_all_name,
             "inv_all_num": inv_all_num,
             "inv_all_expired": inv_all_expired,
-                })
+            })
+
 
 class CheckStockNeedView(TemplateView):
     def get(self, request):
-        need_inventory = []
+            need_inv = {}
+            for easy in easy_expired:
+                dish_check = []
+                total_need_past = {}
+                for each in dish_dict:
+                    if easy in dish_dict[each]:
+                        dish_check.append(each)
 
-        all_inventory = Inventory.objects.values('invName').distinct()
-        for i in all_inventory:
-            name = i['invName']
-            num = 0
-            inventory = Inventory.objects.filter(invName=name)
-            for inv in inventory:
-                num += inv.invNum
-                if num <= inventory_minimum[name]:
-                    need = str(name) + ' : ' + str(num) + '份 (至少需要' + str(inventory_minimum[name]) + '份）'
-                    need_inventory.append(need)
-        return render(request, 'stockCheck.html', {
-                "need_inventory" : need_inventory
-        })
+                for dish in dish_check:
+                    dish_num_for_next = predict(dish)
+                    inv_need_past = {}
+                    for i in range(len(dish_num_for_next)):
+                        inv_num_for_dish = dish_num_for_next[i] * dish_dict[dish][easy]
+                        inv_need_past[i] = inv_num_for_dish
+                    total_need_past[dish] = inv_need_past
+
+                past = []
+                for i in range(len(predict(dish))-1):
+                    for each in total_need_past:
+                        temp_sum = 0
+                        temp_sum += total_need_past[each][i]
+                    past.append(temp_sum)
+
+                mean = sum(past) / len(past)
+                temp = 0
+                for each in past:
+                    temp += (each - mean) ** 2
+                sd = math.sqrt(temp / len(past))
+                need = round(mean + (0.675 * sd), 0)
+                need_inv[easy] = need
+
+            for not_easy in not_easy_expired:
+                try:
+                    inv = Inventory.objects.filter(invName=not_easy)
+                except:
+                    invNum_sum = 0
+                else:
+                    invNum_sum = 0
+                    for each in inv:
+                        invNum_sum += each.invNum
+                finally:
+                    if invNum_sum <= not_easy_min[not_easy]:
+                        need_inv[not_easy] = not_easy_min[not_easy]
+
 
 class CheckStockExpiredView(TemplateView):
     def get(self, request):
@@ -166,7 +211,6 @@ class CheckStockExpiredView(TemplateView):
         stock = int(request.GET.get('stock'))
         result = Inventory.objects.get(sName=name).order_by('Expired')
         return render(request, "stockCheck.html", {'form': check_stock_expired_form, 'result': result})
-
 
 class CheckEquipAllView(TemplateView):
     def get(self, request):
@@ -229,6 +273,7 @@ class ProvideStockView(TemplateView):
 
         return render(request, self.template_name, {'form': provide_stock_form})
 
+
 class ProvideEquipView(TemplateView):
     template_name = 'equipmentProvide.html'
 
@@ -272,41 +317,39 @@ class ProvideEquipView(TemplateView):
         return render(request, self.template_name, {'form': provide_equip_form})
 
 
-Dish_List = ['拿鐵咖啡', '香草拿鐵', '濃縮咖啡', '卡布奇諾', '焦糖瑪奇朵', '提拉米蘇拿鐵', '貝里斯奶酒咖啡', '特調風味鮮奶茶',
-             '玫瑰奶茶', '牛奶糖歐蕾', '可可歐蕾', '抹茶阿法其朵', '蜂蜜檸檬', '蜂蜜奇異果', '精選啤酒', '蘋果優格冰沙', 'Oreo巧克力冰沙',
-             '宇治抹茶冰沙', '香蕉巧克力冰沙', '青檸冰紅茶', '玫瑰四物茶', '富士蘋果冰茶', '伯爵紅茶', '烏龍鐵觀音', '日式玄米煎茶',
-             '燻火腿芝士夾心焗烤土司', '夏威夷比薩芝士焗烤土司', '原味鬆餅', '焦糖冰淇淋鬆餅', '巧克力冰淇淋鬆餅', '香蕉冰淇淋鬆餅',
-             '藍莓貝果', '奶油貝果', '花生貝果', '焦糖北海道牛奶冰淇淋', '甜心草莓冰淇淋', '酥脆巧克力冰淇淋', '起士可頌', '鮪魚可頌',
-             '起士火腿可頌', '黑胡椒牛肉可頌', '蔬菜雞肉可頌', '咖喱雞肉皮塔', '辣味牛肉皮塔', '法式鴨胸皮塔', '挪威燻鮭魚沙拉',
-             '燻火腿沙拉', '一杯雞蛋沙拉（素）', '一杯鮪魚沙拉']
-
 class PedictionView(TemplateView):
     def prediction(request):
         name = request.Get.get('Dish name')
-        curr = datetime.datetime.now()
-        num_per_month = []
-        predict_for_month = []
-
-        dish_order = Order.objects.filter(dishName=name)
-        for year in range(2019, curr.year + 1):
-            if year != curr.year:
-                for month in range(1, 13):
-                    count = 0
-                    for ds_order in dish_order:
-                        if ds_order.oTime.year == year and ds_order.oTime.month == month:
-                            count += ds_order.orderNum
-                    num_per_month.append(count)
-            else:
-                for month in range(1, curr.month + 1):
-                    count = 0
-                    for ds_order in dish_order:
-                        if ds_order.oTime.year == year and ds_order.oTime.month == month:
-                            count += ds_order.orderNum
-                            num_per_month.append(count)
-                            predict_for_month.append(num_per_month[0])
-
-        for i in range(len(num_per_month) - 1):
-                predict = predict_for_month[i] + 0.15 * (num_per_month[i + 1] - predict_for_month[i])
-                predict_for_month.append(predict)
+        predict_for_month = predict(name)
 
         return name, predict_for_month[-1]
+
+
+def predict(name):
+    curr = datetime.now()
+    num_per_month = []
+    predict_for_month = []
+
+    dish_order = Order.objects.filter(dishName=name)
+    for year in range(2019, curr.year + 1):
+        if year != curr.year:
+            for month in range(1, 13):
+                count = 0
+                for ds_order in dish_order:
+                    if ds_order.oTime.year == year and ds_order.oTime.month == month:
+                        count += ds_order.orderNum
+                num_per_month.append(count)
+        else:
+            for month in range(1, curr.month + 1):
+                count = 0
+                for ds_order in dish_order:
+                    if ds_order.oTime.year == year and ds_order.oTime.month == month:
+                        count += ds_order.orderNum
+                num_per_month.append(count)
+        predict_for_month.append(num_per_month[0])
+
+    for i in range(len(num_per_month) - 1):
+        _predict = predict_for_month[i] + 0.15 * (num_per_month[i + 1] - predict_for_month[i])
+        predict_for_month.append(_predict)
+
+    return predict_for_month

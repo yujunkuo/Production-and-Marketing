@@ -8,5 +8,5 @@ urlpatterns = [
   path('retentionRate/', marketing.views.RetentionRateView.as_view()),
   path('survivalRate/', marketing.views.SurvivalRateView.as_view()),
   path('cluster/decisionTree/', marketing.views.DecisionTreeView.as_view()),
-  path('rfm/', marketing.views.rfm),
+  path('rfm/', marketing.views.RFMView.as_view()),
 ]
