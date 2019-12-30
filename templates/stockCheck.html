@@ -8,7 +8,6 @@
   </head>
   <body>
   <p><strong>檢查存貨</strong></p>
-  <img src={% static "inventory.jpg" %} alt= "存貨" height= 300px>
   <script>
       let allShow = false
       let needShow = false
@@ -35,7 +34,7 @@
   <input type= "submit" value= "全部存貨" class = "btn btnClick" id='all' onclick="showCorrespondForm('all')">
   <input type= "submit" value= "所需存貨" class = "btn btnClick" id='need' onclick="showCorrespondForm('need')">
   <input type= "submit" value= "將到期存貨" class = "btn btnClick" id='expired' onclick="showCorrespondForm('expired')">
-  <div id='allForm' style="visibility: hidden;">
+  <div id='allForm' style="visibility: hidden;margin:0px auto;width:900px;height:100px;border:3px #cccccc dashed;">
     <ul>
       <li>存貨名:{{ inv_all_name }}</li>
       <li>存貨數量:{{ inv_all_num }}</li>
@@ -43,11 +42,7 @@
     </ul>
   </div>
   <div id='needForm' style="visibility: hidden;">
-    <ul>
-      <li>存貨名:{{ inv_need_name }}</li>
-      <li>存貨數量:{{ inv_need_num }}</li>
-      <li>存貨到期日:{{ inv_need_expired }}</li>
-    </ul>
+    <p>{{ need_inventory }}</p>
   </div>
   <div id='expiredForm' style="visibility: hidden;">
     <ul>
