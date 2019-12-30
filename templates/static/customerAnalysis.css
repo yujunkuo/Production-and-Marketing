@@ -23,13 +23,24 @@ p{
   font-size: 40px;
   color: lightskyblue;
   position: absolute;
-  top: 100px;
+  top: 20px;
 }
-result{
-  float: right;
-  left: 800px;
+.result1{
+  position: absolute;
+  top: -2000px
+  right: -700px;
 }
-image{
+.result2{
+  position: absolute;
+  top: 180px;
+  right: -700px;
+}
+.result3{
+  position: absolute;
+  top: 480px;
+  right: -700px;
+}
+.image{
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -42,7 +53,7 @@ image{
   color: #3498bd;
   font-weight: 700;
   cursor: pointer;
-  position: relative;
+  position: absolute;
   font-size: 25px;
   top: 100px;
   left: 100px;

@@ -45,11 +45,12 @@
     <p>{{ need_inventory }}</p>
   </div>
   <div id='expiredForm' style="visibility: hidden;">
-    <ul>
-      <li>存貨名:{{ inv_expired_name }}</li>
-      <li>存貨數量:{{ inv_expired_num }}</li>
-      <li>存貨到期日:{{ inv_expired_time }}</li>
-    </ul>
+    <form  method="POST">
+      {% csrf_token %}
+        {{ form.as_p }}
+    </form>
+    <p>{{ result }}</p>
+    12324
   </div>
   <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>
