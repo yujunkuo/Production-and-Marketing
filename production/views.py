@@ -156,9 +156,7 @@ class CheckStockNeedView(TemplateView):
                     need = str(name) + ' : ' + str(num) + '份 (至少需要' + str(inventory_minimum[name]) + '份）'
                     need_inventory.append(need)
         return render(request, 'stockCheck.html', {
-                "inv_need_name": inv_need_name,
-                "inv_need_num": inv_need_num,
-                "inv_need_expired": inv_need_expired,
+                "need_inventory" : need_inventory
         })
 
 class CheckStockExpiredView(TemplateView):
@@ -195,10 +193,19 @@ class CheckEquipAllView(TemplateView):
                     "equip_all_num" : equip_all_num,
             })
 
-
-def check_equip_need():
-    result = Equipment.objects.get(eNum__lt=10)
-    return result
+class CheckEquipNeedView(TemplateView):
+    def get(self, request):
+        result = Equipment.objects.get(eNum__lt=10)
+        equip_need_name = []
+        equip_need_num = []
+        result = list(result)
+        for each in result:
+            equip_need_name.append(each.eName)
+            equip_need_num.append(each.eNum)
+        return render(request, "equipmentCheck.html"), {
+                "equip_need_name" : equip_need_name,
+                "equip_need_num" : equip_need_num,
+    }
 
 
 
@@ -284,33 +291,33 @@ Dish_List = ['拿鐵咖啡', '香草拿鐵', '濃縮咖啡', '卡布奇諾', '�
              '起士火腿可頌', '黑胡椒牛肉可頌', '蔬菜雞肉可頌', '咖喱雞肉皮塔', '辣味牛肉皮塔', '法式鴨胸皮塔', '挪威燻鮭魚沙拉',
              '燻火腿沙拉', '一杯雞蛋沙拉（素）', '一杯鮪魚沙拉']
 
+class PedictionView(TemplateView):
+    def prediction(request):
+        name = request.Get.get('Dish name')
+        curr = datetime.datetime.now()
+        num_per_month = []
+        predict_for_month = []
 
-def prediction(request):
-    name = request.Get.get('Dish name')
-    curr = datetime.datetime.now()
-    num_per_month = []
-    predict_for_month = []
+        dish_order = Order.objects.filter(dishName=name)
+        for year in range(2019, curr.year + 1):
+            if year != curr.year:
+                for month in range(1, 13):
+                    count = 0
+                    for ds_order in dish_order:
+                        if ds_order.oTime.year == year and ds_order.oTime.month == month:
+                            count += ds_order.orderNum
+                    num_per_month.append(count)
+            else:
+                for month in range(1, curr.month + 1):
+                    count = 0
+                    for ds_order in dish_order:
+                        if ds_order.oTime.year == year and ds_order.oTime.month == month:
+                            count += ds_order.orderNum
+                            num_per_month.append(count)
+                            predict_for_month.append(num_per_month[0])
 
-    dish_order = Order.objects.filter(dishName=name)
-    for year in range(2019, curr.year + 1):
-        if year != curr.year:
-            for month in range(1, 13):
-                count = 0
-                for ds_order in dish_order:
-                    if ds_order.oTime.year == year and ds_order.oTime.month == month:
-                        count += ds_order.orderNum
-                num_per_month.append(count)
-        else:
-            for month in range(1, curr.month + 1):
-                count = 0
-                for ds_order in dish_order:
-                    if ds_order.oTime.year == year and ds_order.oTime.month == month:
-                        count += ds_order.orderNum
-                num_per_month.append(count)
-        predict_for_month.append(num_per_month[0])
+        for i in range(len(num_per_month) - 1):
+                predict = predict_for_month[i] + 0.15 * (num_per_month[i + 1] - predict_for_month[i])
+                predict_for_month.append(predict)
 
-    for i in range(len(num_per_month) - 1):
-        predict = predict_for_month[i] + 0.15 * (num_per_month[i + 1] - predict_for_month[i])
-        predict_for_month.append(predict)
-
-    return name, predict_for_month[-1]
+        return name, predict_for_month[-1]
