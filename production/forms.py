@@ -24,6 +24,14 @@ class joinMemberForm(forms.Form):
     pets = forms.BooleanField(required = False, initial = False, label = '是否有養寵物')
     student = forms.BooleanField(required = False, initial = False, label = '是否為學生')
 
+class expiredStockForm(forms.Form):
+    stock_list = []
+    i = 0
+    for each in Inventory.objects.all():
+        stock_list.append([i, each.invName])
+        i += 1
+    stock = forms.ChoiceField(label = '請選擇欲查詢存貨', widget = forms.Select(), choices = stock_list, initial = stock_list[0])
+
 class provideStockForm(forms.Form):
     name = forms.CharField(label = '存貨', widget = forms.TextInput)
     firm = forms.CharField(label = '廠商', widget = forms.TextInput)

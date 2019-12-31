@@ -4,6 +4,7 @@ from .forms import orderForm
 from .forms import joinMemberForm
 from .forms import provideStockForm
 from .forms import provideEquipForm
+from .forms import expiredStockForm
 from datetime import datetime
 from production.models import *
 import math
@@ -133,8 +134,7 @@ class OrderView(TemplateView):
                     zero_inv.delete()
             else:
                 pass
-        print(abc)
-        return render(request, self.template_name, {'form': order_form, "time": time})
+        return render(request, self.template_name, {'form': order_form})
 
 
 class CheckStockAllView(TemplateView):
@@ -206,22 +206,11 @@ class CheckStockNeedView(TemplateView):
 
 class CheckStockExpiredView(TemplateView):
     def get(self, request):
-        name = request.Get.get('Check Stock')
-        inv_expired_name = []
-        inv_expired_num = []
-        inv_expired_time = []
+        global check_stock_expired_form
+        check_stock_expired_form = expiredStockForm()
+        stock = int(request.GET.get('stock'))
         result = Inventory.objects.get(sName=name).order_by('Expired')
-        result = list(result)
-        for each in result:
-            inv_expired_name.append(each.invName)
-            inv_expired_num.append(each.invNum)
-            inv_expired_time.append(each.Expired)
-        return render(request, "stockCheck.html", {
-                "inv_expired_name" : inv_expired_name,
-                "inv_expired_num" : inv_expired_num,
-                "inv_expired_time" : inv_expired_time,
-        })
-
+        return render(request, "stockCheck.html", {'form': check_stock_expired_form, 'result': result})
 
 class CheckEquipAllView(TemplateView):
     def get(self, request):

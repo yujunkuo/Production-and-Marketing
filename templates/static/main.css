@@ -37,22 +37,15 @@ h1{
 p{
   text-align: left;
   line-height: 1.8;
-  position: relative;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
   color: #FFaa33;
-  top: 50px;
-  left: 350px;
 }
-
 ul {
   /* 取消ul預設的內縮及樣式 */
   margin: 0;
   padding: 0;
   list-style: none;
-  position: absolute;
-  top: 100px;
-  left:780px;
 }
 
 ul.drop-down-menu {
@@ -60,6 +53,7 @@ ul.drop-down-menu {
   display: inline-block;
   font-size: 16px;
   cursor: pointer;
+  position: absolute;
 }
 
 ul.drop-down-menu li {
@@ -139,7 +133,7 @@ ul.drop-down-menu li:hover>ul {
   color: #3498bd;
   font-weight: 700;
   cursor: pointer;
-  position: relative;
+  position: absolute;
   font-size: 25px;
   top: 310px;
   left: 100px;
