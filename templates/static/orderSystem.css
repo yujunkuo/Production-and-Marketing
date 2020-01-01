@@ -13,12 +13,20 @@ body{
 }
 p{
   line-height: 1.8;
-  position: relative;
+  position: absolute;
   font-family: 'Noto Sans TC', sans-serif;
   font-size: 36px;
   color: lightskyblue;
-  top: -200px;
-  left: 450px;
+  top: 40px;
+}
+.form{
+  font-size: 28px;
+  position: absolute;
+  left:300px;
+}
+.img{
+  position: absolute;
+  left: 580px;
 }
 .btn{
   width: 200px;
@@ -28,8 +36,8 @@ p{
   color: #3498bd;
   font-weight: 700;
   cursor: pointer;
-  position: relative;
+  position: absolute;
   font-size: 25px;
-  top: 200px;
-  left: -450px;
+  top: 440px;
+  left: 520px;
 }

@@ -18,13 +18,13 @@ body{
   background-attachment: fixed;
 }
 h1{
-  font-family: 標楷體;
   font-size: 40px;
   color: #FFaa33;
   position: absolute;
   top: 30px;
   left: 860px;
 }
+
 .image{
   width: 700px;
   height: 500px;
@@ -33,13 +33,6 @@ h1{
   margin: 10px;
   top: 0px;
   left: 0px;
-}
-p{
-  text-align: left;
-  line-height: 1.8;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 24px;
-  color: #FFaa33;
 }
 ul {
   /* 取消ul預設的內縮及樣式 */

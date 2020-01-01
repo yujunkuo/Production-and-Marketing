@@ -6,17 +6,19 @@
     <meta charset="utf-8">
     {% load static %}
     <link rel="stylesheet" href="{% static 'equipmentProvide.css' %}">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
   </head>
   <body>
   <p><strong>設備進貨</strong></p>
-  <form  method="POST">
+  <form  method="POST" class="form">
     {% csrf_token %}
     <div class="order">
       {{ form | crispy }}
-      <input type="submit"  value="確認">
+      <input type="submit"  value="確認" style="font-size: 24px;">
     </div>
   </form>
+  <img src={% static "貓咪搬箱子.jpg" %} class="img" height=350px; width= 450px;>
   <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>
 </html>
