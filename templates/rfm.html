@@ -6,11 +6,12 @@
     <link rel="stylesheet" href="{% static 'rfm.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-
+    <h1>RFM分析</h1>
   </head>
   <body>
-    <div class="">
+    <div class="rfm">
       {{ res | safe }}
     </div>
+    <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>
 </html>

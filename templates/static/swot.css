@@ -5,27 +5,28 @@
   font-family: 'cwTeXYen', sans-serif;
 }
 body{
-  background: #F1F1F1;
+  background: #F5F5F5;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .background{
-  width: 600px;
+  width: 800px;
   height: 500px;
   background-position: center;
   background-attachment: fixed;
 }
-p{
-  font-family: 標楷體;
-  font-size: 40px;
-  color: lightskyblue;
-  position: relative;
-  top: 50px;
-  left: 100px;
+img{
+  position: absolute;
+  top: 40px;
+  left: 350px;
+  width: 500px;
+  height: 440px;
+  border: 5px solid;
+  border-radius: 10px;
+  border-color: #F5F5F5;
 }
-
 .btn{
   width: 200px;
   height: 60px;
@@ -34,8 +35,8 @@ p{
   color: #3498bd;
   font-weight: 700;
   cursor: pointer;
-  position: relative;
+  position: absolute;
   font-size: 25px;
-  top: 200px;
-  left: -50px;
+  top: 500px;
+  left: 500px;
 }

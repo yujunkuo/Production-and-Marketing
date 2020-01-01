@@ -8,7 +8,6 @@ body{
   font-family: 'cwTeXYen', sans-serif;
 }
 h{
-  font-family: 標楷體;
   font-size: 40px;
   color: lightskyblue;
   position: absolute;
@@ -21,7 +20,7 @@ h{
   transform: translate(-50%, -50%);
 }
 .center-box div{
-  width: 900px;
+  width: 1200px;
   height: 60px;
   background: #6498db;
   overflow: hidden;

@@ -5,21 +5,17 @@
     <title></title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'prediction.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
     <h1>預測未來銷量</h1>
-    <ul>
-    <li>前五期: {{ s1 }}</li>
-    <li>前四期: {{ s2 }}</li>
-    <li>前三期: {{ s3 }}</li>
-    <li>前二期: {{ s4 }}</li>
-    <li>前一期: {{ s5 }}</li>
-    <li>當期: {{ s6 }}</li>
-    </u1>
-
-    </ul>
-
-
+    <div class = "prediction">
+      <form  method="GET">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="確定" style="font-size: 24px;">
+      </form>
+    </div>
     <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
 
   </body>

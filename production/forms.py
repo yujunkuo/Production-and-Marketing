@@ -42,3 +42,11 @@ class provideEquipForm(forms.Form):
     name = forms.CharField(label = '設備', widget = forms.TextInput)
     firm = forms.CharField(label = '廠商', widget = forms.TextInput)
     num = forms.CharField(label = '數量', widget = forms.TextInput)
+
+class predictionForm(forms.Form):
+    stock_list = []
+    i = 0
+    for each in Inventory.objects.all():
+        stock_list.append([i, each.invName])
+        i += 1
+    stock = forms.ChoiceField(label = '請選擇欲預測的存貨銷量', widget = forms.Select(), choices = stock_list, initial = stock_list[0])

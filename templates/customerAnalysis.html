@@ -3,35 +3,27 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'customerAnalysis.css' %}">
   </head>
   <body>
-    <p>客群分析(K-Means)</p>
-    <div class="result1">
-      <ul>
-      <p style="font-family:'cwTeXYen';font-size:16px;color:lightskyblue;">第一群的消費者與其連絡信箱</p>
-      <li>Name:{{ name1 }}<li>
-      <li>E-mail:{{ email1 }}</li>
-      </u1>
-    </div>
-    <div class="result2">
-      <p style="font-family:'cwTeXYen';font-size:16px;color:lightskyblue;">第二群的消費者與其連絡信箱</p>
-      <ul>
-      <li>Name:{{ name2 }}<li>
-      <li>E-mail:{{ email2 }}</li>
-      </u1>
-    </div>
-    <div class="result3">
-      <p style="font-family:'cwTeXYen';font-size:16px;color:lightskyblue;">第三群的消費者與其連絡信箱</p>
-      <ul>
-      <li>Name:{{ name3 }}<li>
-      <li>E-mail:{{ email3 }}</li>
-      </u1>
+    <h1>客群分析(K-Means)</h1>
+    <div style="text-align:left;position: absolute;top: 120px;left:670px;width:800px;height: 350px;">
+      Name:{{ name1 }}<br><br>
+      E-mail:{{ email1 }}
     </div>
 
-
+    <div style="text-align:left;position: absolute;top:500px;left:670px;width:800px;height: 350px;">
+      Name:{{ name2 }}<br><br>
+      E-mail:{{ email2 }}
+    </div>
+    <div style="text-align:left;position: absolute;top:880px;left:670px;width:800px;height: 350px;">
+      Name:{{ name3 }}<br><br>
+      E-mail:{{ email3 }}
+    </div>
+    <img class="image" src="data:image/png;base64,{{ plot_res }}" />
     <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>
 </html>

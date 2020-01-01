@@ -44,13 +44,13 @@ class STPView(TemplateView):
             if pre[i] == "High":
                 target = ""
                 if i < 4:
-                    target += "沒有養寵物,"
+                    target += "沒有養寵物、"
                 else:
-                    target += "有養寵物,"
+                    target += "有養寵物、"
                 if i in [0,1,4,5]:
-                    target += "不是學生,"
+                    target += "不是學生、"
                 else:
-                    target += "是學生,"
+                    target += "是學生、"
                 if i % 2 == 0:
                     target += "女生 "
                 else:

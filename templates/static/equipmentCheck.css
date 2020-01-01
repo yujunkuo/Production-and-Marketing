@@ -12,12 +12,43 @@ body{
   justify-content: center;
 }
 p{
-  font-family: 標楷體;
-  font-size: 40px;
+  font-size: 44px;
   color: lightskyblue;
-  position: relative;
-  top: -200px;
-  left: 240px;
+  position: absolute;
+  top:40px;
+  left: 150px;
+}
+.btn1{
+  width: 200px;
+  height: 60px;
+  background: none;
+  border: 4px solid;
+  color: #3498bd;
+  font-weight: 700;
+  cursor: pointer;
+  position: absolute;
+  font-size: 25px;
+  top: 420px;
+  left: 120px;
+}
+.allequip{
+  width:800px;
+  height:300px;
+  position: absolute;
+  top: 130px;
+  font-size: 28px;
+  left: 180px;
+  color: #9F4D95
+}
+img{
+  position: absolute;
+  top: 25px;
+  left: 620px;
+  width: 600px;
+  height: 450px;
+  border: 5px solid;
+  border-radius: 10px;
+  border-color: #a49dab;
 }
 .btn{
   width: 200px;
@@ -27,8 +58,8 @@ p{
   color: #3498bd;
   font-weight: 700;
   cursor: pointer;
-  position: relative;
+  position: absolute;
   font-size: 25px;
-  top: 180px;
-  left: -200px;
+  top: 420px;
+  left: 350px;
 }
