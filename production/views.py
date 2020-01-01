@@ -137,8 +137,22 @@ class OrderView(TemplateView):
         return render(request, self.template_name, {'form': order_form})
 
 
-class CheckStockAllView(TemplateView):
+class CheckStockView(TemplateView):
+
     def get(self, request):
+        inv_all_name, inv_all_num, inv_all_expired = self.check_stock_all()
+        need = self.check_stock_need()
+        check_stock_expired_form, result = self.check_stock_expired()
+
+        return render(request, "stockCheck.html", {
+            "inv_all_name": inv_all_name,
+            "inv_all_num": inv_all_num,
+            "inv_all_expired": inv_all_expired,
+            "form": check_stock_expired_form,
+            "result": result
+        })
+
+    def check_stock_all(self):
         inv_all_name = []
         inv_all_num = []
         inv_all_expired = []
@@ -150,67 +164,63 @@ class CheckStockAllView(TemplateView):
             time = each.Expired
             expired = time.isoformat()
             inv_all_expired.append(expired)
-        return render(request, 'stockCheck.html', {
-            "inv_all_name": inv_all_name,
-            "inv_all_num": inv_all_num,
-            "inv_all_expired": inv_all_expired,
-            })
+        return inv_all_name, inv_all_num, inv_all_expired
 
 
-class CheckStockNeedView(TemplateView):
-    def get(self, request):
-            need_inv = {}
-            for easy in easy_expired:
-                dish_check = []
-                total_need_past = {}
-                for each in dish_dict:
-                    if easy in dish_dict[each]:
-                        dish_check.append(each)
+    def check_stock_need(self):
+        need_inv = {}
+        for easy in easy_expired:
+            dish_check = []
+            total_need_past = {}
+            for each in dish_dict:
+                if easy in dish_dict[each]:
+                    dish_check.append(each)
 
-                for dish in dish_check:
-                    dish_num_for_next = predict(dish)
-                    inv_need_past = {}
-                    for i in range(len(dish_num_for_next)):
-                        inv_num_for_dish = dish_num_for_next[i] * dish_dict[dish][easy]
-                        inv_need_past[i] = inv_num_for_dish
-                    total_need_past[dish] = inv_need_past
+            for dish in dish_check:
+                dish_num_for_next = predict(dish)
+                inv_need_past = {}
+                for i in range(len(dish_num_for_next)):
+                    inv_num_for_dish = dish_num_for_next[i] * dish_dict[dish][easy]
+                    inv_need_past[i] = inv_num_for_dish
+                total_need_past[dish] = inv_need_past
 
-                past = []
-                for i in range(len(predict(dish))-1):
-                    for each in total_need_past:
-                        temp_sum = 0
-                        temp_sum += total_need_past[each][i]
-                    past.append(temp_sum)
+            past = []
+            for i in range(len(predict(dish))-1):
+                for each in total_need_past:
+                    temp_sum = 0
+                    temp_sum += total_need_past[each][i]
+                past.append(temp_sum)
 
-                mean = sum(past) / len(past)
-                temp = 0
-                for each in past:
-                    temp += (each - mean) ** 2
-                sd = math.sqrt(temp / len(past))
-                need = round(mean + (0.675 * sd), 0)
-                need_inv[easy] = need
+            mean = sum(past) / len(past)
+            temp = 0
+            for each in past:
+                temp += (each - mean) ** 2
+            sd = math.sqrt(temp / len(past))
+            need = round(mean + (0.675 * sd), 0)
+            need_inv[easy] = need
 
-            for not_easy in not_easy_expired:
-                try:
-                    inv = Inventory.objects.filter(invName=not_easy)
-                except:
-                    invNum_sum = 0
-                else:
-                    invNum_sum = 0
-                    for each in inv:
-                        invNum_sum += each.invNum
-                finally:
-                    if invNum_sum <= not_easy_min[not_easy]:
-                        need_inv[not_easy] = not_easy_min[not_easy]
+        for not_easy in not_easy_expired:
+            try:
+                inv = Inventory.objects.filter(invName=not_easy)
+            except:
+                invNum_sum = 0
+            else:
+                invNum_sum = 0
+                for each in inv:
+                    invNum_sum += each.invNum
+            finally:
+                if invNum_sum <= not_easy_min[not_easy]:
+                    need_inv[not_easy] = not_easy_min[not_easy]
 
 
-class CheckStockExpiredView(TemplateView):
-    def get(self, request):
+    def check_stock_expired(self):
         global check_stock_expired_form
         check_stock_expired_form = expiredStockForm()
-        stock = int(request.GET.get('stock'))
-        result = Inventory.objects.get(sName=name).order_by('Expired')
-        return render(request, "stockCheck.html", {'form': check_stock_expired_form, 'result': result})
+        #stock = int(request.GET.get('stock'))
+        #result = Inventory.objects.get(sName=name).order_by('Expired')
+        result = 123
+        return check_stock_expired_form, result
+
 
 class CheckEquipAllView(TemplateView):
     def get(self, request):
