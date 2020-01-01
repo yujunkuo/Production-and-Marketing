@@ -6,11 +6,11 @@
     <link rel="stylesheet" href="{% static 'rfm.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
+
   </head>
   <body>
-    <h1>RFM</h1>
-    <iframe src="rfmiframe.html" height="200" width="300"></iframe>
-
-    <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
+    <div class="">
+      {{ res | safe }}
+    </div>
   </body>
 </html>

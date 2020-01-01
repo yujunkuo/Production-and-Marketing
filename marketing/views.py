@@ -49,7 +49,7 @@ class RFMView(TemplateView):
             id_list.append(cust.MemberID)
             name_list.append(cust.mName)
             email_list.append(cust.Email)
-        r, f, m = [None]*len(id_list), [None]*len(id_list), [None]*len(id_list)
+        r, f, m = [None] * len(id_list), [None] * len(id_list), [None] * len(id_list)
         df = pd.DataFrame({"id": id_list, "name": name_list, "email": email_list, "R": r, "F": f, "M": m})
         # The Recency Score of RFM
         rec = []
@@ -58,11 +58,11 @@ class RFMView(TemplateView):
             if order.MID.MemberID not in rec_set:
                 rec.append(order.MID.MemberID)
                 rec_set.add(order.MID.MemberID)
-        for id in rec[:int(len(rec)/3)]:
+        for id in rec[:int(len(rec) / 3)]:
             df.loc[df["id"] == id, "R"] = 3
-        for id in rec[int(len(rec)/3):int(len(rec)*2/3)]:
+        for id in rec[int(len(rec) / 3):int(len(rec) * 2 / 3)]:
             df.loc[df["id"] == id, "R"] = 2
-        for id in rec[int(len(rec)*2/3):]:
+        for id in rec[int(len(rec) * 2 / 3):]:
             df.loc[df["id"] == id, "R"] = 1
         # The Frequency Score of RFM
         freq = {}
@@ -71,11 +71,11 @@ class RFMView(TemplateView):
             times = len(order_list)
             freq[cust.MemberID] = times
         freq_res = sorted(freq.items(), key=lambda item: item[1], reverse=True)
-        for each in freq_res[:int(len(freq_res)/3)]:
+        for each in freq_res[:int(len(freq_res) / 3)]:
             df.loc[df["id"] == each[0], "F"] = 3
-        for each in freq_res[int(len(freq_res)/3):int(len(freq_res)*2/3)]:
+        for each in freq_res[int(len(freq_res) / 3):int(len(freq_res) * 2 / 3)]:
             df.loc[df["id"] == each[0], "F"] = 2
-        for each in freq_res[int(len(freq_res)*2/3):]:
+        for each in freq_res[int(len(freq_res) * 2 / 3):]:
             df.loc[df["id"] == each[0], "F"] = 1
         # The Monetary Score of RFM
         mon = {}
@@ -88,14 +88,17 @@ class RFMView(TemplateView):
                 cons += dish_price
             mon[cust.MemberID] = cons
         mon_res = sorted(mon.items(), key=lambda item: item[1], reverse=True)
-        for each in mon_res[:int(len(mon_res)/3)]:
+        for each in mon_res[:int(len(mon_res) / 3)]:
             df.loc[df["id"] == each[0], "M"] = 3
-        for each in mon_res[int(len(mon_res)/3):int(len(mon_res)*2/3)]:
+        for each in mon_res[int(len(mon_res) / 3):int(len(mon_res) * 2 / 3)]:
             df.loc[df["id"] == each[0], "M"] = 2
-        for each in mon_res[int(len(mon_res)*2/3):]:
+        for each in mon_res[int(len(mon_res) * 2 / 3):]:
             df.loc[df["id"] == each[0], "M"] = 1
 
-        return render(request, "rfm.html", {"res": df.to_string(index=False)})
+        # old_width = pd.get_option('display.max_colwidth')
+        # pd.set_option('display.max_colwidth', -1)
+        # pd.set_option('display.max_colwidth', old_width)
+        return render(request, "rfm.html", {"res": df.to_html(index=False)})
 
 
 class KmeansView(TemplateView):
