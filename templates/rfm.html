@@ -2,10 +2,15 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'rfm.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
   </head>
   <body>
-    <p>{{ res }}</p>
+    <h1>RFM</h1>
+    <iframe src="rfmiframe.html" height="200" width="300"></iframe>
 
+    <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>
 </html>

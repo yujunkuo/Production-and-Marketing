@@ -6,20 +6,22 @@
     <meta charset="utf-8">
     {% load static %}
     <link rel="stylesheet" href="{% static 'orderSystem.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
     <title></title>
   </head>
   <body>
   <p><strong>點餐系統</strong></p>
-  <form  method="POST">
+  <form  method="POST" class="form">
     {% csrf_token %}
     <div class="order">
-      {{ form | crispy }}
-      <input type="submit"  value="確認點餐">
+      {{ form | crispy }}<br>
+      <input type="submit"  value="確認點餐" style="font-size: 24px;">
 
     </div>
 
   </form>
-  <img src={% static "order.png" %} alt= "點餐" class="img" height= 300px>
+  <img src={% static "貓咪點餐.jpg" %} alt= "點餐" class="img" height= 250px>
   <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>
 </html>

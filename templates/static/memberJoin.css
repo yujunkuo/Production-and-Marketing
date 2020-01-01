@@ -11,16 +11,18 @@ body{
   align-items: center;
   justify-content: center;
 }
-p{
-  line-height: 1.8;
-  position: relative;
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 28px;
-  color: lightskyblue;
-  top: -200px;
-  left:300px;
+h1{
+  position: absolute;
+  top: 30px;
+  left: 130px;
+  font-size: 40px;
 }
-
+.form{
+  font-size: 24px;
+  position: absolute;
+  left: 130px;
+  top: 100px;
+}
 .btn{
   width: 200px;
   height: 60px;
@@ -29,8 +31,12 @@ p{
   color: #3498bd;
   font-weight: 700;
   cursor: pointer;
-  position: relative;
+  position: absolute;
   font-size: 25px;
-  top: 200px;
-  left: -150px;
+  top: 470px;
+  left: 130px;
+}
+.member{
+  position: absolute;
+  left: 500px;
 }

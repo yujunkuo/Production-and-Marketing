@@ -6,16 +6,18 @@
     <meta charset="utf-8">
     {% load static %}
     <link rel="stylesheet" href="{% static 'memberJoin.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
   </head>
   <body>
     <h1>成為小公寓的會員吧!</h1>
-    <form method="POST">
+    <form method="POST" class="form">
         {% csrf_token %}
-        {{ form | crispy }}
-        <input type="submit" value="加入會員">
+        {{ form | crispy }}<br>
+        <input type="submit" value="加入會員" style="font-size: 24px;">
         {{ res }}
     </form>
+    <img src={% static "加入會員.jpg" %} class="member">
     <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>
 </html>

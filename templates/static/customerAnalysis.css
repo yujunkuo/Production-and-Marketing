@@ -27,23 +27,34 @@ p{
 }
 .result1{
   position: absolute;
-  top: -2000px
-  right: -700px;
+  top: 350px
+  left: 170px;
+  margin:0px auto;
+
 }
 .result2{
   position: absolute;
-  top: 180px;
-  right: -700px;
+  top: 750px;
+  left: 570px;
+  margin:0px auto;
+
 }
 .result3{
-  position: absolute;
-  top: 480px;
-  right: -700px;
+  position: relative;
+  top: 650px;
+  left: 770px;
+  margin:0px auto;
+
 }
 .image{
+  width: 200px;
+  height: 200px;
   display: block;
   margin-left: auto;
   margin-right: auto;
+  position: absolute;
+  top: 100px;
+  left: 10px;
 }
 .btn{
   width: 200px;

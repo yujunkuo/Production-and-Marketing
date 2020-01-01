@@ -15,22 +15,30 @@ p{
   line-height: 1.8;
   position: relative;
   font-family: 'Noto Sans TC', sans-serif;
-  font-size: 28px;
+  font-size: 40px;
   color: lightskyblue;
-  top: -200px;
-  left:300px;
+  position: absolute;
+  top: 20px;
 }
-
+.form{
+  font-size: 32px;
+  position: absolute;
+  left:330px;
+}
+.img{
+  position: absolute;
+  left: 680px;
+}
 .btn{
-  width: 200px;
-  height: 60px;
+  width: 160px;
+  height: 50px;
   background: none;
   border: 4px solid;
   color: #3498bd;
   font-weight: 700;
   cursor: pointer;
-  position: relative;
-  font-size: 25px;
-  top: 200px;
-  left: -150px;
+  position: absolute;
+  font-size: 22px;
+  top: 480px;
+  left: 320px;
 }
