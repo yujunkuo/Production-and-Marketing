@@ -14,12 +14,16 @@
 
     <div class="m1">
       <span>Segement</span>
-      <p>年齡、花費金額、養寵物與否、性別、月份、學生與否</p>
+      <p>年齡、花費金額、養寵物與否、性別、學生與否</p>
     </div>
 
     <div class="m2">
       <span>Target</span>
-      <p>22歲以下的女學生、有養寵物、願意消費兩百至三百元、偏好上學期入店</p>
+      <p>
+        {% for each in res %}
+        {{ each }}/
+        {% endfor %}
+      </p>
     </div>
 
     <div class="m3">

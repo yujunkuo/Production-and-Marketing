@@ -36,8 +36,28 @@ def swot(request):
     return render(request, 'swot.html')
 
 
-def stp(request):
-    return render(request, 'stp.html')
+class STPView(TemplateView):
+    def get(self, request):
+        pre = DecisionTreeView.decision_tree_calculate(DecisionTreeView)
+        res = []
+        for i in range(len(pre)):
+            if pre[i] == "High":
+                target = ""
+                if i < 4:
+                    target += "沒有養寵物,"
+                else:
+                    target += "有養寵物,"
+                if i in [0,1,4,5]:
+                    target += "不是學生,"
+                else:
+                    target += "是學生,"
+                if i % 2 == 0:
+                    target += "女生 "
+                else:
+                    target += "男生 "
+                res.append(target)
+
+        return render(request, 'stp.html', {"res": res})
 
 
 class RFMView(TemplateView):
@@ -58,6 +78,9 @@ class RFMView(TemplateView):
             if order.MID.MemberID not in rec_set:
                 rec.append(order.MID.MemberID)
                 rec_set.add(order.MID.MemberID)
+        for cust in Member.objects.all():
+            if cust.MemberID not in rec_set:
+                rec.append(cust.MemberID)
         for id in rec[:int(len(rec) / 3)]:
             df.loc[df["id"] == id, "R"] = 3
         for id in rec[int(len(rec) / 3):int(len(rec) * 2 / 3)]:
@@ -173,6 +196,19 @@ class KmeansView(TemplateView):
 class DecisionTreeView(TemplateView):
 
     def get(self, request):
+        pre = self.decision_tree_calculate()
+        return render(request, "decisionTree.html", {
+            "pre0": "高" if pre[0] == "High" else "低",
+            "pre1": "高" if pre[1] == "High" else "低",
+            "pre2": "高" if pre[2] == "High" else "低",
+            "pre3": "高" if pre[3] == "High" else "低",
+            "pre4": "高" if pre[4] == "High" else "低",
+            "pre5": "高" if pre[5] == "High" else "低",
+            "pre6": "高" if pre[6] == "High" else "低",
+            "pre7": "高" if pre[7] == "High" else "低",
+        })
+
+    def decision_tree_calculate(self):
         pets_list = [1 if each.Pets else 0 for each in Member.objects.all()]
         student_list = [1 if each.Student else 0 for each in Member.objects.all()]
         gender_list = [1 if each.Gender == "Male" else 0 for each in Member.objects.all()]
@@ -202,16 +238,7 @@ class DecisionTreeView(TemplateView):
             "gender": [0, 1, 0, 1, 0, 1, 0, 1]
         })
         pre = clf.predict(test_df)
-        return render(request, "decisionTree.html", {
-            "pre0": "高" if pre[0] == "High" else "低",
-            "pre1": "高" if pre[1] == "High" else "低",
-            "pre2": "高" if pre[2] == "High" else "低",
-            "pre3": "高" if pre[3] == "High" else "低",
-            "pre4": "高" if pre[4] == "High" else "低",
-            "pre5": "高" if pre[5] == "High" else "低",
-            "pre6": "高" if pre[6] == "High" else "低",
-            "pre7": "高" if pre[7] == "High" else "低",
-        })
+        return pre
 
 
 class RetentionRateView(TemplateView):
