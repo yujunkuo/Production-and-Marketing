@@ -302,29 +302,34 @@ class SurvivalRateView(TemplateView):
         curr_time = datetime.now()
         survival = 1
         survival_list = []
+        # 計算存活率
         for year in range(2019, curr_time.year + 1):
             if year != curr_time.year:
                 for month in range(1, 13):
                     if year != 2019 or month != 1:
                         retention = RetentionRateView.get_curr_retention_rate(SurvivalRateView, year, month)
                         survival *= retention
-                        if curr_time.month < 6 and year == (curr_time.year - 1) and month >= (7 + curr_time.month):
-                            survival_list.append(round(survival, 2))
+                        survival_list.append(round(survival, 2))
             else:
                 for month in range(1, curr_time.month + 1):
-                    if year == 2019 and month == 1:
-                        if curr_time.month <= 6:
-                            survival_list.append(round(survival, 2))
-                    else:
-                        retention = RetentionRateView.get_curr_retention_rate(SurvivalRateView, year, month)
-                        survival *= retention
-                        if curr_time.month < 6 or month > 11 - curr_time.month:
-                            survival_list.append(round(survival, 2))
+                    retention = RetentionRateView.get_curr_retention_rate(SurvivalRateView, year, month)
+                    survival *= retention
+                    survival_list.append(round(survival, 2))
+
+        # 畫圖
+        plt.plot(survival_list[-6:])
+        plt.legend()
+        save_file = BytesIO()
+        plt.savefig(save_file, format='png')
+        plot_res = base64.b64encode(save_file.getvalue()).decode('utf8')
+        plt.close()
+
         return render(request, 'survivalRate.html', {
-            "s1": survival_list[0],
-            "s2": survival_list[1],
-            "s3": survival_list[2],
-            "s4": survival_list[3],
-            "s5": survival_list[4],
-            "s6": survival_list[5]
+            "s1": survival_list[-6],
+            "s2": survival_list[-5],
+            "s3": survival_list[-4],
+            "s4": survival_list[-3],
+            "s5": survival_list[-2],
+            "s6": survival_list[-1],
+            "plot_res": plot_res
         })
