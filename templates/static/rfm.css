@@ -18,15 +18,13 @@ h1{
   top: 40px;
   left: 160px;
 }
-p{
-
-}
 .rfm{
   width: 550px;
   height: 550px;
   font-size: 16px;
-  left: 200px;
-  top: 500px;
+  left: 370px;
+  top: 20px;
+  position: absolute;
 }
 .btn1{
   width: 200px;
@@ -86,7 +84,7 @@ p{
   position: absolute;
   top: 40px;
   font-size: 20px;
-  left: 720px;
+  left: 750px;
   color: #9F4D95
 }
 .welcome{
@@ -95,25 +93,25 @@ p{
   position: absolute;
   top: 360px;
   font-size: 20px;
-  left: 720px;
+  left: 750px;
   color: #9F4D95
 }
 .old{
   width:800px;
   height:100px;
   position: absolute;
-  top: 680px;
+  top: 640px;
   font-size: 20px;
-  left: 720px;
+  left: 750px;
   color: #9F4D95
 }
 .delete{
   width:800px;
   height:100px;
   position: absolute;
-  top: 1000px;
+  top: 880px;
   font-size: 20px;
-  left: 720px;
+  left: 750px;
   color: #9F4D95
 }
 .btn{

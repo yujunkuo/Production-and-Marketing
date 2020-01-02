@@ -229,15 +229,12 @@ class CheckExpiredStockView(TemplateView):
             name = inv_list[index]
             result = Inventory.objects.filter(invName=name).order_by('Expired')
             check_stock_expired_form = expiredStockForm()
-            check_stock_expired = []
-            check_stock_num = []
             for each in result:
                 time = each.Expired
                 expired = time.isoformat()
-                check_stock_expired.append(expired)
-                check_stock_num.append(each.invNum)
+                check_stock_num = each.invNum
         return render(request, self.template_name, {
-                "result": check_stock_expired,
+                "result": expired,
                 "check_num": check_stock_num,
                 "form": check_stock_expired_form,
                 })
