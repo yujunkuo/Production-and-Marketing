@@ -5,6 +5,7 @@ from .forms import joinMemberForm
 from .forms import provideStockForm
 from .forms import provideEquipForm
 from .forms import expiredStockForm
+from .forms import predictionForm
 from datetime import datetime
 from production.models import *
 import math
@@ -49,8 +50,6 @@ Dish_List = ['拿鐵咖啡', '香草拿鐵', '濃縮咖啡', '卡布奇諾', '�
              '燻火腿沙拉', '一杯雞蛋沙拉（素）', '一杯鮪魚沙拉']
 
 # Create your views here.
-
-
 class JoinMemberView(TemplateView):
     template_name = 'memberJoin.html'
     def get(self, request):
@@ -136,21 +135,19 @@ class OrderView(TemplateView):
                 pass
         return render(request, self.template_name, {'form': order_form})
 
-
 class CheckStockView(TemplateView):
 
     def get(self, request):
         inv_all_name, inv_all_num, inv_all_expired = self.check_stock_all()
         need = self.check_stock_need()
-        check_stock_expired_form, result = self.check_stock_expired()
 
         return render(request, "stockCheck.html", {
             "inv_all_name": inv_all_name,
             "inv_all_num": inv_all_num,
             "inv_all_expired": inv_all_expired,
-            "form": check_stock_expired_form,
-            "result": result
-        })
+            "need_inventory": need,
+
+            })
 
     def check_stock_all(self):
         inv_all_name = []
@@ -165,7 +162,6 @@ class CheckStockView(TemplateView):
             expired = time.isoformat()
             inv_all_expired.append(expired)
         return inv_all_name, inv_all_num, inv_all_expired
-
 
     def check_stock_need(self):
         need_inv = {}
@@ -211,45 +207,61 @@ class CheckStockView(TemplateView):
             finally:
                 if invNum_sum <= not_easy_min[not_easy]:
                     need_inv[not_easy] = not_easy_min[not_easy]
+        return need_inv
 
+class CheckExpiredStockView(TemplateView):
+    template_name = 'checkExpiredStock.html'
 
-    def check_stock_expired(self):
+    def get(self, request):
         global check_stock_expired_form
         check_stock_expired_form = expiredStockForm()
-        #stock = int(request.GET.get('stock'))
-        #result = Inventory.objects.get(sName=name).order_by('Expired')
-        result = 123
-        return check_stock_expired_form, result
+        return render(request, self.template_name, {'form': check_stock_expired_form})
 
-
-class CheckEquipAllView(TemplateView):
-    def get(self, request):
-            result = Equipment.objects.all()
-            equip_all_name = []
-            equip_all_num = []
-            result = list(result)
+    def post(self, request):
+        global check_stock_expired_form
+        check_stock_expired_form = expiredStockForm(request.POST)
+        if check_stock_expired_form.is_valid():
+            index = int(request.POST.get('stock'))
+            inv_list = []
+            inv = Inventory.objects.order_by('invName').distinct()
+            for each in inv:
+                inv_list.append(each.invName)
+            name = inv_list[index]
+            result = Inventory.objects.filter(invName=name).order_by('Expired')
+            check_stock_expired_form = expiredStockForm()
+            check_stock_expired = []
+            check_stock_num = []
             for each in result:
-                equip_all_name.append(each.eName)
-                equip_all_num.append(each.eNum)
-            return render(request, "equipmentCheck.html", {
-                    "equip_all_name" : equip_all_name,
-                    "equip_all_num" : equip_all_num,
-            })
+                time = each.Expired
+                expired = time.isoformat()
+                check_stock_expired.append(expired)
+                check_stock_num.append(each.invNum)
+        return render(request, self.template_name, {
+                "result": check_stock_expired,
+                "check_num": check_stock_num,
+                "form": check_stock_expired_form,
+                })
 
-class CheckEquipNeedView(TemplateView):
+class CheckEquipView(TemplateView):
+    Template_name = 'equipmentCheck.html'
+
     def get(self, request):
-        result = Equipment.objects.get(eNum__lt=10)
-        equip_need_name = []
-        equip_need_num = []
+        equip_all_name, equip_all_num = self.check_equip_all()
+
+        return render(request, "equipmentCheck.html", {
+            "equip_all_name": equip_all_name,
+            "equip_all_num": equip_all_num,
+        })
+
+    def check_equip_all(self):
+        result = Equipment.objects.all()
+        equip_all_name = []
+        equip_all_num = []
         result = list(result)
         for each in result:
-            equip_need_name.append(each.eName)
-            equip_need_num.append(each.eNum)
-        return render(request, "equipmentCheck.html"), {
-                "equip_need_name" : equip_need_name,
-                "equip_need_num" : equip_need_num,
-    }
-
+            equip_all_name.append(each.eName)
+            equip_all_num.append(each.eNum)
+        return equip_all_name, equip_all_num
 
 
 class ProvideStockView(TemplateView):
@@ -327,13 +339,26 @@ class ProvideEquipView(TemplateView):
         return render(request, self.template_name, {'form': provide_equip_form})
 
 
-class PedictionView(TemplateView):
-    def prediction(request):
-        name = request.Get.get('Dish name')
-        predict_for_month = predict(name)
+class predictionView(TemplateView):
+    template_name = 'prediction.html'
 
-        return name, predict_for_month[-1]
+    def get(self, request):
+        global prediction_form
+        prediction_form = predictionForm()
+        return render(request, self.template_name, {'form': prediction_form})
 
+    def post(self, request):
+        global prediction_form
+        prediction_form = predictionForm(request.POST)
+
+        if prediction_form.is_valid():
+            index = int(request.POST.get('dish'))
+            dish = Dish_List[index]
+            predict_for_month = predict(dish)
+        return render(request, self.template_name, {
+                "form": prediction_form,
+                "month": predict_for_month[-1]
+                })
 
 def predict(name):
     curr = datetime.now()
@@ -348,15 +373,15 @@ def predict(name):
                 for ds_order in dish_order:
                     if ds_order.oTime.year == year and ds_order.oTime.month == month:
                         count += ds_order.orderNum
-                num_per_month.append(count)
+                        num_per_month.append(count)
         else:
             for month in range(1, curr.month + 1):
                 count = 0
                 for ds_order in dish_order:
                     if ds_order.oTime.year == year and ds_order.oTime.month == month:
                         count += ds_order.orderNum
-                num_per_month.append(count)
-        predict_for_month.append(num_per_month[0])
+                        num_per_month.append(count)
+                    predict_for_month.append(num_per_month[0])
 
     for i in range(len(num_per_month) - 1):
         _predict = predict_for_month[i] + 0.15 * (num_per_month[i + 1] - predict_for_month[i])

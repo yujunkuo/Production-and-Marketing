@@ -8,17 +8,20 @@
     <title></title>
   </head>
   <body>
-  <p>客群分析(決策樹)</p><br>
-  <ul>
-    <li font-size: 22px>沒有養寵物, 不是學生, 女生: {{ pre0 }}</li>
-    <li font-size: 22px>沒有養寵物, 不是學生, 男生: {{ pre1 }}</li>
-    <li font-size: 22px>沒有養寵物, 是學生, 女生: {{ pre2 }}</li>
-    <li font-size: 22px>沒有養寵物, 是學生, 男生: {{ pre3 }}</li>
-    <li font-size: 22px>有養寵物, 不是學生, 女生: {{ pre4 }}</li>
-    <li font-size: 22px>有養寵物, 不是學生, 男生: {{ pre5 }}</li>
-    <li font-size: 22px>有養寵物, 是學生, 女生: {{ pre6 }}</li>
-    <li font-size: 22px>有養寵物, 是學生, 男生: {{ pre7 }}</li>
-  </ul>
+  <h1>客群分析(決策樹)</h1>
+  <div class="list">
+    <ul>
+      <li font-size: 22px>沒有養寵物, 不是學生, 女生: {{ pre0 }}</li>
+      <li font-size: 22px>沒有養寵物, 不是學生, 男生: {{ pre1 }}</li>
+      <li font-size: 22px>沒有養寵物, 是學生, 女生: {{ pre2 }}</li>
+      <li font-size: 22px>沒有養寵物, 是學生, 男生: {{ pre3 }}</li>
+      <li font-size: 22px>有養寵物, 不是學生, 女生: {{ pre4 }}</li>
+      <li font-size: 22px>有養寵物, 不是學生, 男生: {{ pre5 }}</li>
+      <li font-size: 22px>有養寵物, 是學生, 女生: {{ pre6 }}</li>
+      <li font-size: 22px>有養寵物, 是學生, 男生: {{ pre7 }}</li>
+    </ul>
+  </div>
   <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
+  <img src={% static "貓咪爬樹.jpg" %}>
   </body>
 </html>

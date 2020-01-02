@@ -21,30 +21,29 @@ h1{
   font-size: 40px;
   color: lightskyblue;
   position: absolute;
-  top: 40px;
-  left: 180px;
+  top: 60px;
+  left: 240px;
 }
 .list{
   position: absolute;
   top: 180px;
   font-size: 32px;
-  left: 230px;
+  left: 280px;
   color: #9F4D95
 }
 img{
   position: absolute;
-  top: 135px;
+  top: 65px;
   left: 600px;
-  width: 450px;
-  height: 300px;
-  border: 10px solid;
+  width: 500px;
+  height: 370px;
+  border: 5px solid;
   border-radius: 10px;
   border-color: #a49dab;
 }
 .btn{
   width: 200px;
-  height
-  : 60px;
+  height: 60px;
   background: none;
   border: 4px solid;
   color: #3498bd;
@@ -53,5 +52,5 @@ img{
   position: absolute;
   font-size: 25px;
   top: 480px;
-  left: 540px;
+  left: 500px;
 }

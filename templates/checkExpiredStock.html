@@ -4,20 +4,21 @@
     <meta charset="utf-8">
     <title></title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'prediction.css' %}">
+    <link rel="stylesheet" href="{% static 'checkExpiredStock.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-    <h1>預測未來銷量</h1>
-    <div class = "prediction">
-      <form  method="POST">
+    <h1>檢查過期存貨</h1>
+    <div class = "expired">
+      <form  method="post">
         {% csrf_token %}
         {{ form }}<br><br>
-        <input type="submit" value="確定" style="font-size: 24px;"><br><br>
-        預測銷量: {{ month }}
+        <input type="submit" value="確定" style="font-size: 28px;"><br><br>
+        數量: {{ check_num }}<br>
+        有效日期: {{ result }}
       </form>
     </div>
-    <img src={% static "貓咪裝死.jpg" %}>
+    <img src={% static "過期.jfif" %} alt= "點餐" class="img">
     <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
 
   </body>

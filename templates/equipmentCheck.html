@@ -12,7 +12,6 @@
   <p><strong>檢查設備</strong></p>
   <script>
       let allShow = false
-      let needShow = false
       function showCorrespondForm(id){
         showFormId = id+'Form'
         target = document.querySelector('#'+showFormId)
@@ -22,28 +21,18 @@
           case 'all':
             allShow = !allShow
             break;
-          case 'need':
-            needShow = !needShow
-            break;
           default:
         }
       }
     </script>
-    <input type= "submit" value= "全部設備" class = "btn btnClick" id='all' onclick="showCorrespondForm('all')">
-    <input type= "submit" value= "所需設備" class = "btn btnClick" id='need' onclick="showCorrespondForm('need')">
-    <div id='allForm' style="visibility: hidden;">
+    <input type= "submit" value= "全部設備" class = "btn1 btnClick" id='all' onclick="showCorrespondForm('all')">
+    <div id='allForm' class="allequip"style="visibility: hidden;">
       <ul>
         <li>設備名:{{ equip_all_name }}</li>
         <li>設備數量:{{ equip_all_num }}</li>
       </ul>
     </div>
-    <div id='needForm' style="visibility: hidden;">
-      <ul>
-        <li>設備名:{{ inv_need_name }}</li>
-        <li>設備數量:{{ inv_need_num }}</li>
-      </ul>
-    </div>
-
+    <img src={% static "貓咪檢查.jpg" %}>
     <input type= "button" value= "回首頁" class = "btn" onclick="location.href='/'">
   </body>
 </html>
