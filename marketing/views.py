@@ -47,7 +47,7 @@ class STPView(TemplateView):
                     target += "沒有養寵物、"
                 else:
                     target += "有養寵物、"
-                if i in [0,1,4,5]:
+                if i in [0, 1, 4, 5]:
                     target += "不是學生、"
                 else:
                     target += "是學生、"
@@ -118,10 +118,18 @@ class RFMView(TemplateView):
         for each in mon_res[int(len(mon_res) * 2 / 3):]:
             df.loc[df["id"] == each[0], "M"] = 1
 
-        # old_width = pd.get_option('display.max_colwidth')
-        # pd.set_option('display.max_colwidth', -1)
-        # pd.set_option('display.max_colwidth', old_width)
-        return render(request, "rfm.html", {"res": df.to_html(index=False)})
+        vip = df[(df["R"] == 3) & (df["F"] == 3) & (df["M"] == 3)]
+        welcome = df[(df["R"] == 3) & (df["F"] == 1)]
+        old = df[(df["R"] == 1) & (df["F"] == 3) & (df["M"] == 3)]
+        delete = df[(df["R"] == 1) & (df["F"] == 1) & (df["M"] == 1)]
+
+        return render(request, "rfm.html", {
+            "res": df.to_html(index=False),
+            "vip": vip.to_html(index=False),
+            "welcome": welcome.to_html(index=False),
+            "old": old.to_html(index=False),
+            "delete": delete.to_html(index=False)
+        })
 
 
 class KmeansView(TemplateView):
