@@ -25,6 +25,94 @@ h1{
   left: 200px;
   top: 500px;
 }
+.btn1{
+  width: 200px;
+  height: 60px;
+  background: none;
+  border: 4px solid;
+  color: #3498bd;
+  font-weight: 700;
+  cursor: pointer;
+  position: absolute;
+  font-size: 25px;
+  top: 130px;
+  left: 150px;
+}
+.btn2{
+  width: 200px;
+  height: 60px;
+  background: none;
+  border: 4px solid;
+  color: #3498bd;
+  font-weight: 700;
+  cursor: pointer;
+  position: absolute;
+  font-size: 25px;
+  top: 250px;
+  left: 150px;
+}
+.btn3{
+  width: 200px;
+  height: 60px;
+  background: none;
+  border: 4px solid;
+  color: #3498bd;
+  font-weight: 700;
+  cursor: pointer;
+  position: absolute;
+  font-size: 25px;
+  top: 370px;
+  left: 150px;
+}
+.btn4{
+  width: 200px;
+  height: 60px;
+  background: none;
+  border: 4px solid;
+  color: #3498bd;
+  font-weight: 700;
+  cursor: pointer;
+  position: absolute;
+  font-size: 25px;
+  top: 490px;
+  left: 150px;
+}
+.vip{
+  width:900px;
+  height:100px;
+  position: absolute;
+  top: 110px;
+  font-size: 24px;
+  left: 480px;
+  color: #9F4D95
+}
+.welcome{
+  width:800px;
+  height:100px;
+  position: absolute;
+  top: 250px;
+  font-size: 20px;
+  left: 480px;
+  color: #9F4D95
+}
+.old{
+  width:800px;
+  height:100px;
+  position: absolute;
+  top: 250px;
+  font-size: 20px;
+  left: 480px;
+  color: #9F4D95
+}
+.delete{
+  width:800px;
+  height:100px;
+  position: absolute;
+  top: 250px;
+  font-size: 20px;
+  left: 480px;
+  color: #9F4D95
+}
 .btn{
   width: 200px;
   height: 60px;
@@ -35,6 +123,6 @@ h1{
   cursor: pointer;
   position: absolute;
   font-size: 25px;
-  top: 440px;
-  left: 140px;
+  top: 610px;
+  left: 150px;
 }

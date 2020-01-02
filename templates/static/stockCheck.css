@@ -45,19 +45,6 @@ p{
   top: 250px;
   left: 230px;
 }
-.btn3{
-  width: 200px;
-  height: 60px;
-  background: none;
-  border: 4px solid;
-  color: #3498bd;
-  font-weight: 700;
-  cursor: pointer;
-  position: absolute;
-  font-size: 25px;
-  top: 370px;
-  left: 230px;
-}
 .allinv{
   width:900px;
   height:100px;
@@ -73,15 +60,6 @@ p{
   height:100px;
   position: absolute;
   top: 250px;
-  font-size: 20px;
-  left: 480px;
-  color: #9F4D95
-}
-.expiredinv{
-  width:800px;
-  height:100px;
-  position: absolute;
-  top: 370px;
   font-size: 20px;
   left: 480px;
   color: #9F4D95
