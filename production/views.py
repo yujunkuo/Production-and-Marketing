@@ -140,15 +140,13 @@ class CheckStockView(TemplateView):
     def get(self, request):
         inv_all_name, inv_all_num, inv_all_expired = self.check_stock_all()
         need = self.check_stock_need()
-        check_stock_expired_form, check_stock_expired, request = self.check_stock_expired()
 
         return render(request, "stockCheck.html", {
             "inv_all_name": inv_all_name,
             "inv_all_num": inv_all_num,
             "inv_all_expired": inv_all_expired,
-            "form": check_stock_expired_form,
             "need_inventory": need,
-            "expired": check_stock_expired
+
             })
 
     def check_stock_all(self):
@@ -211,17 +209,42 @@ class CheckStockView(TemplateView):
                     need_inv[not_easy] = not_easy_min[not_easy]
         return need_inv
 
-    def check_stock_expired(self):
+class CheckExpiredStockView(TemplateView):
+    template_name = 'checkExpiredStock.html'
+
+    def get(self, request):
         global check_stock_expired_form
         check_stock_expired_form = expiredStockForm()
-        name = self.Get.get('Check Stock')
-        result = Inventory.objects.get(invName=name).order_by('Expired')
-        check_stock_expired = []
-        for each in result:
-            check_stock_expired.append(each.Expired)
-        return check_stock_expired_form, check_stock_expired, request
+        return render(request, self.template_name, {'form': check_stock_expired_form})
+
+    def post(self, request):
+        global check_stock_expired_form
+        check_stock_expired_form = expiredStockForm(request.POST)
+        if check_stock_expired_form.is_valid():
+            index = int(request.POST.get('stock'))
+            inv_list = []
+            inv = Inventory.objects.order_by('invName').distinct()
+            for each in inv:
+                inv_list.append(each.invName)
+            name = inv_list[index]
+            result = Inventory.objects.filter(invName=name).order_by('Expired')
+            check_stock_expired_form = expiredStockForm()
+            check_stock_expired = []
+            check_stock_num = []
+            for each in result:
+                time = each.Expired
+                expired = time.isoformat()
+                check_stock_expired.append(expired)
+                check_stock_num.append(each.invNum)
+        return render(request, self.template_name, {
+                "result": check_stock_expired,
+                "check_num": check_stock_num,
+                "form": check_stock_expired_form,
+                })
 
 class CheckEquipView(TemplateView):
+    Template_name = 'equipmentCheck.html'
+
     def get(self, request):
         equip_all_name, equip_all_num = self.check_equip_all()
 
@@ -317,21 +340,32 @@ class ProvideEquipView(TemplateView):
 
 
 class predictionView(TemplateView):
+    template_name = 'prediction.html'
+
     def get(self, request):
         global prediction_form
         prediction_form = predictionForm()
-        predict_for_month = predict(self)
-        return render(request, "prediction.html", {
+        return render(request, self.template_name, {'form': prediction_form})
+
+    def post(self, request):
+        global prediction_form
+        prediction_form = predictionForm(request.POST)
+
+        if prediction_form.is_valid():
+            index = int(request.POST.get('dish'))
+            dish = Dish_List[index]
+            predict_for_month = predict(dish)
+        return render(request, self.template_name, {
                 "form": prediction_form,
                 "month": predict_for_month[-1]
                 })
 
-def predict(self):
+def predict(name):
     curr = datetime.now()
     num_per_month = []
     predict_for_month = []
 
-    dish_order = Order.objects.filter(dishName=self)
+    dish_order = Order.objects.filter(dishName=name)
     for year in range(2019, curr.year + 1):
         if year != curr.year:
             for month in range(1, 13):
@@ -353,4 +387,4 @@ def predict(self):
         _predict = predict_for_month[i] + 0.15 * (num_per_month[i + 1] - predict_for_month[i])
         predict_for_month.append(_predict)
 
-        return predict_for_month
+    return predict_for_month

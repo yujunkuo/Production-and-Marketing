@@ -7,6 +7,7 @@ urlpatterns = [
     path('stockCheck/', production.views.CheckStockView.as_view()),
     path('equipmentCheck/', production.views.CheckEquipView.as_view()),
     path('stockProvide/', production.views.ProvideStockView.as_view()),
+    path('stockCheck/checkExpiredStock/', production.views.CheckExpiredStockView.as_view()),
     path('equipmentProvide/', production.views.ProvideEquipView.as_view()),
     path('prediction/', production.views.predictionView.as_view()),
 ]

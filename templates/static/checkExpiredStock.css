@@ -21,7 +21,7 @@ h1{
 form{
   font-size: 34px;
 }
-.prediction{
+.expired{
   font-size: 30px;
   position: absolute;
   left: 130px;
@@ -34,10 +34,9 @@ form{
 }
 img{
   position: absolute;
-  top: 65px;
+  height: 400px;
+  width: 550px;
   left: 600px;
-  width: 500px;
-  height: 370px;
   border: 5px solid;
   border-radius: 10px;
   border-color: #a49dab;

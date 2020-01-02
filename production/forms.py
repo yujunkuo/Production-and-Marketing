@@ -27,7 +27,7 @@ class joinMemberForm(forms.Form):
 class expiredStockForm(forms.Form):
     stock_list = []
     i = 0
-    for each in Inventory.objects.all():
+    for each in Inventory.objects.all().distinct():
         stock_list.append([i, each.invName])
         i += 1
     stock = forms.ChoiceField(label = '請選擇欲查詢存貨', widget = forms.Select(), choices = stock_list, initial = stock_list[0])
@@ -44,9 +44,9 @@ class provideEquipForm(forms.Form):
     num = forms.CharField(label = '數量', widget = forms.TextInput)
 
 class predictionForm(forms.Form):
-    stock_list = []
+    dish_list = []
     i = 0
-    for each in Inventory.objects.all():
-        stock_list.append([i, each.invName])
+    for each in Dish.objects.all():
+        dish_list.append([i, each.dName])
         i += 1
-    stock = forms.ChoiceField(label = '請選擇欲預測的存貨銷量', widget = forms.Select(), choices = stock_list, initial = stock_list[0])
+    dish = forms.ChoiceField(label = '請選擇欲預測餐點', widget = forms.Select(), choices = dish_list, initial = dish_list[0])

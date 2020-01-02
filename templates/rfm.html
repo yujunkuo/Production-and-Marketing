@@ -9,6 +9,47 @@
     <h1>RFM分析</h1>
   </head>
   <body>
+    <script>
+        let one = false
+        let two = false
+        let three = false
+        let four = false
+        function showCorrespondForm(id){
+          showFormId = id+'Form'
+          target = document.querySelector('#'+showFormId)
+          console.log(target)
+          target.style.visibility = eval(id+'Show') ? 'hidden':'visible';
+          switch (id) {
+            case 'one':
+              oneShow = !oneShow
+              break;
+            case 'two':
+              twoShow = !twoShow
+              break;
+            case 'three':
+              threeShow = !threeShow
+              break;
+            case 'four':
+              fourShow = !fourShow
+              break;
+            default:
+            }
+          }
+    </script>
+    <input type= "submit" value= "全部存貨" class = "btn1 btnClick" id='one' onclick="showCorrespondForm('one')">
+    <input type= "submit" value= "所需存貨" class = "btn2 btnClick" id='two' onclick="showCorrespondForm('two')">
+    <input type= "submit" value= "將到期存貨" class = "btn3 btnClick"  id='three' onclick="showCorrespondForm('three')">
+    <input type= "submit" value= "將到期存貨" class = "btn3 btnClick"  id='three' onclick="showCorrespondForm('three')">
+    <div id='allForm' class="allinv" style="visibility: hidden;">
+      <ul>
+        <li>存貨名:{{ inv_all_name }}</li>
+        <li>存貨數量:{{ inv_all_num }}</li>
+        <li>存貨到期日:{{ inv_all_expired }}</li>
+      </ul>
+    </div>
+    <div id='needForm' class="needinv" style="visibility: hidden;" >
+      {{ need_inventory }}
+    </div>
     <div class="rfm">
       {{ res | safe }}
     </div>
