@@ -10,10 +10,10 @@
   <body>
     <h1>RFM分析</h1>
     <script>
-        let one = false
-        let two = false
-        let three = false
-        let four = false
+        let oneShow = false
+        let twoShow = false
+        let threeShow = false
+        let fourShow = false
         function showCorrespondForm(id){
           showFormId = id+'Form'
           target = document.querySelector('#'+showFormId)
@@ -43,21 +43,26 @@
     <div id='oneForm' class="vip" style="visibility: hidden;">
       <p>【最有價值的名單:高R、高F、高M】</p>
       <p>這些顧客最近消費，消費頻率和金額也很高。建議寄送獨家優惠，感謝他們過去的關注。可選擇發送問卷，
-顯示公司重視他們的意見。也可嘗試邀請他們關注公司 Facebook 或 Instagram 加強與他們的關係。</p>
+        顯示公司重視他們的意見。也可嘗試邀請他們關注公司 Facebook 或 Instagram 加強與他們的關係。</p>
+        {{ vip | safe }}
     </div>
     <div id='twoForm' class="welcome" style="visibility: hidden;" >
       <p>【最有活力的名單:高R、低F】</p>
       <p>最近才剛消費的顧客，表示他們對公司品牌最有印象，因此應該進一步加强顧客對你的印象。這個組別包含
-新手顧客，因此建議寄送歡迎信的優惠，或是提供產品訊息、新手適用指南，讓他們更瞭解公司</p>
+        新手顧客，因此建議寄送歡迎信的優惠，或是提供產品訊息、新手適用指南，讓他們更瞭解公司</p>
+        {{ welcome | safe }}
+
     </div>
     <div id='threeForm' class="old" style="visibility: hidden;" >
       <p>【最需關心的名單:低R、高F、高M】</p>
       <p>過去的業績大部分來自這群顧客，但他們已許久未進行消費。為甚麼他們最近不關心你了呢?他們是最有價值的
-顧客，因此應瞭解他們目前的需求。建議發送舊顧客關心信，提供促銷活動,並調查他們的消費習慣。</p>
+        顧客，因此應瞭解他們目前的需求。建議發送舊顧客關心信，提供促銷活動,並調查他們的消費習慣。</p>
+      {{ old | safe }}
     </div>
-    <div id='fourForm' class="delete" style="visibility: hidden;" >
+    <div id='fourForm' class="delete" style="visibility: hidden;">
      <p>【最消極的名單:低R、低F、低M】</p>
      <p>刪了吧! 不挽留</p>
+     {{ delete | safe }}
     </div>
     <div class="rfm">
       {{ res | safe }}

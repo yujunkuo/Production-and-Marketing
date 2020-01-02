@@ -18,6 +18,9 @@ h1{
   top: 40px;
   left: 160px;
 }
+p{
+
+}
 .rfm{
   width: 550px;
   height: 550px;
@@ -81,36 +84,36 @@ h1{
   width:900px;
   height:100px;
   position: absolute;
-  top: 110px;
-  font-size: 24px;
-  left: 480px;
+  top: 40px;
+  font-size: 20px;
+  left: 720px;
   color: #9F4D95
 }
 .welcome{
   width:800px;
   height:100px;
   position: absolute;
-  top: 250px;
+  top: 360px;
   font-size: 20px;
-  left: 480px;
+  left: 720px;
   color: #9F4D95
 }
 .old{
   width:800px;
   height:100px;
   position: absolute;
-  top: 250px;
+  top: 680px;
   font-size: 20px;
-  left: 480px;
+  left: 720px;
   color: #9F4D95
 }
 .delete{
   width:800px;
   height:100px;
   position: absolute;
-  top: 250px;
+  top: 1000px;
   font-size: 20px;
-  left: 480px;
+  left: 720px;
   color: #9F4D95
 }
 .btn{

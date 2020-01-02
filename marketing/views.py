@@ -136,15 +136,15 @@ class KmeansView(TemplateView):
     template_name = 'customerAnalysis.html'
 
     def get(self, request):
-        plot_res, name1, name2, name3, email1, email2, email3 = self.handle()
+        plot_res, name0, name1, name2, email0, email1, email2 = self.handle()
         return render(request, self.template_name, {
             "plot_res": plot_res,
+            "name0": name0,
             "name1": name1,
             "name2": name2,
-            "name3": name3,
+            "email0": email0,
             "email1": email1,
-            "email2": email2,
-            "email3": email3
+            "email2": email2
         })
 
     # def post(self, request):
@@ -190,15 +190,15 @@ class KmeansView(TemplateView):
         plot_res = base64.b64encode(save_file.getvalue()).decode('utf8')
         plt.close()
 
+        name0 = list(df[(model.labels_ == 0)]["name"])
         name1 = list(df[(model.labels_ == 1)]["name"])
         name2 = list(df[(model.labels_ == 2)]["name"])
-        name3 = list(df[(model.labels_ == 3)]["name"])
 
+        email0 = list(df[(model.labels_ == 0)]["email"])
         email1 = list(df[(model.labels_ == 1)]["email"])
         email2 = list(df[(model.labels_ == 2)]["email"])
-        email3 = list(df[(model.labels_ == 3)]["email"])
 
-        return plot_res, name1, name2, name3, email1, email2, email3
+        return plot_res, name0, name1, name2, email0, email1, email2
 
 
 class DecisionTreeView(TemplateView):
