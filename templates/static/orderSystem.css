@@ -17,7 +17,8 @@ p{
   font-family: 'Noto Sans TC', sans-serif;
   font-size: 42px;
   color: lightskyblue;
-  top: 40px;
+  top: 100px;
+  left: 450px;
 }
 .form{
   font-size: 28px;
@@ -38,6 +39,6 @@ p{
   cursor: pointer;
   position: absolute;
   font-size: 25px;
-  top: 440px;
+  top: 600px;
   left: 520px;
 }

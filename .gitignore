@@ -1,1 +1,9 @@
 .DS_Store*.xcuserstate
+
+# djangogirls/.gitignore
+
+djangogirls_venv
+*.pyc
+__pycache__
+staticfiles
+db.sqlite3

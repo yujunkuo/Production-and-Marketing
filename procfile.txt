@@ -1,0 +1,1 @@
+web: gunicorn --pythonpath production_and_marketing production_and_marketing.wsgi
