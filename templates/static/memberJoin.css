@@ -33,10 +33,11 @@ h1{
   cursor: pointer;
   position: absolute;
   font-size: 25px;
-  top: 470px;
+  top: 550px;
   left: 130px;
 }
 .member{
   position: absolute;
-  left: 500px;
+  top: 80px;
+  left: 540px;
 }

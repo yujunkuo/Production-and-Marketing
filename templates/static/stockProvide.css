@@ -18,7 +18,8 @@ p{
   font-size: 40px;
   color: lightskyblue;
   position: absolute;
-  top: 20px;
+  top: 100px;
+  left: 450px;
 }
 .form{
   font-size: 32px;
@@ -39,6 +40,6 @@ p{
   cursor: pointer;
   position: absolute;
   font-size: 22px;
-  top: 480px;
+  top: 650px;
   left: 320px;
 }
